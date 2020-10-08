@@ -1,4 +1,8 @@
 import { combineReducers } from 'redux';
-
-const allReducers = combineReducers({});
+import auth from './auth';
+import alert from './alert';
+const allReducers = combineReducers({
+  auth,
+  alert,
+});
 export default allReducers;
