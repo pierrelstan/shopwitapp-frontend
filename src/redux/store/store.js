@@ -4,7 +4,6 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage for
 
 import thunk from 'redux-thunk';
 import allReducers from '../reducers/index';
-import setAuthToken from '../../utils/setAuthToken';
 
 const initialState = {};
 
