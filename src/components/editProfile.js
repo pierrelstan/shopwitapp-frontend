@@ -48,7 +48,7 @@ const useStyles = (theme) => ({
     overflow: 'hidden',
     borderRadius: '50%',
     objectFit: 'cover',
-    opacity: 0.2,
+    opacity: 0.4,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -81,6 +81,12 @@ const useStyles = (theme) => ({
   container_Profile: {
     display: 'grid',
     gridTemplateColumns: '150px 300px ',
+  },
+  containerCameraIcon: {
+    position: 'absolute',
+    top: '160px',
+    left: '80px',
+    color: '#333',
   },
 });
 
@@ -217,12 +223,12 @@ class EditProfile extends Component {
 
                         <div onClick={() => this.imageUploader.current.click()}>
                           <img
-                            className={classes.avatar}
+                            className={classes.avatarOpacity}
                             ref={this.uploadedImage}
                             alt='profile_image'
                             src={this.props.avatar}
                           />
-                          <div>
+                          <div className={classes.containerCameraIcon}>
                             <PhotoCameraRoundedIcon />
                           </div>
                         </div>
