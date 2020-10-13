@@ -23,6 +23,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import PhotoCameraRoundedIcon from '@material-ui/icons/PhotoCameraRounded';
 import { loadUser, updateProfile } from '../redux/actions/auth';
 
 const useStyles = (theme) => ({
@@ -212,8 +213,6 @@ class EditProfile extends Component {
                           style={{
                             display: 'none',
                           }}
-                          //   disabled={this.state.disabled}
-                          //   className={classes.avatar}
                         />
 
                         <div onClick={() => this.imageUploader.current.click()}>
@@ -222,57 +221,11 @@ class EditProfile extends Component {
                             ref={this.uploadedImage}
                             alt='profile_image'
                             src={this.props.avatar}
-                            // disabled={this.state.disabled}
                           />
+                          <div>
+                            <PhotoCameraRoundedIcon />
+                          </div>
                         </div>
-                      </div>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          flexWrap: 'wrap',
-                          margin: '6px',
-                        }}
-                      >
-                        {/* <Button
-                              variant='contained'
-                              color='inherit'
-                              className={classes.buttonEdit}
-                              // className={
-                              //   // classes.buttonEdit,
-                              //   `${
-                              //     this.state.disabled === true
-                              //       ? classes.colorButtonEdit
-                              //       : classes.colorButtonEditFalse
-                              //   }
-                              //   `
-                              // }
-                              onClick={this.handleEdit}
-                            >
-                              {/* <EditIcon
-                                fontSize='medium'
-                                className={`${
-                                  this.state.disabled === true
-                                    ? classes.colorButtonEdit
-                                    : classes.colorButtonEditFalse
-                                }`}
-                              /> */}
-                        {/* EDIT
-                            </Button> */}
-                        {/* <div>
-                              {/* {!this.state.disabled ? ( */}
-                        {/* <Button
-                              variant='contained'
-                              color='inherit'
-                              type='submit'
-                            >
-                              Update
-                            </Button> */}
-                        {/* ) : (
-                                ''
-                              )} */}
-                        {/* </div>{' '} */}
-                        {/* */}
                       </div>
                     </div>
                   </div>
