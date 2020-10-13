@@ -293,5 +293,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default withStyles(useStyles)(
-  connect(mapStateToProps, { loadUser })(EditProfile),
+  connect(mapStateToProps, { loadUser, updateProfile })(EditProfile),
 );
