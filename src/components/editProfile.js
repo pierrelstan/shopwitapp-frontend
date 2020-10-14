@@ -84,7 +84,7 @@ const useStyles = (theme) => ({
   },
   containerCameraIcon: {
     position: 'absolute',
-    top: '160px',
+    top: '180px',
     left: '80px',
     color: '#333',
   },
@@ -133,8 +133,39 @@ class EditProfile extends Component {
       reader.readAsDataURL(file);
     }
   };
-  handleChange = () => {};
-  handleSubmit = () => {};
+  handleChange = (e) => {
+    let firstname = this.firstname.value;
+    let lastname = this.lastname.value;
+    let location = this.location.value;
+    this.setState({
+      firstname,
+      lastname,
+      location,
+    });
+  };
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const { avatar, userId, firstname, lastname, location } = this.state;
+
+    try {
+      await this.props.updateProfile(
+        userId,
+        avatar,
+        firstname,
+        lastname,
+        location,
+      );
+      this.setState({
+        update: true,
+        disabled: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   componentDidMount() {
     this.props.loadUser();
     if (this.props.auth.user) {
@@ -148,14 +179,26 @@ class EditProfile extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    // check if the state.user is null
+    if (nextState.user === null) {
+      this.props.loadUser();
+      return true;
+    }
+
+    return true;
+  }
+
   render() {
     const { classes } = this.props;
     return (
       <div>
         <Button
           variant='outlined'
+          disableRipple
           color='primary'
           onClick={this.handleClickOpen}
+          evalation={3}
         >
           EDIT PROFILE
         </Button>
@@ -229,7 +272,7 @@ class EditProfile extends Component {
                             src={this.props.avatar}
                           />
                           <div className={classes.containerCameraIcon}>
-                            <PhotoCameraRoundedIcon />
+                            <PhotoCameraRoundedIcon fontSize='large' />
                           </div>
                         </div>
                       </div>
@@ -239,45 +282,36 @@ class EditProfile extends Component {
               </div>
 
               <TextField
-                //   error={Errors}
-                // variant='standard-password-input'
                 margin='normal'
                 required
                 fullWidth
                 id='firstName'
                 label='First Name'
                 name='firstName'
-                // autoComplete='firstName'
-                // autoFocus
-                //   value={user.email}
+                type='text'
+                inputRef={(el) => (this.firstname = el)}
                 onChange={this.handleChange}
-                value={this.state.firstname}
+                defaultValue={this.state.firstname}
               />
               <TextField
-                //   error={Errors}
-
-                // variant='outlined'
+                type='text'
                 margin='normal'
                 name='lastName'
                 label='LastName'
                 id='lastName'
                 fullWidth
-                //   value={user.password}
-                autoComplete='current-password'
+                inputRef={(el) => (this.lastname = el)}
                 onChange={this.handleChange}
-                value={this.state.lastname}
+                defaultValue={this.state.lastname}
               />
 
               <TextField
-                //   error={Errors}
-
-                // variant='outlined'
                 margin='normal'
                 name='location'
-                label='Location'
+                label='location'
                 id='location'
                 fullWidth
-                //   value={user.password}
+                inputRef={(el) => (this.location = el)}
                 onChange={this.handleChange}
               />
             </form>
