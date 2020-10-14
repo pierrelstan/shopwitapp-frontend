@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import EditIcon from '@material-ui/icons/Edit';
-import { loadUser } from '../redux/actions/auth';
+import { loadUser, updateProfile } from '../redux/actions/auth';
 // import MyProducts from '../components/MyProducts';
 import {
   TextField,
@@ -12,6 +14,8 @@ import {
   Typography,
   Button,
 } from '@material-ui/core';
+import clsx from 'clsx';
+import EditProfile from '../components/editProfile';
 
 const useStyles = (theme) => ({
   container: {
@@ -25,6 +29,17 @@ const useStyles = (theme) => ({
     overflow: 'hidden',
     borderRadius: '50%',
     objectFit: 'cover',
+    border: '5px solid #eee',
+  },
+  avatarOpacity: {
+    display: 'inline-block',
+    position: 'relative',
+    width: '150px',
+    height: '150px',
+    overflow: 'hidden',
+    borderRadius: '50%',
+    objectFit: 'cover',
+    opacity: 0.2,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -32,14 +47,32 @@ const useStyles = (theme) => ({
   },
   buttonEdit: {
     position: 'relative',
-    top: ' -118px',
-    left: '62px',
+    marginRight: '30px',
   },
   colorButtonEdit: {
     color: 'blue',
   },
   colorButtonEditFalse: {
-    color: '#eee',
+    color: '#333',
+  },
+  submit: {
+    position: 'absolute',
+    borderRadius: '10%',
+    left: '190px',
+  },
+  containerProfile: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  loading: {
+    position: 'absolute',
+    top: '127px',
+    left: '66px',
+  },
+  container_Profile: {
+    display: 'grid',
+    gridTemplateColumns: '150px 1fr ',
+    gridGap: '20px',
   },
 });
 class Profile extends Component {
@@ -60,124 +93,27 @@ class Profile extends Component {
       carts: [],
       user: null,
       transarant: '',
+      successful: false,
     };
-
-    this.uploadedImage = React.createRef(null);
-    this.imageUploader = React.createRef(null);
-
-    this._isMounted = false;
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextState.update);
-    // check if the state.user is null
-    if (!nextState.user === null) {
-      // call loadUser from redux to return the user data
-      this.props.loadUser();
-      // this.setState({
-      //   update: false,
-      // });
-      return true;
-    }
-    return true;
-  }
   componentDidMount() {
-    return this.props.loadUser();
-  }
-  componentWillMount() {
-    // pass the user data loadUser to the state
     if (this.props.auth.user) {
       this.setState({
         greetingTheName: this.props.auth.user.firstname,
         firstname: this.props.auth.user.firstname,
         lastname: this.props.auth.user.lastname,
         email: this.props.auth.user.email,
+        avatar: this.props.auth.avatar,
         userId: this.props.auth.user._id,
       });
     }
   }
 
-  //   fix error binding
-  handleChange = (e) => {
-    let target = e.target;
-    this.setState({
-      [target.name]: e.target.value,
-    });
-  };
-  handleEdit = () => {
-    this.setState((prevState) => ({
-      disabled: !prevState.disabled,
-      transarant: 'transparant',
-    }));
-  };
-
-  handleImageUpload = (e) => {
-    const [file] = e.target.files;
-
-    if (file) {
-      const reader = new FileReader();
-      const { current } = this.uploadedImage;
-      current.file = file;
-      reader.onload = (e) => {
-        current.src = e.target.result;
-
-        this.setState({
-          avatar: e.target.result,
-        });
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-  handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const { firstname, lastname, email, password, avatar } = this.state;
-
-    await axios
-      .put(
-        `http://localhost:4000/auth/user/${this.state.userId}/edit`,
-        { firstname, lastname, email, avatar },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-      .then((response) => {
-        if (response) {
-          this.setState({
-            id: this.state.userId,
-            firstname: response.data.firstname,
-            lastname: response.data.lastname,
-            email: response.data.email,
-            avatar: response.data.avatar,
-            update: true,
-            disabled: true,
-            transarant: '',
-          });
-          if (this.state.update === true) {
-            return this.props.loadUser();
-          }
-        } else {
-          console.log('connect to internet');
-        }
-      })
-      .catch((error) => {
-        this.setState({
-          error: error,
-        });
-      });
-  };
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
   render() {
-    const { firstname } = this.state;
+    const { lastname, userId } = this.state;
     const { classes } = this.props;
-    const { user } = this.props.auth;
+    const { user, firstname } = this.props.auth;
     return (
       <div>
         <Container maxWidth='lg'>
@@ -187,7 +123,6 @@ class Profile extends Component {
               height: '939px',
             }}
           >
-            {this.state.update ? <h4>Update successfully!</h4> : ''}
             <div>
               <form onSubmit={this.handleSubmit} className={classes.form}>
                 <div>
@@ -196,47 +131,39 @@ class Profile extends Component {
                       ''
                     ) : (
                       <div>
-                        <input
-                          type='file'
-                          accept='image/*'
-                          multiple='false'
-                          onChange={this.handleImageUpload}
-                          ref={this.imageUploader}
-                          style={{
-                            display: 'none',
-                          }}
-                          disabled={this.state.disabled}
-                          className={classes.avatar}
-                        />
-                        <div onClick={() => this.imageUploader.current.click()}>
-                          <img
-                            className={classes.avatar}
-                            ref={this.uploadedImage}
-                            alt='profile_image'
-                            src={user && user.avatar}
-                            disabled={this.state.disabled}
-                          />
+                        <div className={classes.container_Profile}>
+                          <div>
+                            <img
+                              className={`${
+                                this.state.disabled === true
+                                  ? classes.avatar
+                                  : classes.avatarOpacity
+                              }`}
+                              ref={this.uploadedImage}
+                              alt='profile_image'
+                              src={user.avatar}
+                              disabled={this.state.disabled}
+                            />
+                          </div>
+
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              flexWrap: 'wrap',
+                              marginLeft: '20px',
+                            }}
+                          >
+                            <EditProfile
+                              avatar={user.avatar}
+                              firstname={firstname}
+                              lastname={lastname}
+                              userId={userId}
+                            />
+                          </div>
                         </div>
                       </div>
                     )}
-                    <Button variant='contained' color='success' type='submit'>
-                      Submit
-                    </Button>
-                    <Button
-                      variant='contained'
-                      color='success'
-                      onClick={() => this.handleEdit()}
-                      className={classes.buttonEdit}
-                    >
-                      <EditIcon
-                        fontSize='small'
-                        className={`${
-                          this.state.disabled === true
-                            ? classes.colorButtonEdit
-                            : classes.colorButtonEditFalse
-                        }`}
-                      />
-                    </Button>
                   </div>
                   <Typography
                     variant='h4'
@@ -244,7 +171,7 @@ class Profile extends Component {
                       margin: '20px',
                     }}
                   >
-                    {firstname}
+                    {user.firstname}
                   </Typography>
                 </div>
               </form>
@@ -285,9 +212,10 @@ class Profile extends Component {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  update: state.auth.update,
 });
 export default withStyles(useStyles)(
-  connect(mapStateToProps, { loadUser })(Profile),
+  connect(mapStateToProps, { loadUser, updateProfile })(Profile),
 );
 
 const menu = [
