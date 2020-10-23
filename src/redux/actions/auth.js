@@ -173,7 +173,13 @@ export const updateProfile = (
         payload: res.data,
         update: true,
       });
-      return dispatch(loadUser());
+      setTimeout(() => {
+        dispatch({
+          type: REMOVE_UPDATE_SUCCESS_MESSAGE,
+          update: false,
+        });
+      }, 3000);
+      dispatch(loadUser());
     } else {
       console.log('connect to internet');
     }
