@@ -62,9 +62,11 @@ export default function (state = initialState, action) {
     case REMOVE_UPDATE_SUCCESS_MESSAGE:
       return {
         ...state,
-        user: {
+        ...payload,
+        message: {
           message: '',
         },
+        update: false,
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:
