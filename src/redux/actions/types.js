@@ -26,3 +26,5 @@ export const ADD_LIKE_BY_ID = 'ADD_LIKE_BY_ID';
 export const REMOVE_LIKE_BY_ID = 'REMOVE_LIKE_BY_ID';
 export const ADD_SCROLL_VALUES = 'ADD_SCROLL_VALUES';
 export const PAGES = 'PAGES';
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+export const UPDATE_PROFILE_FAIL = 'UPDATE_PROFILE_FAIL';
