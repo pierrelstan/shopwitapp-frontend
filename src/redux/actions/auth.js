@@ -9,6 +9,9 @@ import {
   LOGOUT,
   NEW_PASSWORD,
   NEW_PASSWORD_FAIL,
+  UPDATE_PROFILE,
+  UPDATE_PROFILE_FAIL,
+  REMOVE_UPDATE_SUCCESS_MESSAGE,
 } from './types';
 // import { allCarts } from './ItemsActions';
 import { setAlert } from './alert';
@@ -36,13 +39,19 @@ export const loadUser = () => (dispatch) => {
       // dispatch(allCarts());
     })
     .catch((err) => {
-      const errors = err.response.data.errors;
-      if (errors) {
-        errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      if (err) {
+        const errors = err.response.data.errors;
+
+        if (!errors) {
+          dispatch(setAlert('Please connect to internet', 'danger'));
+        }
+        if (errors) {
+          errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+        }
+        dispatch({
+          type: AUTH_ERROR,
+        });
       }
-      dispatch({
-        type: AUTH_ERROR,
-      });
     });
 };
 
@@ -137,5 +146,46 @@ export const newPassWord = (token, state, props) => async (dispatch) => {
     dispatch({
       type: NEW_PASSWORD_FAIL,
     });
+  }
+};
+
+export const updateProfile = (
+  userId,
+  avatar,
+  firstname,
+  lastname,
+  location,
+) => async (dispatch) => {
+  console.log(firstname, lastname, avatar, userId, location);
+  try {
+    let res = await axios.put(
+      `http://localhost:4000/auth/user/${userId}/edit`,
+      { avatar, firstname, lastname },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    if (res) {
+      dispatch({
+        type: UPDATE_PROFILE,
+        payload: res.data,
+        update: true,
+      });
+      return dispatch(loadUser());
+    } else {
+      console.log('connect to internet');
+    }
+  } catch (error) {
+    // error handling
+
+    let errors = error.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+      dispatch({
+        type: UPDATE_PROFILE_FAIL,
+      });
+    }
   }
 };
