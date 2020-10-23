@@ -112,7 +112,7 @@ class Profile extends Component {
 
   render() {
     const { lastname, userId } = this.state;
-    const { classes } = this.props;
+    const { classes, success } = this.props;
     const { user, firstname } = this.props.auth;
     return (
       <div>
@@ -124,57 +124,45 @@ class Profile extends Component {
             }}
           >
             <div>
-              <form onSubmit={this.handleSubmit} className={classes.form}>
+              <div>
                 <div>
                   <div>
-                    {!this.props.auth ? (
-                      ''
-                    ) : (
+                    <div className={classes.container_Profile}>
                       <div>
-                        <div className={classes.container_Profile}>
-                          <div>
-                            <img
-                              className={`${
-                                this.state.disabled === true
-                                  ? classes.avatar
-                                  : classes.avatarOpacity
-                              }`}
-                              ref={this.uploadedImage}
-                              alt='profile_image'
-                              src={user.avatar}
-                              disabled={this.state.disabled}
-                            />
-                          </div>
-
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              flexWrap: 'wrap',
-                              marginLeft: '20px',
-                            }}
-                          >
-                            <EditProfile
-                              avatar={user.avatar}
-                              firstname={firstname}
-                              lastname={lastname}
-                              userId={userId}
-                            />
-                          </div>
-                        </div>
+                        <img
+                          className={`${classes.avatar}`}
+                          alt='profile_image'
+                          src={user.avatar}
+                        />
                       </div>
-                    )}
+
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          flexWrap: 'wrap',
+                          marginLeft: '20px',
+                        }}
+                      >
+                        <EditProfile
+                          avatar={user.avatar}
+                          firstname={firstname}
+                          lastname={lastname}
+                          userId={userId}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <Typography
-                    variant='h4'
-                    style={{
-                      margin: '20px',
-                    }}
-                  >
-                    {user.firstname}
-                  </Typography>
                 </div>
-              </form>
+                <Typography
+                  variant='h4'
+                  style={{
+                    margin: '20px',
+                  }}
+                >
+                  {user.firstname}
+                </Typography>
+              </div>
             </div>
             <div>
               {menu.map((menu) => (
