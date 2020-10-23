@@ -8,18 +8,23 @@ import {
   LOGOUT,
   NEW_PASSWORD,
   NEW_PASSWORD_FAIL,
+  UPDATE_PROFILE,
+  UPDATE_PROFILE_FAIL,
+  REMOVE_UPDATE_SUCCESS_MESSAGE,
 } from '../actions/types';
 
 let initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: false,
   loading: true,
+  message: '',
   user: {
     fistname: '',
     lastname: '',
-    avatar: 'https://share.getcloudapp.com/9ZuBqDyK',
+    avatar: '',
     active: false,
   },
+  update: false,
 };
 
 export default function (state = initialState, action) {
@@ -31,6 +36,7 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         user: payload,
+        active: true,
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
@@ -41,11 +47,30 @@ export default function (state = initialState, action) {
         ...payload,
         isAuthenticated: true,
         loading: false,
+        active: true,
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...state,
+        ...payload,
+        message: payload,
+        isAuthenticated: true,
+        loading: false,
+        active: true,
+        update: true,
+      };
+    case REMOVE_UPDATE_SUCCESS_MESSAGE:
+      return {
+        ...state,
+        user: {
+          message: '',
+        },
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGIN_FAIL:
     case NEW_PASSWORD_FAIL:
+    case UPDATE_PROFILE_FAIL:
     case LOGOUT:
       localStorage.removeItem('token');
       return {
@@ -53,7 +78,7 @@ export default function (state = initialState, action) {
         user: {
           fistname: '',
           lastname: '',
-          avatar: 'https://share.getcloudapp.com/9ZuBqDyK',
+          avatar: '',
           active: false,
         },
         token: null,
