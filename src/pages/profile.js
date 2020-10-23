@@ -201,6 +201,7 @@ class Profile extends Component {
 const mapStateToProps = (state) => ({
   auth: state.auth,
   update: state.auth.update,
+  success: state.auth.message,
 });
 export default withStyles(useStyles)(
   connect(mapStateToProps, { loadUser, updateProfile })(Profile),
