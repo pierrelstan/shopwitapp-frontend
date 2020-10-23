@@ -126,6 +126,11 @@ class Profile extends Component {
             <div>
               <div>
                 <div>
+                  <h1>
+                    {this.props.success && this.props.success
+                      ? this.props.success.message
+                      : ''}
+                  </h1>
                   <div>
                     <div className={classes.container_Profile}>
                       <div>
