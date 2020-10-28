@@ -7,10 +7,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
-
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -163,7 +161,11 @@ function Login({ Log_in, active, isAuthenticated, alert }) {
             value='Submit'
             onClick={handleToggle}
           >
-            Sign In
+            {!open ? (
+              'Sign In'
+            ) : (
+              <CircularProgress color='inherit' thickness={2.3} size={30} />
+            )}
           </Button>
           <Grid container>
             <Grid item xs>
@@ -178,13 +180,6 @@ function Login({ Log_in, active, isAuthenticated, alert }) {
             </Grid>
           </Grid>
         </form>
-        <Backdrop
-          className={classes.backdrop}
-          open={open}
-          onClick={handleClose}
-        >
-          <CircularProgress color='inherit' />
-        </Backdrop>
       </div>
     </Container>
   );
