@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
       zIndex: 2,
       transition: '0.5s all',
       opacity: 0,
-      background: 'linear-gradient(to bottom, rgba(0,0,0,0.5),rgba(0,0,0,0.5))',
+      background: 'linear-gradient(to bottom, rgba(0,0,0,0.5),rgba(0,0,0,0.2))',
     },
 
     '& p': {
@@ -104,6 +104,21 @@ const useStyles = makeStyles((theme) => ({
       transition: '0.5s all',
     },
     '&:hover p': {
+      opacity: 1,
+      transform: 'translateY(0px)',
+    },
+
+    '& h1': {
+      textTransform: 'uppercase',
+      position: 'absolute',
+      top: '20px',
+      zIndex: 3,
+      color: '#fff',
+      opacity: 0,
+      transform: 'translateY(30px)',
+      transition: '0.5s all',
+    },
+    '&:hover h1': {
       opacity: 1,
       transform: 'translateY(0px)',
     },
@@ -120,6 +135,11 @@ const useStyles = makeStyles((theme) => ({
     '&:hover button': {
       opacity: 1,
       transform: 'translateY(0px)',
+    },
+
+    '&:hover .price': {
+      backgroundColor: '#fff',
+      color: '#333',
     },
     [theme.breakpoints.down('xs')]: {
       height: '240px',
@@ -152,6 +172,14 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'none',
     },
   },
+  '@keyframes fadeIn': {
+    '0%': { borderRadius: '0px' },
+    '25%': { borderRadius: ' 10%' },
+    '50%': { borderRadius: '15%' },
+    '75%': { borderRadius: ' 20%' },
+    '100% ': { borderRadius: ' 50%' },
+  },
+
   price: {
     color: '#ffffff',
     borderRadius: '50%',
@@ -252,13 +280,15 @@ function PopularProducts(props) {
                   }}
                 />
                 <CardContent>
-                  <p>{data.description}</p>
+                  <div>
+                    <h1>{data.title}</h1>
+                  </div>
+                  <p className='paragraph'>{data.description}</p>
                 </CardContent>
               </Link>
               <div
                 style={{
                   display: 'flex',
-                  // gridTemplateColumns: '1fr 1fr',
                   justifyContent: 'space-around',
                 }}
               >
