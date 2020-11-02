@@ -6,6 +6,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import store, { persistor } from './redux/store/store';
 import './index.css';
+import 'swiper/swiper-bundle.css';
 import App from './App';
 import { theme } from './Theme/theme';
 import * as serviceWorker from './serviceWorker';
