@@ -1,4 +1,4 @@
-import {ADD_SCROLL_VALUES} from './types';
+import { ADD_SCROLL_VALUES } from './types';
 
 export const addScrollValues = (value) => (dispatch) => {
   dispatch({
