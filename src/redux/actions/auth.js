@@ -42,9 +42,6 @@ export const loadUser = () => (dispatch) => {
       if (err) {
         const errors = err.response.data.errors;
 
-        if (!errors) {
-          dispatch(setAlert('Please connect to internet', 'danger'));
-        }
         if (errors) {
           errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
         }
