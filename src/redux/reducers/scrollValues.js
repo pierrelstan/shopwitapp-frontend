@@ -8,7 +8,7 @@ export default (state = initialState, action) => {
     case ADD_SCROLL_VALUES:
       return {
         ...state,
-        values: values,
+        values,
       };
     default:
       return state;
