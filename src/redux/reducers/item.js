@@ -1,4 +1,4 @@
-import {FETCH_ITEM_BY_ID} from '../actions/types';
+import { FETCH_ITEM_BY_ID } from '../actions/types';
 
 const initialState = {
   description: 'Fetch one Item',
