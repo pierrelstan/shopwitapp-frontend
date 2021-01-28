@@ -22,7 +22,7 @@ export default function (state = initialState, action) {
     case ADD_TO_CART_BY_ID:
       return {
         ...state,
-        addCart: action.payload,
+        addCart: action.payload.data,
         isLoaded: false,
         error: null,
       };
@@ -38,7 +38,7 @@ export default function (state = initialState, action) {
     case FETCH_CARTS:
       return {
         ...state,
-        allCarts: action.payload,
+        allCarts: [...action.payload],
         isLoaded: false,
       };
     case UPDATE_CART:
