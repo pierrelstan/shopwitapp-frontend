@@ -26,7 +26,7 @@ export default function (state = initialState, action) {
     case FETCH_FAVORITES:
       return {
         ...state,
-        allFavorites: action.payload,
+        allFavorites: [...action.payload],
         isLoaded: true,
       };
 
