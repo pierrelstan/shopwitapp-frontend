@@ -29,8 +29,11 @@ let initialState = {
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
+
   switch (type) {
     case USER_LOAD:
+      localStorage.removeItem('userId');
+      localStorage.setItem('userId', payload._id);
       return {
         ...state,
         isAuthenticated: true,
@@ -41,7 +44,13 @@ export default function (state = initialState, action) {
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
     case NEW_PASSWORD:
+      localStorage.removeItem('userId');
+      localStorage.removeItem('token');
+      localStorage.removeItem('persist:token');
       localStorage.setItem('token', payload.token);
+      localStorage.setItem('persist:token', payload.token);
+      localStorage.setItem('persist:root', payload.token);
+
       return {
         ...state,
         ...payload,
@@ -74,7 +83,12 @@ export default function (state = initialState, action) {
     case NEW_PASSWORD_FAIL:
     case UPDATE_PROFILE_FAIL:
     case LOGOUT:
+      localStorage.removeItem('persist:token');
+      localStorage.removeItem('persist:favorites');
+      localStorage.removeItem('persist:items');
+      localStorage.removeItem('persist:root');
       localStorage.removeItem('token');
+      localStorage.removeItem('userId');
       return {
         ...state,
         user: {
