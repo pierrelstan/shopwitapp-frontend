@@ -13,43 +13,40 @@ import {
   UPDATE_PROFILE_FAIL,
   REMOVE_UPDATE_SUCCESS_MESSAGE,
 } from './types';
-// import { allCarts } from './ItemsActions';
+import { fetchItemsByUserId } from './ItemsActions';
 import { setAlert } from './alert';
 import setAuthToken from '../../utils/setAuthToken';
 
 // Load user
-export const loadUser = () => (dispatch) => {
+export const loadUser = () => async (dispatch) => {
   let config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
   let token = localStorage.getItem('token');
+
   if (token) {
     setAuthToken(token);
   }
-  axios
-    .get('http://localhost:4000/auth', config)
-    .then((res) => {
-      console.log(res);
-      dispatch({
-        type: USER_LOAD,
-        payload: res.data,
-      });
-      // dispatch(allCarts());
-    })
-    .catch((err) => {
-      if (err) {
-        const errors = err.response.data.errors;
+  try {
+    let data = await axios.get('http://localhost:4000/api/auth', config);
 
-        if (errors) {
-          errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
-        }
-        dispatch({
-          type: AUTH_ERROR,
-        });
-      }
+    await dispatch({
+      type: USER_LOAD,
+      payload: data.data,
     });
+  } catch (error) {
+    const errors = error.response;
+    if (errors) {
+      errors.data.forEach((error) =>
+        dispatch(setAlert(error.errors.msg, 'warning')),
+      );
+    }
+    dispatch({
+      type: AUTH_ERROR,
+    });
+  }
 };
 
 // register user
@@ -71,7 +68,7 @@ export const register = ({
   };
 
   try {
-    axios.post('http://localhost:4000/auth/signup', body).then((res) => {
+    axios.post('http://localhost:4000/api/auth/signup', body).then((res) => {
       dispatch({
         type: REGISTER_SUCCESS,
         payload: res.data,
@@ -93,25 +90,26 @@ export const Log_in = (user) => (dispatch) => {
     },
   };
 
-  axios.post('http://localhost:4000/auth/login', user, config).then(
+  axios.post('http://localhost:4000/api/auth/login', user, config).then(
     (res) => {
-      console.log(res);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
-      return dispatch(loadUser());
+      loadUser();
     },
     (error) => {
       // error handling
-
       let errors = error.response.data.errors;
-      console.log(errors);
-      if (errors) {
-        errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
-        dispatch({
-          type: LOGIN_FAIL,
-        });
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+
+      dispatch({
+        type: LOGIN_FAIL,
+      });
+      if (axios.isCancel(error)) {
+        console.log('request cancelled');
+      } else {
+        console.log('some other reason');
       }
     },
   );
@@ -128,7 +126,7 @@ export const logout = () => (dispatch) => {
 export const newPassWord = (token, state, props) => async (dispatch) => {
   try {
     let res = await axios.post(
-      `http://localhost:4000/auth/newpassword/${token}`,
+      `http://localhost:4000/api/auth/newpassword/${token}`,
       state,
     );
 
@@ -137,7 +135,6 @@ export const newPassWord = (token, state, props) => async (dispatch) => {
       payload: res.data,
     });
 
-    dispatch(loadUser());
     props.history.push('/');
   } catch (error) {
     dispatch({
@@ -152,12 +149,28 @@ export const updateProfile = (
   firstname,
   lastname,
   location,
+  addressLine1,
+  addressLine2,
+  city,
+  stateProvinceRegion,
+  zipPostalCode,
+  country,
 ) => async (dispatch) => {
-  console.log(firstname, lastname, avatar, userId, location);
   try {
     let res = await axios.put(
-      `http://localhost:4000/auth/user/${userId}/edit`,
-      { avatar, firstname, lastname },
+      `http://localhost:4000/api/auth/user/${userId}/edit`,
+      {
+        avatar,
+        firstname,
+        lastname,
+        location,
+        addressLine1,
+        addressLine2,
+        city,
+        stateProvinceRegion,
+        zipPostalCode,
+        country,
+      },
       {
         headers: {
           'Content-Type': 'application/json',
@@ -170,6 +183,7 @@ export const updateProfile = (
         payload: res.data,
         update: true,
       });
+      dispatch(setAlert('Update profile successfully!', 'success'));
       setTimeout(() => {
         dispatch({
           type: REMOVE_UPDATE_SUCCESS_MESSAGE,
@@ -182,7 +196,7 @@ export const updateProfile = (
     }
   } catch (error) {
     // error handling
-
+    console.log(error.response);
     let errors = error.response.data.errors;
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
