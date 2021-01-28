@@ -6,6 +6,9 @@ import items from './items';
 import item from './item';
 import pages from './pages';
 import openCart from './openCart';
+import carts from './RootCarts';
+import favorites from './favorites';
+import openFavoritesAndClosing from './OpenAndCloseFavorites';
 
 const allReducers = combineReducers({
   auth,
@@ -15,5 +18,8 @@ const allReducers = combineReducers({
   item,
   pages,
   openCart,
+  carts,
+  favorites,
+  openFavoritesAndClosing,
 });
 export default allReducers;
