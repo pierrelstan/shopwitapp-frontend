@@ -2,8 +2,10 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import AirportShuttleIcon from '@material-ui/icons/AirportShuttle';
 import WatchLaterIcon from '@material-ui/icons/WatchLater';
+import EmojiTransportationIcon from '@material-ui/icons/EmojiTransportation';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import services from '../utils/images/services.jpg';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -46,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
   containerServices: {
     display: 'flex',
     justifyContent: 'space-around',
+    alignItems: 'center',
     flexWrap: 'wrap',
     color: '#fff',
     marginTop: '80px',
@@ -54,16 +57,28 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: '10px',
     paddingRight: '10px',
     textAlign: 'center',
-    backgroundImage: ` linear-gradient(80deg, rgba(0, 0, 0, 0.87), #0000009e),url(${`https://res.cloudinary.com/stanley/image/upload/v1599741722/markus-spiske-GVF30JP2nIg-unsplash_dxanhm.jpg`})`,
+    backgroundImage: ` linear-gradient(80deg, rgba(0, 0, 0, 0.87), #0000009e),url(${services})`,
     backgroundAttachment: 'fixed',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: ' center center',
-
+    height: '50vh',
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'row',
-      height: 'auto',
+      height: '100%',
       margin: '30px',
+      backgroundImage: ` linear-gradient(80deg, rgba(0, 0, 0, 0.87), #0000009e),url(${services})`,
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundAttachment: 'initial',
+    },
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'row',
+      height: '100%',
+      margin: '30px',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundAttachment: 'initial',
     },
   },
   iconMargin: {
@@ -93,28 +108,31 @@ const useStyles = makeStyles((theme) => ({
 
 const IconsServices = () => {
   const classes = useStyles();
+  const Data = React.useMemo(() => data, []);
+
   return (
-    <>
-      {data.map((Item) => {
-        return (
-          <div>
-            <IconButton className={classes.iconMargin}>
-              {<Item.icon className={classes.iconColor} />}
-            </IconButton>
-            <Typography variant='h6' className={classes.servicesTitle}>
-              {Item.secure}
-            </Typography>
-            <Typography variant='body1' className={classes.servicesParagraph}>
-              {Item.garanty}
-            </Typography>
-          </div>
-        );
-      })}
-    </>
+    <React.Fragment>
+      {Data &&
+        Data.map((Item) => {
+          return (
+            <div key={Item.id}>
+              <IconButton className={classes.iconMargin}>
+                {<Item.icon className={classes.iconColor} />}
+              </IconButton>
+              <Typography variant='h6' className={classes.servicesTitle}>
+                {Item.secure}
+              </Typography>
+              <Typography variant='body1' className={classes.servicesParagraph}>
+                {Item.garanty}
+              </Typography>
+            </div>
+          );
+        })}
+    </React.Fragment>
   );
 };
 
-export default function Services() {
+function Services() {
   const classes = useStyles();
   return (
     <div className={classes.main}>
@@ -126,20 +144,23 @@ export default function Services() {
     </div>
   );
 }
-
+export default Services;
 const data = [
   {
-    icon: AirportShuttleIcon,
+    id: 0,
+    icon: EmojiTransportationIcon,
     secure: 'FREE SHIPPING',
     garanty: 'For all order over 99$',
   },
   {
+    id: 1,
     icon: WatchLaterIcon,
     secure: 'DELIVERY ON TIME',
     garanty: 'We make sure you got your item on time',
   },
   {
-    icon: AirportShuttleIcon,
+    id: 2,
+    icon: AttachMoneyIcon,
     secure: ' SECURE PAYMENT',
     garanty: '   100% secure payment',
   },
