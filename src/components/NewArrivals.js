@@ -7,8 +7,7 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import styled, { keyframes, css } from 'styled-components';
 import { connect } from 'react-redux';
-import Titles from './Titles';
-import Wrapper from './Wrapper';
+import image from '../utils/images/logo2.png';
 
 // Create the keyframes for the images
 const rightAnimations = keyframes`
@@ -66,30 +65,35 @@ const Left = styled.div`
       ? css`
           ${leftAnimations} 3s 0.1s  forwards cubic-bezier(0.2, 0.8, 0.2, 1)
         `
-      : props.ScrollNumber <= 4286
-      ? css`
-          ${rightAnimations} 3s 0.1s forwards cubic-bezier(0.1, 0.8, 0.2, 1)
-        `
-      : ''};
+      : // : props.ScrollNumber <= 4286
+        // ? css`
+        //     ${rightAnimations} 3s 0.1s forwards cubic-bezier(0.1, 0.8, 0.2, 1)
+        //   `
+        ''};
   text-align: center;
 `;
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
-    flexWrap: 'wrap',
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#eee',
     textAlign: 'center',
-    height: '100vh',
+    padding: '30px',
+    // height: '50vh',
+
     [theme.breakpoints.down('sm')]: {
       justifyContent: 'center',
       height: 'auto',
     },
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.down('md')]: {
       justifyContent: 'space-around',
-      flexWrap: 'wrap-reverse',
+      height: '50vh',
+    },
+    [theme.breakpoints.down('xs')]: {
+      flexWrap: 'wrap',
+      height: 'auto',
     },
   },
   image: {
@@ -97,24 +101,14 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '555px',
     height: 'auto',
     objectFit: 'cover',
-    // [theme.breakpoints.down('sm')]: {
-    //   // width: '100%',
-    //   height: 'auto',
-    //   width: '500px',
-    //   // height: 'auto',
-    //   // objectFit: 'cover',
-    //   marginTop: '100px',
-    // },
+
     [theme.breakpoints.between('1088', '1133')]: {
       height: 'auto',
       width: '500px',
-      // height: 'auto',
     },
     [theme.breakpoints.between('963', '1089')]: {
-      // width: '100%',
       height: 'auto',
       width: '400px',
-      // height: 'auto',
     },
     [theme.breakpoints.between('870', '960')]: {
       width: '500px',
@@ -123,14 +117,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.between('600', '870')]: {
       width: '400px',
       height: 'auto',
-      // width: '300px',
-      // height: 'auto',
     },
     [theme.breakpoints.between('412', '600')]: {
       width: '300px',
       height: 'auto',
-      // width: '300px',
-      // height: 'auto',
     },
     [theme.breakpoints.down('412')]: {
       width: '100%',
@@ -180,46 +170,50 @@ function NewArrivals(props) {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 
   return (
     <div>
-      <Wrapper />
-      <div className={classes.container}>
-        <Right {...props}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px',
-            }}
-          >
-            <Typography variant='h1' className={classes.h1}>
-              #NEW SUMMER COLLECTION 2020
-            </Typography>
-            <Typography variant='h4' className={classes.h4}>
-              ARRIVALS SALES
-            </Typography>
-
-            <Button
-              size={`${!matches ? 'large' : 'small'}`}
-              variant='contained'
-              className={classes.button}
-              component={RouterLink}
-              color='inherit'
-              to='/shop'
+      {!matchesXS && (
+        <div className={classes.container}>
+          <Right {...props}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px',
+              }}
             >
-              SHOP NOW
-            </Button>
-          </div>
-        </Right>
-        <Left {...props}>
-          <img
-            src='https://res.cloudinary.com/stanley/image/upload/v1600417244/bg_1_tgm9mm.png'
-            alt='image'
-            className={classes.image}
-          />
-        </Left>
-      </div>
+              <Typography variant='h1' className={classes.h1}>
+                #NEW SUMMER COLLECTION 2021
+              </Typography>
+              <Typography variant='h4' className={classes.h4}>
+                ARRIVALS SALES
+              </Typography>
+
+              <Button
+                size={`${!matches ? 'large' : 'small'}`}
+                variant='contained'
+                className={classes.button}
+                component={RouterLink}
+                color='inherit'
+                to='/shop'
+              >
+                SHOP NOW
+              </Button>
+            </div>
+          </Right>
+          <Left {...props}>
+            <img
+              src={image}
+              alt='Hero'
+              width='640'
+              height='360'
+              className={classes.image}
+            />
+          </Left>
+        </div>
+      )}
     </div>
   );
 }
@@ -227,4 +221,4 @@ const mapStateToProps = (state) => ({
   values: state.scrollValues.values,
 });
 
-export default connect(mapStateToProps, {})(NewArrivals);
+export default connect(mapStateToProps)(NewArrivals);
