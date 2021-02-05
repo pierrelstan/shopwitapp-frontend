@@ -14,10 +14,12 @@ import {
   Typography,
   Button,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import EditProfile from '../components/editProfile';
+import Footer from '../components/Footer';
 
-const useStyles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     display: 'grid',
   },
@@ -74,143 +76,129 @@ const useStyles = (theme) => ({
     gridTemplateColumns: '150px 1fr ',
     gridGap: '20px',
   },
-});
-class Profile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      greetingTheName: '',
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-      userId: '',
-      error: null,
-      disabled: true,
-      avatar: '',
-      update: false,
-      edit: false,
-      carts: [],
-      user: null,
-      transarant: '',
-      successful: false,
-    };
-  }
+}));
+const Profile = (props) => {
+  const [User, setUser] = React.useState({
+    greetingTheName: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    password: '',
+    userId: '',
+    error: null,
+    disabled: true,
+    avatar: '',
+    update: false,
+    edit: false,
+    carts: [],
+    user: null,
+    transarant: '',
+    successful: false,
+  });
 
-  componentDidMount() {
-    if (this.props.auth.user) {
-      this.setState({
-        greetingTheName: this.props.auth.user.firstname,
-        firstname: this.props.auth.user.firstname,
-        lastname: this.props.auth.user.lastname,
-        email: this.props.auth.user.email,
-        avatar: this.props.auth.avatar,
-        userId: this.props.auth.user._id,
-      });
-    }
-  }
+  const classes = useStyles();
 
-  render() {
-    const { lastname, userId } = this.state;
-    const { classes, success } = this.props;
-    const { user, firstname } = this.props.auth;
-    return (
-      <div>
-        <Container maxWidth='lg'>
-          <div
-            style={{
-              width: '100%',
-              height: '939px',
-            }}
-          >
+  React.useEffect(() => {
+    setUser((prev) => ({
+      ...prev,
+      greetingTheName: props.auth.user.firstname,
+      firstname: props.auth.user.firstname,
+      lastname: props.auth.user.lastname,
+      email: props.auth.user.email,
+      avatar: props.auth.user.avatar,
+      userId: props.auth.user._id,
+    }));
+  }, [props.auth.avatar, props.auth.user]);
+
+  const { lastname, userId, firstname, avatar } = User;
+
+  return (
+    <Container maxWidth='lg'>
+      <div
+        style={{
+          width: '100%',
+          height: '939px',
+        }}
+      >
+        <div>
+          <div>
             <div>
               <div>
-                <div>
-                  <h1>
-                    {this.props.success && this.props.success
-                      ? this.props.success.message
-                      : ''}
-                  </h1>
+                <div className={classes.container_Profile}>
                   <div>
-                    <div className={classes.container_Profile}>
-                      <div>
-                        <img
-                          className={`${classes.avatar}`}
-                          alt='profile_image'
-                          src={user.avatar}
-                        />
-                      </div>
+                    <img
+                      className={`${classes.avatar}`}
+                      alt='profile_image'
+                      src={avatar}
+                    />
+                  </div>
 
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          flexWrap: 'wrap',
-                          marginLeft: '20px',
-                        }}
-                      >
-                        <EditProfile
-                          avatar={user.avatar}
-                          firstname={firstname}
-                          lastname={lastname}
-                          userId={userId}
-                        />
-                      </div>
-                    </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                      marginLeft: '20px',
+                    }}
+                  >
+                    <EditProfile
+                      avatar={avatar}
+                      firstname={firstname}
+                      lastname={lastname}
+                      userId={userId}
+                    />
                   </div>
                 </div>
-                <Typography
-                  variant='h4'
-                  style={{
-                    margin: '20px',
-                  }}
-                >
-                  {user.firstname}
-                </Typography>
               </div>
             </div>
-            <div>
-              {menu.map((menu) => (
-                <Button
-                  variant='outlined'
-                  color='primary'
-                  style={{
-                    margin: '10px',
-                  }}
-                >
-                  {menu.name}
-                </Button>
-              ))}
-            </div>
-
-            <div>
-              {menu2.map((menu) => (
-                <Button
-                  variant='outlined'
-                  color='primary'
-                  style={{
-                    margin: '10px',
-                  }}
-                >
-                  {menu.name}
-                </Button>
-              ))}
-            </div>
+            <Typography
+              variant='h4'
+              style={{
+                margin: '20px',
+              }}
+            >
+              {firstname}
+            </Typography>
           </div>
-        </Container>
+        </div>
+        <div>
+          {menu.map((menu) => (
+            <Button
+              variant='outlined'
+              color='primary'
+              style={{
+                margin: '10px',
+              }}
+            >
+              {menu.name}
+            </Button>
+          ))}
+        </div>
+
+        <div>
+          {menu2.map((menu) => (
+            <Button
+              variant='outlined'
+              color='primary'
+              style={{
+                margin: '10px',
+              }}
+            >
+              {menu.name}
+            </Button>
+          ))}
+        </div>
       </div>
-    );
-  }
-}
+    </Container>
+  );
+};
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
   update: state.auth.update,
   success: state.auth.message,
 });
-export default withStyles(useStyles)(
-  connect(mapStateToProps, { loadUser, updateProfile })(Profile),
-);
+export default connect(mapStateToProps, { loadUser, updateProfile })(Profile);
 
 const menu = [
   {
