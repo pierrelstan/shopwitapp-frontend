@@ -1,46 +1,31 @@
 import React from 'react';
-
 import { connect } from 'react-redux';
-
 import { Paper } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
 
 const Alert = ({ alerts }) => {
-  // const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-  // React.useEffect(() => {
-  //   if (alerts.alertTypes === 'errors') {
-  //     const message_Failed = 'Please enter a valid email';
-  //     enqueueSnackbar(message_Failed, {
-  //       preventDuplicate: true,
-  //       autoHideDuration: 3000,
-  //       variant: 'warning',
-  //       anchorOrigin: {
-  //         vertical: 'top',
-  //         horizontal: 'right',
-  //       },
-  //     });
-  //   } else {
-  //     const message_Success = 'Thank you for Subscribing';
-  //     enqueueSnackbar(message_Success, {
-  //       preventDuplicate: true,
-  //       variant: 'success',
-  //       autoHideDuration: 3000,
-  //       anchorOrigin: {
-  //         vertical: 'top',
-  //         horizontal: 'right',
-  //       },
-  //     });
-  //   }
-  // }, []);
+  const { enqueueSnackbar } = useSnackbar();
   return (
-    <Paper>
+    <div
+      style={{
+        display: 'none',
+      }}
+    >
       {alerts !== null &&
         alerts.length > 0 &&
         alerts.map((alert) => (
-          <div key={alert.id} className={`alert alert-${alert.alertTypes} `}>
-            {alert.msg}
+          <div key={alert.id}>
+            {enqueueSnackbar(`${alert.msg}`, {
+              variant: `${alert.alertTypes}`,
+              preventDuplicate: true,
+              anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right',
+              },
+            })}
           </div>
         ))}
-    </Paper>
+    </div>
   );
 };
 
