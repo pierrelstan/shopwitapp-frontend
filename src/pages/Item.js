@@ -10,17 +10,16 @@ import Button from '@material-ui/core/Button';
 import { useSnackbar } from 'notistack';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Paper, Box, ButtonGroup } from '@material-ui/core';
-// import { Rating } from '@material-ui/lab';
-// import CommmentsItem from './commentsItem';
 import {
   fetchItemById,
-  // removeItemById,
+  removeItemById,
   // removeCart,
   // allCarts,
   // addToCart,
 } from '../redux/actions/ItemsActions';
 import Wrapper from '../components/Wrapper';
 import ScrollOnTop from '../components/ScrollOnTop';
+import Titles from '../components/Titles';
 // import ScrollToTop from './ScrollOnTop';
 
 const useStyles = makeStyles((theme) => ({
@@ -80,7 +79,6 @@ const Item = (props) => {
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    console.log(id);
     if (id) {
       setLoading(true);
     } else {
@@ -89,36 +87,24 @@ const Item = (props) => {
   }, [id]);
 
   React.useEffect(() => {
-    setTimeout(() => {
-      fetchItemById(id);
-    }, 10);
-  }, [id]);
+    fetchItemById(id);
+  }, [fetchItemById, id]);
 
   const handleClickAddToCart = async (id) => {
     await addToCart(id);
   };
 
-  const handleDeleteItem = async () => {
-    await removeItemById(id);
-    await props.history.push('/');
-
-    let store = localStorage.getItem('store');
-
-    carts.map((cart) => {
-      if (cart._id === id) {
-        // removeCart(cart.item._id);
-        // allCarts(userId);
-        // history.push('/carts');
-      }
-    });
+  const handleDeleteItem = (userId) => {
+    removeItemById(id, userId, props.history);
   };
 
   const data = props.item.item;
   if (!item.isLoaded) {
     return (
-      <div className={classes.centered}>
+      <Wrapper>
+        <Titles>Product</Titles>
         <CircularProgress color='secondary' />
-      </div>
+      </Wrapper>
     );
   }
   if (item.error) {
@@ -128,6 +114,7 @@ const Item = (props) => {
       <div>
         <ScrollOnTop />
         <Wrapper>
+          <Titles>Product</Titles>
           <div>
             <Paper elevation={0}>
               <div className={classes.container}>
@@ -178,7 +165,9 @@ const Item = (props) => {
                         Edit{' '}
                       </Link>
                     </Button>
-                    <Button onClick={handleDeleteItem}>Delete</Button>
+                    <Button onClick={() => handleDeleteItem(data.userId)}>
+                      Delete
+                    </Button>
                   </ButtonGroup>
                 </div>
               </div>
@@ -205,7 +194,7 @@ const mapStateToProps = (state) => ({
 });
 export default connect(mapStateToProps, {
   fetchItemById,
-  // removeItemById,
+  removeItemById,
   // removeCart,
   // allCarts,
   // addToCart,
