@@ -1,6 +1,4 @@
 import axios from 'axios';
-import axiosCancel from 'axios-cancel';
-import openSocket from 'socket.io-client';
 import {
   FETCH_ITEMS,
   SEARCH_ITEMS,
@@ -18,8 +16,8 @@ import {
   UPDATE_ITEM,
   UPDATE_ITEM_FAIL,
   FETCH_ITEMS_BY_USER_ID,
-  FETCH_ITEMS_BY_USER_ID_FAILED,
   FETCH_LAST_PRODUCTS,
+  DELETE_ITEM_FAIL,
 } from './types';
 import { setAlert } from './alert';
 
@@ -32,34 +30,25 @@ export const fetchLastProducts = (cancelToken) => async (dispatch) => {
   };
   try {
     let items = await axios.get(
-      'http://localhost:4000/api/item/lastproducts',
+      'http://10.0.0.5:4000/api/item/lastproducts',
       config,
     );
     dispatch({
       type: FETCH_LAST_PRODUCTS,
-      payload: items.data,
-      isLoaded: true,
-      error: null,
+      lastProducts: items.data,
     });
   } catch (err) {
-    let a = axios.isCancel(err);
-    if (a) {
-      console.log('request cancelled');
-    } else {
-      console.log('some other reason');
-    }
+    throw err;
   }
-  // cancelTokenSource.cancel();
 };
 export const fetchItems = () => async (dispatch, getState) => {
-  // let requestId = 'stanley';
   let config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
   try {
-    let items = await axios.get('http://localhost:4000/api/item/all', config);
+    let items = await axios.get('http://10.0.0.5:4000/api/item/all', config);
     dispatch({
       type: FETCH_ITEMS,
       payload: items.data,
@@ -67,28 +56,24 @@ export const fetchItems = () => async (dispatch, getState) => {
       error: null,
     });
   } catch (err) {
-    if (axios.isCancel(err)) {
-      console.log('request cancelled');
-    } else {
-      console.log('some other reason');
-    }
+    throw err;
   }
 };
 
 export const CreateItem = (product, history, userId) => (dispatch) => {
   axios
-    .post('http://localhost:4000/api/item/new', product, {
+    .post('http://10.0.0.5:4000/api/item/new', product, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
     .then((response) => {
+      dispatch(fetchItemsByUserId());
       dispatch({
         type: CREATE_ITEM,
         payload: response,
       });
-      history.push(`/myproducts/${userId._id}`);
-      dispatch(fetchItems());
+      history.push(`/myproducts`);
     })
     .catch((err) => {
       const errors = err.response.data.errors;
@@ -104,7 +89,7 @@ export const CreateItem = (product, history, userId) => (dispatch) => {
 export const searchItems = (data) => (dispatch) => {
   const { search } = data;
   axios
-    .get(`http://localhost:4000/api/item/s/search?`, {
+    .get(`http://10.0.0.5:4000/api/item/s/search?`, {
       params: {
         title: `${search}`,
       },
@@ -141,7 +126,6 @@ export const clearSearchItems = () => (dispatch) => {
   });
 };
 export const fetchItemById = (id) => (dispatch) => {
-  console.log(id);
   let config = {
     headers: {
       'content-type': 'application/json',
@@ -149,7 +133,7 @@ export const fetchItemById = (id) => (dispatch) => {
   };
 
   axios
-    .get(`http://localhost:4000/api/item/${id}`, config)
+    .get(`http://10.0.0.5:4000/api/item/${id}`, config)
     .then((item) =>
       dispatch({
         type: FETCH_ITEM_BY_ID,
@@ -163,58 +147,64 @@ export const fetchItemById = (id) => (dispatch) => {
     });
 };
 
-export const removeItemById = (id) => (dispatch) => {
+export const removeItemById = (id, userId, history) => (dispatch) => {
+  console.log(userId);
   let config = {
     headers: {
       'Content-Type': 'application/json',
     },
+    params: {
+      userId: userId,
+    },
   };
 
   axios
-    .delete(`http://localhost:4000/api/item/${id}`, config)
+    .delete(`http://10.0.0.5:4000/api/item/${id}?`, config)
     .then(() => {
       dispatch({
         type: REMOVE_ITEM_BY_ID,
         payload: id,
       });
+      history.push('/myproducts');
       dispatch(setAlert('Delete Item successfully!', 'success'));
+      dispatch(fetchLastProducts());
       dispatch(fetchItems());
     })
-    .catch((error) => ({
-      error: error,
-    }));
+    .catch((error) => {
+      const errors = error.response.data;
+      if (errors) {
+        dispatch(setAlert(errors.error, 'warning'));
+      }
+      dispatch({
+        type: DELETE_ITEM_FAIL,
+      });
+    });
 };
 
-export const fetchItemsByUserId = (id) => async (dispatch) => {
+export const fetchItemsByUserId = (id, cancelToken) => async (dispatch) => {
   let config = {
     headers: {
       'Content-Type': 'application/json',
     },
+    cancelToken: cancelToken, // 2nd step
   };
   try {
     let itemsByUserId = await axios.get(
-      `http://localhost:4000/api/item/user/items/${id}`,
+      `http://10.0.0.5:4000/api/item/user/items/${id}`,
       config,
     );
-    console.log(itemsByUserId.data);
+
     await dispatch({
       type: FETCH_ITEMS_BY_USER_ID,
       payload: itemsByUserId.data,
       isLoaded: true,
     });
   } catch (error) {
-    const errors = error.response;
-    if (errors) {
-      await dispatch({
-        type: FETCH_ITEMS_BY_USER_ID_FAILED,
-      });
-    }
-
-    console.log(errors);
+    throw error;
   }
 };
 
-export const updateItem = (id, state) => async (dispatch) => {
+export const updateItem = (id, state, userId) => async (dispatch) => {
   let config = {
     headers: {
       'Content-Type': 'application/json',
@@ -222,7 +212,7 @@ export const updateItem = (id, state) => async (dispatch) => {
   };
 
   try {
-    let data = await axios.put(`http://localhost:4000/api/item/${id}`, state, {
+    let data = await axios.put(`http://10.0.0.5:4000/api/item/${id}`, state, {
       config,
     });
     dispatch({
@@ -232,26 +222,22 @@ export const updateItem = (id, state) => async (dispatch) => {
     });
     dispatch(setAlert('Updated cart successfully!', 'success'));
     dispatch(fetchItems());
+    dispatch(fetchItemsByUserId(userId));
   } catch (error) {
-    const errors = error.response.data.errors;
+    const errors = error.response.data;
     if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'warning')));
+      dispatch(setAlert(errors.error, 'warning'));
     }
     dispatch({
       type: UPDATE_ITEM_FAIL,
     });
-    if (axios.isCancel(error)) {
-      console.log('request cancelled');
-    } else {
-      console.log('some other reason');
-    }
   }
 };
 
 export const addToCart = (id) => async (dispatch) => {
   try {
     await axios
-      .post(`http://localhost:4000/api/item/add-to-cart/${id}`, {
+      .post(`http://10.0.0.5:4000/api/item/add-to-cart/${id}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -283,12 +269,12 @@ export const allCarts = (id, cancelToken) => async (dispatch) => {
   let config = {
     headers: {
       'Content-Type': 'application/json',
+      cancelToken: cancelToken,
     },
-    cancelToken,
   };
   try {
     let carts = await axios.get(
-      `http://localhost:4000/api/item/cart/${id}`,
+      `http://10.0.0.5:4000/api/item/cart/${id}`,
       config,
     );
     dispatch({
@@ -298,11 +284,7 @@ export const allCarts = (id, cancelToken) => async (dispatch) => {
       error: null,
     });
   } catch (err) {
-    if (axios.isCancel(err)) {
-      console.log('request cancelled');
-    } else {
-      console.log('some other reason');
-    }
+    throw err;
   }
 };
 export const updateCart = (id, number) => async (dispatch) => {
@@ -314,7 +296,7 @@ export const updateCart = (id, number) => async (dispatch) => {
   };
   try {
     let res = await axios.put(
-      `http://localhost:4000/api/item/updateCart/${id}`,
+      `http://10.0.0.5:4000/api/item/updateCart/${id}`,
       number,
       config,
     );
@@ -333,6 +315,7 @@ export const updateCart = (id, number) => async (dispatch) => {
       console.log('request cancelled');
     } else {
       console.log('some other reason');
+      throw error;
     }
   }
 };
@@ -344,7 +327,7 @@ export const removeCart = (id) => (dispatch) => {
   };
 
   axios
-    .post(`http://localhost:4000/api/item/removecart/${id}`, config)
+    .post(`http://10.0.0.5:4000/api/item/removecart/${id}`, config)
     .then((res) => {
       dispatch({
         type: REMOVE_CART_BY_ID,
