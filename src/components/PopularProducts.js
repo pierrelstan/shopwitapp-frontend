@@ -1,8 +1,6 @@
 import React from 'react';
-// import { FixedSizeList as List } from 'react-window';
 import { connect } from 'react-redux';
 import { useHistory, withRouter } from 'react-router-dom';
-import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import {
   addToCart,
@@ -14,16 +12,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button, Grid } from '@material-ui/core';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Wrapper from './Wrapper';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import FavoriteSharpIcon from '@material-ui/icons/FavoriteSharp';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import RemoveShoppingCartSharpIcon from '@material-ui/icons/RemoveShoppingCartSharp';
 import Titles from './Titles';
 
 const useStyles = makeStyles((theme) => ({
@@ -68,8 +63,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   imageCard: {
-    // width: '100%',
-    // height: 'auto',
     maxWidth: '317px',
     verticalAlign: 'middle',
     position: 'relative',
@@ -80,7 +73,6 @@ const useStyles = makeStyles((theme) => ({
     width: '322px',
     height: '304px',
     zIndex: 1,
-    // objectFit: 'cover',
     '&:hover': {
       boxShadow: 'none',
     },
@@ -98,6 +90,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       objectFit: 'cover',
       top: '-180px',
+      maxWidth: '70%',
+      width: '85%',
+      left: '53px',
     },
     [theme.breakpoints.down('md')]: {
       objectFit: 'cover',
@@ -111,10 +106,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '24px',
     transition: '0.5s ease-in-out ',
     zIndex: 1,
-    // background: 'linear-gradient(to bottom, rgb(0 0 0 / 4%),rgb(0 0 0 / 67%))',
     [theme.breakpoints.down('xs')]: {
       width: '277px',
       height: '296px',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      height: '336px',
+      maxWidth: '100%',
     },
     boxShadow:
       ' 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2)',
@@ -237,7 +236,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-around',
     position: 'relative',
-    width: '322px',
     top: '200px',
   },
 }));
@@ -260,7 +258,7 @@ const DisplayShoppingIcon = ({
   }, [Carts, id]);
   return (
     <div>
-      {show ? (
+      {show && (
         <AddShoppingCartIcon
           onClick={() => hanldeRemoveCart(id)}
           style={{
@@ -268,7 +266,8 @@ const DisplayShoppingIcon = ({
             color: '#4BB543',
           }}
         />
-      ) : (
+      )}
+      {!show && (
         <ShoppingCartIcon
           style={{
             fontSize: 62,
@@ -292,16 +291,11 @@ const DisplayFavoriteIcon = ({
     let favs = Favs && Favs.findIndex((item) => item.item._id === id) !== -1;
     favs && setShow(true);
     !favs && setShow(false);
-    // if (favs) {
-    //   setShow(true)
-    // } else {
-    //   setShow(false)
-    // }
   }, [Favs, id]);
 
   return (
     <div>
-      {show ? (
+      {show && (
         <FavoriteSharpIcon
           onClick={() => handleRemoveFavorite(id)}
           style={{
@@ -309,7 +303,8 @@ const DisplayFavoriteIcon = ({
             color: '#cb436b',
           }}
         />
-      ) : (
+      )}
+      {!show && (
         <FavoriteBorderIcon
           style={{
             fontSize: 62,
@@ -327,7 +322,6 @@ function PopularProducts({
   addToCart,
   addToFavorites,
   carts,
-  items,
   favorites,
   fetchItems,
   lastProducts,
@@ -379,77 +373,90 @@ function PopularProducts({
   return (
     <div style={{ paddingBottom: '12px' }}>
       <Titles>LAST PRODUCTS</Titles>
-      <div className={classes.container}>
-        <div className={classes.containerItems}>
+      <div>
+        <Grid
+          container
+          spacing={3}
+          // className={classes.container}
+        >
           {lastProducts &&
             lastProducts.map((data) => (
-              <Card
-                className={classes.card}
-                key={data.title}
-                elevation={matches ? 1 : 0}
+              <Grid
+                //  className={classes.containerItems}
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
               >
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    padding: '20px',
-                  }}
+                <Card
+                  className={classes.card}
+                  key={data.title}
+                  elevation={matches ? 1 : 0}
                 >
-                  <Typography component='span' className={classes.price}>
-                    ${data.price}
-                  </Typography>
-                </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      padding: '20px',
+                    }}
+                  >
+                    <Typography component='span' className={classes.price}>
+                      ${data.price}
+                    </Typography>
+                  </div>
 
-                <img
-                  alt={data.title}
-                  src={data.imageUrl}
-                  title={data.title}
-                  className={classes.imageCard}
-                />
-                <Link href={`/item/${data._id}`} className={classes.textLink}>
-                  <CardContent>
-                    <div>
-                      <h1>{data.title}</h1>
-                    </div>
-                    <p>
-                      <span>{data.description}</span>
-                    </p>
-                  </CardContent>
-                </Link>
-                <div className={classes.containerButton}>
-                  <div>
-                    <Box>
+                  <img
+                    alt={data.title}
+                    src={data.imageUrl}
+                    title={data.title}
+                    className={classes.imageCard}
+                  />
+                  <Link href={`/item/${data._id}`} className={classes.textLink}>
+                    <CardContent>
                       <div>
-                        <Button className={classes.button}>
-                          <DisplayFavoriteIcon
-                            id={data._id}
-                            Favs={favorites.allFavorites}
-                            handleAddFavorites={handleAddFavorites}
-                            handleRemoveFavorite={handleRemoveFavorite}
-                          />
-                        </Button>
+                        <h1>{data.title}</h1>
                       </div>
-                    </Box>
+                      <p>
+                        <span>{data.description}</span>
+                      </p>
+                    </CardContent>
+                  </Link>
+                  <div className={classes.containerButton}>
+                    <div>
+                      <Box>
+                        <div>
+                          <Button className={classes.button}>
+                            <DisplayFavoriteIcon
+                              id={data._id}
+                              Favs={favorites.allFavorites}
+                              handleAddFavorites={handleAddFavorites}
+                              handleRemoveFavorite={handleRemoveFavorite}
+                            />
+                          </Button>
+                        </div>
+                      </Box>
+                    </div>
+                    <div>
+                      <Box>
+                        <div className={classes.textLink}>
+                          <Button className={classes.button}>
+                            <DisplayShoppingIcon
+                              Carts={carts.allCarts}
+                              id={data._id}
+                              handleAddCart={handleAddCart}
+                              hanldeRemoveCart={hanldeRemoveCart}
+                            />
+                          </Button>
+                        </div>
+                      </Box>
+                    </div>
                   </div>
-                  <div>
-                    <Box>
-                      <div className={classes.textLink}>
-                        <Button className={classes.button}>
-                          <DisplayShoppingIcon
-                            Carts={carts.allCarts}
-                            id={data._id}
-                            handleAddCart={handleAddCart}
-                            hanldeRemoveCart={hanldeRemoveCart}
-                          />
-                        </Button>
-                      </div>
-                    </Box>
-                  </div>
-                </div>
-              </Card>
+                </Card>
+              </Grid>
             ))}
-        </div>
-
+        </Grid>
+        {/* // </Grid> */}
         <div
           style={{
             marginTop: '100px',
