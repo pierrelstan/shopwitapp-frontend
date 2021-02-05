@@ -1,31 +1,33 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { useHistory, withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Wrapper from './Wrapper';
 import Titles from './Titles';
+import image1 from '../utils/images/image1.jpg';
+import image2 from '../utils/images/image2.jpg';
+import image3 from '../utils/images/image3.jpg';
 
 const images = [
   {
-    url:
-      'https://res.cloudinary.com/stanley/image/upload/v1593138547/sickfits/ben-rosett-WdJkXFQ4VHY-unsplash.jpg',
+    url: image1,
     title: 'Men',
     width: '40%',
     height: '550px',
     margin: '0px',
   },
   {
-    url:
-      'https://res.cloudinary.com/stanley/image/upload/v1593138171/sickfits/freestocks-VFrcRtEQKL8-unsplash.jpg',
+    url: image2,
     title: 'Woman',
     width: '30%',
     height: '550px',
     margin: '40px',
   },
   {
-    url:
-      'https://res.cloudinary.com/stanley/image/upload/v1594910424/clem-onojeghuo-OuxPfti70I0-unsplash_qjruul.jpg',
+    url: image3,
     title: 'Shoes',
     width: '30%',
     height: '550px',
@@ -119,13 +121,12 @@ const useStyles = makeStyles((theme) => ({
   },
   imageWidth: {},
 }));
-
-export default function MenuNavigation() {
+function MenuNavigation({ items }) {
   const classes = useStyles();
 
   return (
-    <Wrapper>
-      <Titles title='DISCOVER THE COLLECTIONS' />
+    <div>
+      <Titles>DISCOVER THE COLLECTIONS</Titles>
       <div className={classes.root}>
         {images.map((image) => (
           <ButtonBase
@@ -153,13 +154,19 @@ export default function MenuNavigation() {
                 color='inherit'
                 className={classes.imageTitle}
               >
-                {image.title} (40)
+                {image.title} {items.items.length}
                 <span className={classes.imageMarked} />
               </Typography>
             </span>
           </ButtonBase>
         ))}
       </div>
-    </Wrapper>
+    </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  items: state.items,
+});
+
+export default withRouter(connect(mapStateToProps, {})(MenuNavigation));
