@@ -376,17 +376,6 @@ function PopularProducts({
     history.push('/shop');
   };
 
-  // if (!items.isLoaded) {
-  //   return (
-  //     <div>
-  //       <Titles>LAST PRODUCTS</Titles>
-  //       <div>
-  //         <CircularProgress color="secondary" />
-  //       </div>
-  //     </div>
-  //   )
-  // }
-
   return (
     <div style={{ paddingBottom: '12px' }}>
       <Titles>LAST PRODUCTS</Titles>
