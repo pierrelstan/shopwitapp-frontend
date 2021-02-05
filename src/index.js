@@ -4,21 +4,28 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { SnackbarProvider } from 'notistack';
 import store, { persistor } from './redux/store/store';
 import './index.css';
 import 'swiper/swiper-bundle.css';
 import App from './App';
 import { theme } from './Theme/theme';
 import * as serviceWorker from './serviceWorker';
+import { fetchLastProducts, fetchItems } from './redux/actions/ItemsActions';
+
+store.dispatch(fetchLastProducts());
+store.dispatch(fetchItems());
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <ThemeProvider theme={theme}>
-            <App />
-          </ThemeProvider>
+          <SnackbarProvider maxSnack={1}>
+            <ThemeProvider theme={theme}>
+              <App />
+            </ThemeProvider>
+          </SnackbarProvider>
         </PersistGate>
       </Provider>
     </BrowserRouter>
