@@ -1,38 +1,29 @@
 import React from 'react';
-import Hero from '../components/Hero';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import MenuNavigation from '../components/MenuNavigation';
+import { Container } from '@material-ui/core';
+import Hero from '../components/Hero';
 import PopularProducts from '../components/PopularProducts';
-import Wrapper from '../components/Wrapper';
 import MostRated from '../components/MostRated';
 import NewArrivals from '../components/NewArrivals';
-import MarginTop from '../components/MarginTop';
+import Services from '../components/Services';
+import NewsLetters from '../components/NewsLetter';
 
-const Home = (props) => {
+const Home = () => {
   return (
     <div>
-      <Hero ScrollNumber={props.values} />
-      <Wrapper>
-        <div>
-          <MarginTop />
-          <MenuNavigation />
-          <MarginTop />
-          <PopularProducts />
-          <MarginTop />
-          <MostRated />
-          <MarginTop />
-        </div>
-      </Wrapper>
-      <NewArrivals ScrollNumber={props.values} />
+      <Container maxWidth='xl'>
+        <Hero />
+        <MenuNavigation />
+        <PopularProducts />
+      </Container>
+      <NewsLetters />
+      <Container maxWidth='xl'>
+        <MostRated />
+      </Container>
+      <Services />
+      <NewArrivals />
     </div>
   );
 };
-const mapStateToProps = (state) => ({
-  // items: state.items,
-  // carts: state.RootCarts.allCarts,
-  // favorites: state.toggleFavorite.favoriteFilm,
-  values: state.scrollValues.values,
-});
 
-export default withRouter(connect(mapStateToProps, {})(Home));
+export default Home;
