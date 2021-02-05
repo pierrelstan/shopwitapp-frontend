@@ -45,18 +45,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Login({ Log_in, active, isAuthenticated, alert }) {
+function Login({ Log_in, active, alert }) {
   const [user, setUser] = React.useState({
     email: '',
     password: '',
   });
 
   const [Errors, SetErrors] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+
   const [open, setOpen] = React.useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
   const handleToggle = () => {
     if (active) {
       setOpen(!open);
@@ -76,7 +73,7 @@ function Login({ Log_in, active, isAuthenticated, alert }) {
     if (alert.length === 1) {
       setOpen(false);
     }
-  });
+  }, [active, alert.length, history]);
 
   const handleChange = (event) => {
     setUser({ ...user, [event.target.name]: event.target.value });
