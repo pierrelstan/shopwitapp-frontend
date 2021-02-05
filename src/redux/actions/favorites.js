@@ -10,7 +10,7 @@ import {
 export const addToFavorites = (id, userId) => async (dispatch) => {
   try {
     await axios
-      .post(`http://localhost:4000/item/add-to-favorites/${id}`, {
+      .post(`http://10.0.0.5:4000/api/item/add-to-favorites/${id}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -25,34 +25,40 @@ export const addToFavorites = (id, userId) => async (dispatch) => {
         dispatch(setAlert('Add to favorites  successfully!', 'success'));
       });
   } catch (err) {
+    console.log(err);
     if (err.response.data.msg) {
       dispatch(setAlert('Please login first!', 'warning'));
+    } else {
+      const errors = err.response.data.errors;
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, 'warning')));
+      }
+      dispatch({
+        type: ADD_FAVORITES_FAILED,
+      });
     }
-    const errors = err.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'warning')));
-    }
-    dispatch({
-      type: ADD_FAVORITES_FAILED,
-    });
   }
 };
 
-export const allFavorites = (userId) => (dispatch) => {
+export const allFavorites = (userId, cancelToken) => (dispatch) => {
   let config = {
     headers: {
       'Content-Type': 'application/json',
+      cancelToken: cancelToken,
     },
   };
   axios
-    .get(`http://localhost:4000/item/favorites/${userId}`, config)
+    .get(`http://10.0.0.5:4000/api/item/favorites/${userId}`, config)
     .then((response) => {
       dispatch({
         type: FETCH_FAVORITES,
         payload: response.data,
-        // isLoaded: true,
+        isLoaded: true,
         error: null,
       });
+    })
+    .catch((error) => {
+      throw error;
     });
 };
 
@@ -64,7 +70,7 @@ export const removeFavorites = (id) => (dispatch) => {
   };
 
   axios
-    .post(`http://localhost:4000/item/removeFavorites/${id}`, config)
+    .post(`http://10.0.0.5:4000/api/item/removeFavorites/${id}`, config)
     .then((res) => {
       dispatch({
         type: REMOVE_FAVORITES,
