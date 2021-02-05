@@ -9,6 +9,11 @@ import {
   responsiveFontSizes,
   ThemeProvider,
 } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { connect } from 'react-redux';
+import { CreateItem } from '../redux/actions/ItemsActions';
+import Titles from '../components/Titles';
 
 let theme = createMuiTheme();
 theme = responsiveFontSizes(theme);
@@ -37,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     textAlign: 'center',
-    marginBottom: '30px',
+    margin: '30px',
   },
 }));
 const iniTialState = {
@@ -47,114 +52,146 @@ const iniTialState = {
   imageUrl: '',
   quantityProducts: '',
 };
-const Sell = (props) => {
+const Sell = ({ CreateItem, history, userId }) => {
   const [product, setProduct] = React.useState(iniTialState);
   const classes = useStyles();
+
+  const uploadedImage = React.useRef();
+
+  const handleImageUpload = (e) => {
+    const [file] = e.target.files;
+    if (file) {
+      const reader = new FileReader();
+      const { current } = uploadedImage;
+      current.file = file;
+      reader.onload = (e) => {
+        current.src = e.target;
+        setProduct({ ...product, imageUrl: e.target.result });
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleChange = (event) => {
     setProduct({ ...product, [event.target.name]: event.target.value });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post('http://localhost:4000/item/new', product, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        setProduct(iniTialState);
-        props.history.push('/');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    CreateItem(product, history, userId);
   };
 
   return (
-    <div className='container'>
-      <ThemeProvider theme={theme}>
-        <Typography variant='h4' className={classes.title}>
-          Enter your Product infos
-        </Typography>
-      </ThemeProvider>
-      <form className={classes.form} noValidate onSubmit={handleSubmit}>
-        <TextField
-          variant='outlined'
-          margin='normal'
-          required={true}
-          fullWidth
-          id='title'
-          label='Title'
-          name='title'
-          autoComplete='title'
-          value={product.title}
-          onChange={handleChange}
-        />
-        <TextField
-          variant='outlined'
-          margin='normal'
-          required={true}
-          fullWidth
-          name='description'
-          label='Description'
-          id='description'
-          autoComplete='description'
-          value={product.description}
-          onChange={handleChange}
-        />
-        <TextField
-          variant='outlined'
-          margin='normal'
-          required={true}
-          fullWidth
-          name='imageUrl'
-          label='Image'
-          id='imageUrl'
-          autoComplete='imageUrl'
-          value={product.imageUrl}
-          onChange={handleChange}
-        />
-        <TextField
-          variant='outlined'
-          margin='normal'
-          required={true}
-          fullWidth
-          name='price'
-          label='Price'
-          id='price'
-          autoComplete='price'
-          value={product.price}
-          onChange={handleChange}
-        />
+    <div>
+      <Container component='main' maxWidth='md'>
+        <Titles>Add Product</Titles>
+        <CssBaseline />
+        <div>
+          <div>
+            <form className={classes.form} noValidate onSubmit={handleSubmit}>
+              <TextField
+                variant='outlined'
+                margin='normal'
+                required={true}
+                fullWidth
+                id='title'
+                label='Title'
+                name='title'
+                autoComplete='title'
+                value={product.title}
+                onChange={handleChange}
+              />
+              <TextField
+                variant='outlined'
+                margin='normal'
+                required={true}
+                fullWidth
+                name='description'
+                label='Description'
+                id='description'
+                autoComplete='description'
+                value={product.description}
+                onChange={handleChange}
+              />
+              <div style={{ display: 'flex', gap: '30px' }}>
+                <TextField
+                  margin='normal'
+                  required={true}
+                  type='file'
+                  accept='image/*'
+                  name='imageUrl'
+                  label='Add image'
+                  multiple='false'
+                  id='imageUrl'
+                  autoComplete='imageUrl'
+                  ref={uploadedImage}
+                  // value={product.imageUrl}
+                  onChange={handleImageUpload}
+                />
+                <div
+                  style={{
+                    display: 'grid',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  {product.imageUrl && (
+                    <img
+                      src={product.imageUrl}
+                      alt='preview'
+                      style={{
+                        width: '320px',
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+              <TextField
+                variant='outlined'
+                margin='normal'
+                required={true}
+                fullWidth
+                name='price'
+                label='Price'
+                id='price'
+                autoComplete='price'
+                value={product.price}
+                onChange={handleChange}
+              />
 
-        <TextField
-          variant='outlined'
-          margin='normal'
-          required={true}
-          fullWidth
-          id='quantityProducts'
-          label='Quantity'
-          name='quantityProducts'
-          autoComplete='quantityProducts'
-          value={product.quantityProducts}
-          onChange={handleChange}
-        />
-        <div className={classes.containerSubmit}>
-          <Button
-            type='submit'
-            variant='outlined'
-            color='primary'
-            className={classes.submit}
-            value='Submit'
-          >
-            Submit
-          </Button>
+              <TextField
+                variant='outlined'
+                margin='normal'
+                required={true}
+                fullWidth
+                id='quantityProducts'
+                label='Quantity'
+                name='quantityProducts'
+                autoComplete='quantityProducts'
+                value={product.quantityProducts}
+                onChange={handleChange}
+              />
+              <div className={classes.containerSubmit}>
+                <Button
+                  type='submit'
+                  variant='outlined'
+                  color='primary'
+                  className={classes.submit}
+                  value='Submit'
+                >
+                  Submit
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
+      </Container>
     </div>
   );
 };
 
-export default Sell;
+const mapStateToProps = (state) => ({
+  userId: state.auth.user._id,
+});
+
+export default connect(mapStateToProps, { CreateItem })(Sell);
