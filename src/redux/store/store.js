@@ -1,6 +1,8 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import localforage from 'localforage';
+
+import storage from 'redux-persist/lib/storage';
+
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import allReducers from '../reducers/index';
@@ -11,20 +13,17 @@ const middleware = [thunk];
 
 const persistConfig = {
   key: 'root',
-  storage: localforage,
-  whitelist: ['carts', 'favorites', 'items', 'products', 'auth', 'item'], // only navigation will be persisted
+  storage,
+  whitelist: ['auth', 'carts', 'favorites'],
 };
 
 const persistedReducer = persistReducer(persistConfig, allReducers);
 
+const composeEnhancers = composeWithDevTools({});
 const store = createStore(
   persistedReducer,
   initialState,
-  compose(
-    applyMiddleware(...middleware),
-    window.__REDUX_DEVTOOLS_EXTENSION__ &&
-      window.__REDUX_DEVTOOLS_EXTENSION__(),
-  ),
+  composeEnhancers(applyMiddleware(...middleware)),
 );
 
 export let persistor = persistStore(store);
