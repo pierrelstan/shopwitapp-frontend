@@ -2,16 +2,11 @@ import axios from 'axios';
 import { PAGES } from './types';
 import { fetchItems } from './ItemsActions';
 
-// export const pagesControlled = (value) => (dispatch) => {
-//   dispatch({
-//     type: PAGES,
-//     page: value,
-//   });
-// };
-
-export const pagesControlled = (page) => (dispatch) => {
+export const pagesControlled = (page, cancelToken) => (dispatch) => {
   axios
-    .get(`http://localhost:4000/item/page/${page}`)
+    .get(`http://10.0.0.5:4000/api/item/page/${page}`, {
+      cancelToken: cancelToken,
+    })
     .then(
       (items) =>
         dispatch({
