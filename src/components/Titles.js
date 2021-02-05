@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#454754',
     marginBottom: '30px',
     paddingBottom: '7px',
+    textTransform: 'uppercase',
     [theme.breakpoints.down('xs')]: {
       fontSize: '25px',
     },
@@ -66,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Titles({ title }) {
+export default function Titles(props) {
   const classes = useStyles();
   return (
     <Box className={classes.containerTitle}>
@@ -74,7 +75,7 @@ export default function Titles({ title }) {
         variant='h3'
         className={clsx(classes.TitleColor, classes.titleBorderLeftColor)}
       >
-        {title}
+        {props.children}
       </Typography>
     </Box>
   );
