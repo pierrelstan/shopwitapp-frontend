@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import Titles from '../components/Titles';
 import Link from '@material-ui/core/Link';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Wrapper from '../components/Wrapper';
+import { CircularProgress, Container } from '@material-ui/core';
 import { fetchItemsByUserId } from '../redux/actions/ItemsActions';
+import { loadUser } from '../redux/actions/auth';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -50,12 +52,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   imageCard: {
-    width: '100%',
-    height: 'auto',
-    MaxWidth: '347px',
+    // width: '100%',
+    // height: 'auto',
+    maxWidth: '317px',
+    verticalAlign: 'middle',
     position: 'relative',
-    top: '-175px',
+    top: '-88px',
     objectFit: 'cover',
+    margin: 0,
+    padding: 0,
+    width: '322px',
+    height: '304px',
+    zIndex: 1,
+    // objectFit: 'cover',
     '&:hover': {
       boxShadow: 'none',
     },
@@ -74,9 +83,9 @@ const useStyles = makeStyles((theme) => ({
       objectFit: 'cover',
       top: '-180px',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       objectFit: 'cover',
-      top: '-130px',
+      top: '-80px',
     },
   },
   card: {
@@ -111,79 +120,84 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MyProducts({ auth, fetchItemsByUserId, products }) {
+function MyProducts({ products, isLoaded, auth }) {
   const classes = useStyles();
-
   React.useEffect(() => {
-    const USER_ID = auth.user._id;
-    fetchItemsByUserId(USER_ID);
-  }, [auth.user._id, fetchItemsByUserId]);
+    if (auth.user._id) {
+      fetchItemsByUserId(auth.user._id);
+    }
+  }, [auth.user._id]);
+
+  if (!isLoaded) {
+    return (
+      <Container maxWidth='xl'>
+        <Titles>My Products </Titles>
+        <div>
+          <CircularProgress color='secondary' />
+        </div>
+      </Container>
+    );
+  }
 
   return (
-    <Wrapper>
+    <Container maxWidth='xl'>
       <div className={classes.container}>
-        {products.length !== 0 ? (
-          <h1
-            style={{
-              textAlign: 'center',
-              textTransform: 'uppercase',
-              marginBottom: '40px',
-            }}
-          >
-            My Products
-          </h1>
-        ) : (
-          <h1
-            style={{
-              textAlign: 'center',
-              textTransform: 'uppercase',
-              marginBottom: '40px',
-            }}
-          >
-            Products empty
-          </h1>
-        )}
-        <div className={classes.containerItems}>
-          {products &&
-            products.map((data) => (
-              <Card className={classes.card} key={data.title} elevation={1}>
-                <Link
-                  component={RouterLink}
-                  to={`/item/${data._id}`}
-                  className={classes.textLink}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      padding: '20px',
-                    }}
-                  >
-                    <Typography component='span' className={classes.price}>
-                      ${data.price}
-                    </Typography>
-                  </div>
+        <Titles>My Products</Titles>
 
-                  <img
-                    alt={data.title}
-                    src={data.imageUrl}
-                    title={data.title}
-                    className={classes.imageCard}
-                  />
-                </Link>
-              </Card>
-            ))}
+        <h1
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {/* {products.length !== 0 ? '' : 'Products empty'} */}
+        </h1>
+
+        <div className={classes.containerItems}>
+          {products.map((data) => (
+            <Card className={classes.card} key={data.title} elevation={1}>
+              <Link
+                component={RouterLink}
+                to={`/item/${data._id}`}
+                className={classes.textLink}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    padding: '20px',
+                  }}
+                >
+                  <Typography component='span' className={classes.price}>
+                    ${data.price}
+                  </Typography>
+                </div>
+
+                <img
+                  alt={data.title}
+                  src={data.imageUrl}
+                  title={data.title}
+                  className={classes.imageCard}
+                />
+              </Link>
+            </Card>
+          ))}
         </div>
       </div>
-    </Wrapper>
+    </Container>
   );
 }
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  products: state.items.myProducts,
+  products: state.myProducts.myProducts,
+  isLoaded: state.myProducts.isLoaded,
 });
 
-export default connect(mapStateToProps, { fetchItemsByUserId })(
-  withRouter(MyProducts),
+export default connect(mapStateToProps, { fetchItemsByUserId, loadUser })(
+  React.memo(MyProducts, (prev, next) => {
+    if (prev.products === next.products) {
+      return true;
+    }
+  }),
 );
