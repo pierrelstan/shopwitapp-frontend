@@ -1,37 +1,36 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { fade, makeStyles } from '@material-ui/core/styles';
-import InputBase from '@material-ui/core/InputBase';
-import Typography from '@material-ui/core/Typography';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Avatar from '@material-ui/core/Avatar';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import Badge from '@material-ui/core/Badge';
-import { withStyles } from '@material-ui/core/styles';
-import { Box, BottomNavigation } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import HomeIcon from '@material-ui/icons/Home';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import clsx from 'clsx';
-import Divider from '@material-ui/core/Divider';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import Link from '@material-ui/core/Link';
-// import SearchC from './Search';
-import { searchItems, clearSearchItems, logout } from '../redux/actions/auth';
-// import AlignItemsList from './SubSearch';
+import React, { useCallback, memo } from 'react'
+import { connect } from 'react-redux'
+import axios from 'axios'
+import { withRouter } from 'react-router-dom'
+import { fade, makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import { Link as RouterLink, useHistory } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import Avatar from '@material-ui/core/Avatar'
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import Badge from '@material-ui/core/Badge'
+import { withStyles } from '@material-ui/core/styles'
+import { Box } from '@material-ui/core'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import Drawer from '@material-ui/core/Drawer'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import Divider from '@material-ui/core/Divider'
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
+import Link from '@material-ui/core/Link'
+import { logout } from '../redux/actions/auth'
+import { openCart } from '../redux/actions/openCart'
+import { openFavoritesAndClosing } from '../redux/actions/OpenAndCloseFavorites'
+import { allFavorites } from '../redux/actions/favorites'
+import { fetchItemsByUserId, allCarts } from '../redux/actions/ItemsActions'
+import Cart from './Cart'
+import FavoritesItem from './Favorites'
+
+const minWidth = 140
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   containerMenu: {
     display: 'flex',
     justifyContent: 'center',
-    // paddingRight: '30px',
+    gap: '10px',
     alignItems: 'center',
     [theme.breakpoints.up('xs')]: {
       display: 'flex',
@@ -104,6 +103,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   hideOnDeskTop: {
+    margiRight: '58px',
     [theme.breakpoints.up('sm')]: {
       display: 'none',
     },
@@ -174,7 +174,6 @@ const useStyles = makeStyles((theme) => ({
   },
   menuTextSize: {
     fontSize: '16px',
-    // fontWeight: 400,
   },
   linkColor: {
     color: '#a67a4b',
@@ -225,7 +224,22 @@ const useStyles = makeStyles((theme) => ({
       display: 'block',
     },
   },
-}));
+  paper: {
+    minWidth: minWidth,
+    borderRadius: 4,
+    marginTop: 20,
+  },
+  position: {
+    display: 'none',
+  },
+  link: {
+    color: '#333',
+    '&:hover': {
+      color: '#333',
+      textDecoration: 'none',
+    },
+  },
+}))
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -234,70 +248,81 @@ const StyledBadge = withStyles((theme) => ({
     border: `2px solid ${theme.palette.background.paper}`,
     padding: '0 4px',
   },
-}))(Badge);
+}))(Badge)
 
-function AuthLinks(props) {
+function AuthLinks({
+  logout,
+  openCart,
+  openFavoritesAndClosing,
+  allFavorites,
+  fetchItemsByUserId,
+  allCarts,
+  avatar,
+  cart,
+  carts,
+  favOpenOrClose,
+  favs,
+  userId,
+}) {
   const [state, setState] = React.useState({
     top: false,
     left: false,
     bottom: false,
     right: false,
-  });
+  })
 
-  const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorEl01, setAnchorEl01] = React.useState(null);
-  const [disp, setDisp] = React.useState(false);
-  const [Search, setSearch] = React.useState('');
-  const [show, setShow] = React.useState(false);
+  const classes = useStyles()
+  let history = useHistory()
 
-  let history = useHistory();
+  const [anchorEl, setAnchorEl] = React.useState(null)
+
+  const handleClickCart = () => {
+    openCart(true)
+  }
+
+  const handleClickFav = () => {
+    openFavoritesAndClosing(true)
+  }
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === 'keydown' &&
       (event.key === 'Tab' || event.key === 'Shift')
     ) {
-      return;
+      return
     }
 
-    setState({ ...state, [anchor]: open });
-  };
+    setState({ ...state, [anchor]: open })
+  }
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
-  const handleClickHamburger = (event) => {
-    setAnchorEl01(event.currentTarget);
-  };
   const handleClose = () => {
-    setAnchorEl(null);
-    setAnchorEl01(null);
-  };
+    setAnchorEl(null)
+  }
 
   const list = (anchor) => (
     <div
       className={classes.list}
-      role='presentation'
+      role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <Box
         className={classes.containerTitle}
         style={{
-          // textAlign: 'center',
           marginTop: '20px',
           marginBottom: '20px',
           marginLeft: '13px',
-          // paddingLeft: '30px',
         }}
       >
         <Typography
-          variant='h6'
+          variant="h6"
           className={classes.title}
           component={RouterLink}
-          to='/'
+          to="/"
         >
           SHopwit
         </Typography>
@@ -321,7 +346,7 @@ function AuthLinks(props) {
                 {text.toUpperCase()}
               </Link>
             </ListItem>
-          ),
+          )
         )}
       </List>
       <Divider />
@@ -331,23 +356,22 @@ function AuthLinks(props) {
             primary={'LOGOUT'}
             className={classes.linkColor}
             onClick={() => {
-              props.logout();
-              history.push('/');
+              logout()
             }}
           />
         </ListItem>
       </List>
     </div>
-  );
+  )
 
   return (
     <React.Fragment>
       <Box className={classes.containerTitle}>
         <Typography
-          variant='h6'
+          variant="h6"
           className={classes.title}
           component={RouterLink}
-          to='/'
+          to="/"
         >
           SHopwit
         </Typography>
@@ -356,40 +380,40 @@ function AuthLinks(props) {
       <Box className={classes.containerSubMenu}>
         <Button
           component={RouterLink}
-          to='/'
-          color='inherit'
+          to="/"
+          color="inherit"
           className={classes.menuTextSize}
         >
           Home
         </Button>
         <Button
           component={RouterLink}
-          color='inherit'
-          to='/shop'
+          color="inherit"
+          to="/shop"
           className={classes.menuTextSize}
         >
           shop
         </Button>
         <Button
           component={RouterLink}
-          color='inherit'
-          to='/item/new'
+          color="inherit"
+          to="/item/new"
           className={classes.menuTextSize}
         >
           Sell
         </Button>
         <Button
           component={RouterLink}
-          color='inherit'
-          to='/men'
+          color="inherit"
+          to="/men"
           className={classes.menuTextSize}
         >
           Men
         </Button>
         <Button
           component={RouterLink}
-          color='inherit'
-          to='/woman'
+          color="inherit"
+          to="/woman"
           className={classes.menuTextSize}
         >
           Woman
@@ -406,11 +430,11 @@ function AuthLinks(props) {
             right: '136px',
           }}
         >
-          {/* <AlignItemsList data={props.search.search} /> */}
+          {/* <AlignItemsList data={search.search} /> */}
         </div>
 
         <Box className={classes.hideOnDeskTop}>
-          <IconButton
+          {/* <IconButton
             edge='start'
             // className={classes.menuButton}
             color='inherit'
@@ -420,27 +444,23 @@ function AuthLinks(props) {
             }}
           >
             <SearchIcon />
-          </IconButton>
+          </IconButton> */}
         </Box>
         <Box>
-          <IconButton>
-            <StyledBadge badgeContent='0' color='secondary'>
+          <IconButton onClick={handleClickFav}>
+            <StyledBadge
+              badgeContent={`${!favs ? '0' : favs.length}`}
+              color="secondary"
+            >
               <FavoriteBorderIcon />
             </StyledBadge>
           </IconButton>
         </Box>
         <Box>
-          <IconButton
-            aria-label='cart'
-            component={RouterLink}
-            to='/carts'
-            style={{
-              margin: '2px',
-            }}
-          >
+          <IconButton aria-label="cart" onClick={handleClickCart}>
             <StyledBadge
-              badgeContent={`${!props.carts ? '0' : props.carts.length}`}
-              color='secondary'
+              badgeContent={`${!carts ? '0' : carts.length}`}
+              color="secondary"
             >
               <ShoppingCartIcon />
             </StyledBadge>
@@ -449,18 +469,21 @@ function AuthLinks(props) {
         <Box className={classes.hambergeurMargin}>
           <div className={classes.hideOnDeskTop}>
             <IconButton
-              color='inherit'
-              aria-label='open drawer'
-              edge='end'
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
               onClick={toggleDrawer('left', true)}
               // className={clsx(open && classes.hide)}
             >
-              <MenuIcon fontSize='small' />
+              <MenuIcon fontSize="small" />
             </IconButton>
             <Drawer
               anchor={'left'}
               open={state['left']}
               onClose={toggleDrawer('left', false)}
+              ModalProps={{
+                keepMounted: true,
+              }}
             >
               {list('left')}
             </Drawer>
@@ -468,72 +491,97 @@ function AuthLinks(props) {
         </Box>
         <Box>
           <IconButton
-            aria-label='account of current user'
-            aria-controls='primary-search-account-menu'
-            aria-haspopup='true'
-            color='inherit'
+            aria-label="account of current user"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            color="inherit"
             className={classes.hideOnMobile}
             onClick={handleClick}
           >
             <Avatar
-              src={props.avatar}
-              alt='profile'
-              aria-controls='simple-menu'
-              color='inherit'
-              aria-haspopup='true'
-              onMouseOver={handleClick}
+              src={avatar.user === null ? '' : avatar.user.avatar}
+              alt="profile"
+              aria-controls="simple-menu"
+              color="inherit"
+              aria-haspopup="true"
+              onMouseEnter={handleClick}
             />
           </IconButton>
-
-          <Menu
-            id='simple-menu'
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-            getContentAnchorEl={null}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-          >
-            <MenuItem
-              onClick={handleClose}
-              component={RouterLink}
-              to='/profile'
+          <div onClick={handleClose}>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              // onClose={handleClose}
+              getContentAnchorEl={null}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              disableRestoreFocus
             >
-              Profile
-            </MenuItem>
-            <MenuItem
-              onClick={handleClose}
-              component={RouterLink}
-              to='/profile'
-            >
-              My Products
-            </MenuItem>
-            <MenuItem>Dashboard</MenuItem>
-            <MenuItem onClick={(handleClose, () => props.logout())}>
-              Logout
-            </MenuItem>
-          </Menu>
+              <MenuItem
+                onClick={handleClose}
+                component={RouterLink}
+                to="/profile"
+              >
+                Profile
+              </MenuItem>
+              <MenuItem>
+                <Link
+                  component={RouterLink}
+                  to="/myproducts"
+                  className={classes.link}
+                >
+                  My Products
+                </Link>
+              </MenuItem>
+              <MenuItem component={RouterLink} to="/orders">
+                Orders
+              </MenuItem>
+              <MenuItem component={RouterLink} to="/dashboard">
+                Dashboard
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  history.push('/')
+                  logout(true)
+                }}
+              >
+                Logout
+              </MenuItem>
+            </Menu>
+          </div>
         </Box>
       </Box>
+      <Cart open={cart} />
+
+      <FavoritesItem openF={favOpenOrClose} />
     </React.Fragment>
-  );
+  )
 }
 
 const mapStateToProps = (state) => ({
-  avatar: state.auth.user.avatar,
-  search: state.Search,
-});
+  avatar: state.auth,
+  cart: state.openCart.cart,
+  carts: state.carts.allCarts,
+  favOpenOrClose: state.openFavoritesAndClosing.open,
+  favs: state.favorites.allFavorites,
+  userId: state.auth.user,
+})
 
 export default withRouter(
   connect(mapStateToProps, {
-    // searchItems, clearSearchItems
     logout,
-  })(AuthLinks),
-);
+    openCart,
+    openFavoritesAndClosing,
+    allFavorites,
+    fetchItemsByUserId,
+    allCarts,
+  })(AuthLinks)
+)
