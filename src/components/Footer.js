@@ -14,11 +14,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     justifyItems: 'center',
-    // alignItems: 'center',
     paddingTop: '100px',
-    margin: 0,
-    position: 'relative',
-    bottom: 0,
     [theme.breakpoints.down('xs')]: {
       rowGap: '33px',
       display: 'grid',
@@ -39,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+    gap: '30px',
     flexDirection: 'row',
     // gridTemplateColumns: '1fr 1fr ',
     justifyItems: 'center',
@@ -172,7 +169,7 @@ export default function Footer() {
         <p
           style={{
             color: '#fff',
-            margin: '-20px',
+            margin: '0px',
             padding: '0px',
           }}
         >
