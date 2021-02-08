@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import SwiperCore, {
   Navigation,
   Pagination,
@@ -133,10 +133,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MostRated({ lastProducts, items }) {
+function MostRated() {
   const classes = useStyles();
   const [value] = React.useState(0);
 
+  const { lastProducts, loading } = useSelector((state) => ({
+    lastProducts: state.lastProducts.lastProducts,
+    loading: state.lastProducts.isLoadingLast10Products,
+  }));
+
+  if (loading) {
+    return (
+      <div>
+        <Titles>LAST PRODUCTS</Titles>
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div>
       <Titles>MOST RATED</Titles>
@@ -212,8 +225,4 @@ function MostRated({ lastProducts, items }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  lastProducts: state.lastProducts.lastProducts,
-  items: state.items,
-});
-export default connect(mapStateToProps, null)(MostRated);
+export default MostRated;
