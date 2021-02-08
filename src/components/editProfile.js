@@ -1,13 +1,13 @@
-import React from 'react'
-import Button from '@material-ui/core/Button'
-import Dialog from '@material-ui/core/Dialog'
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
 // import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField'
-import { connect } from 'react-redux'
-import CloseIcon from '@material-ui/icons/Close'
-import { makeStyles } from '@material-ui/core/styles'
-import PhotoCameraRoundedIcon from '@material-ui/icons/PhotoCameraRounded'
-import { loadUser, updateProfile } from '../redux/actions/auth'
+import TextField from '@material-ui/core/TextField';
+import { connect } from 'react-redux';
+import CloseIcon from '@material-ui/icons/Close';
+import { makeStyles } from '@material-ui/core/styles';
+import PhotoCameraRoundedIcon from '@material-ui/icons/PhotoCameraRounded';
+import { loadUser, updateProfile } from '../redux/actions/auth';
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'grid',
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     left: '80px',
     color: '#333',
   },
-}))
+}));
 
 const EditProfile = ({ updateProfile, auth, loadUser }) => {
   const [User, setUser] = React.useState({
@@ -78,48 +78,50 @@ const EditProfile = ({ updateProfile, auth, loadUser }) => {
     lastname: '',
     avatar: '',
     location: '',
-    disabled: false,
-  })
-  const [open, setOpen] = React.useState(false)
-  const classes = useStyles()
-  let uploadedImage = React.useRef(null)
-  let imageUploader = React.useRef(null)
+  });
+  const [open, setOpen] = React.useState(false);
+  const classes = useStyles();
+  let uploadedImage = React.useRef(null);
+  let imageUploader = React.useRef(null);
 
   const handleClickOpen = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   const handleClose = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
   const handleImageUpload = (e) => {
-    const [file] = e.target.files
+    const [file] = e.target.files;
     if (file) {
-      const reader = new FileReader()
-      const { current } = uploadedImage
-      current.file = file
+      const reader = new FileReader();
+      const { current } = uploadedImage;
+      current.file = file;
       reader.onload = (e) => {
-        current.src = e.target.result
+        current.src = e.target.result;
 
-        setUser({ ...User, avatar: e.target.result })
-      }
+        setUser({ ...User, avatar: e.target.result });
+      };
 
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(file);
     }
-  }
+  };
   const handleChange = (e) => {
-    setUser({ ...User, [e.target.name]: e.target.value })
-  }
+    console.log(e.target.value);
+    setUser({ ...User, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
-    const { avatar, userId, firstname, lastname, location } = User
-    e.preventDefault()
+    e.preventDefault();
+    console.table(User);
+
     try {
-      await updateProfile(userId, avatar, firstname, lastname, location)
+      await updateProfile(User);
+      console.log(User);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   React.useEffect(() => {
     setUser((prev) => ({
@@ -128,23 +130,22 @@ const EditProfile = ({ updateProfile, auth, loadUser }) => {
       lastname: auth.user.lastname,
       email: auth.user.email,
       avatar: auth.user.avatar,
-      userId: auth.user._id,
-    }))
+    }));
   }, [
-    auth.user._id,
     auth.user.avatar,
     auth.user.email,
     auth.user.firstname,
     auth.user.lastname,
     loadUser,
-  ])
-  const { avatar, firstname, lastname } = User
+  ]);
+  const { avatar, firstname, lastname, location } = User;
+
   return (
     <div>
       <Button
-        variant="outlined"
+        variant='outlined'
         disableRipple
-        color="primary"
+        color='primary'
         onClick={handleClickOpen}
         evalation={3}
       >
@@ -155,8 +156,8 @@ const EditProfile = ({ updateProfile, auth, loadUser }) => {
         keepMounted
         // scroll={scroll}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
+        aria-labelledby='alert-dialog-slide-title'
+        aria-describedby='alert-dialog-slide-description'
       >
         <div
           style={{
@@ -174,7 +175,7 @@ const EditProfile = ({ updateProfile, auth, loadUser }) => {
               <div>
                 <Button
                   onClick={handleClose}
-                  color="primary"
+                  color='primary'
                   style={{ marginRight: '10px' }}
                 >
                   <CloseIcon />
@@ -182,7 +183,7 @@ const EditProfile = ({ updateProfile, auth, loadUser }) => {
                 Edit Profile
               </div>
 
-              <Button onClick={handleClose} color="primary" type="submit">
+              <Button onClick={handleClose} color='primary' type='submit'>
                 Save
               </Button>
             </div>
@@ -194,9 +195,9 @@ const EditProfile = ({ updateProfile, auth, loadUser }) => {
                   <div className={classes.container_Profile}>
                     <div>
                       <input
-                        type="file"
-                        accept="image/*"
-                        multiple="false"
+                        type='file'
+                        accept='image/*'
+                        multiple={false}
                         onChange={handleImageUpload}
                         ref={imageUploader}
                         style={{
@@ -208,11 +209,11 @@ const EditProfile = ({ updateProfile, auth, loadUser }) => {
                         <img
                           className={classes.avatarOpacity}
                           ref={uploadedImage}
-                          alt="profile_image"
+                          alt='profile_image'
                           src={avatar}
                         />
                         <div className={classes.containerCameraIcon}>
-                          <PhotoCameraRoundedIcon fontSize="large" />
+                          <PhotoCameraRoundedIcon fontSize='large' />
                         </div>
                       </div>
                     </div>
@@ -222,51 +223,52 @@ const EditProfile = ({ updateProfile, auth, loadUser }) => {
             </div>
 
             <TextField
-              margin="normal"
+              margin='normal'
               required
               fullWidth
-              id="firstName"
-              label="First Name"
-              name="firstName"
-              type="text"
+              id='firstName'
+              label='First Name'
+              name='firstname'
+              type='text'
               onChange={handleChange}
               defaultValue={firstname}
             />
             <TextField
-              type="text"
-              margin="normal"
-              name="lastName"
-              label="LastName"
-              id="lastName"
+              type='text'
+              margin='normal'
+              name='lastname'
+              label='LastName'
+              id='lastName'
               fullWidth
               onChange={handleChange}
               defaultValue={lastname}
             />
 
             <TextField
-              margin="normal"
-              name="location"
-              label="location"
-              id="location"
+              margin='normal'
+              name='location'
+              label='location'
+              id='location'
               fullWidth
               onChange={handleChange}
+              defaultValue={location}
             />
           </form>
         </div>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
   update: state.auth.update,
-})
+});
 
 export default connect(mapStateToProps, { loadUser, updateProfile })(
   React.memo(EditProfile, (prev, next) => {
     if (prev.user !== next.user) {
-      return true
+      return true;
     }
-  })
-)
+  }),
+);
