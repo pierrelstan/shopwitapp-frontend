@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, withRouter } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import {
@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { Box, Button, Grid } from '@material-ui/core';
+import { Box, Button, CircularProgress, Grid } from '@material-ui/core';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -264,6 +264,7 @@ const DisplayShoppingIcon = ({
           style={{
             fontSize: 62,
             color: '#4BB543',
+            backgroundColor: 'transparent',
           }}
         />
       )}
@@ -271,6 +272,7 @@ const DisplayShoppingIcon = ({
         <ShoppingCartIcon
           style={{
             fontSize: 62,
+            backgroundColor: 'transparent',
           }}
           onClick={() => handleAddCart(id)}
         />
@@ -289,8 +291,12 @@ const DisplayFavoriteIcon = ({
 
   React.useEffect(() => {
     let favs = Favs && Favs.findIndex((item) => item.item._id === id) !== -1;
-    favs && setShow(true);
-    !favs && setShow(false);
+
+    if (favs) {
+      setShow(true);
+    } else {
+      setShow(false);
+    }
   }, [Favs, id]);
 
   return (
@@ -316,60 +322,50 @@ const DisplayFavoriteIcon = ({
   );
 };
 
-function PopularProducts({
-  removeCart,
-  removeFavorites,
-  addToCart,
-  addToFavorites,
-  carts,
-  favorites,
-  fetchItems,
-  lastProducts,
-}) {
+function PopularProducts() {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
   let history = useHistory();
 
-  let fetchAllItems = React.useRef(() => {});
+  const dispatch = useDispatch();
 
-  fetchAllItems.current = () => {
-    fetchItems();
+  const { lastProducts, carts, favorites, loading } = useSelector((state) => ({
+    lastProducts: state.lastProducts.lastProducts,
+    carts: state.carts,
+    favorites: state.favorites,
+    loading: state.lastProducts.isLoadingLast10Products,
+  }));
+
+  const handleRemoveFavorite = (id) => {
+    let fav = favorites.allFavorites.find((item) => item.item._id === id);
+    dispatch(removeFavorites(fav._id));
   };
 
-  const handleRemoveFavorite = React.useCallback(
-    (id) => {
-      let fav = favorites.allFavorites.find((item) => item.item._id === id);
-      removeFavorites(fav._id);
-    },
-    [favorites.allFavorites, removeFavorites],
-  );
+  const hanldeRemoveCart = (id) => {
+    let cart = carts.allCarts.filter((item) => item.item._id === id);
+    const { _id } = cart[0];
+    dispatch(removeCart(_id));
+  };
 
-  const hanldeRemoveCart = React.useCallback(
-    (id) => {
-      let cart = carts.allCarts.filter((item) => item.item._id === id);
-      const { _id } = cart[0];
-      removeCart(_id);
-    },
-    [carts.allCarts, removeCart],
-  );
-  const handleAddCart = React.useCallback(
-    (id) => {
-      addToCart(id);
-    },
-    [addToCart],
-  );
+  const handleAddCart = (id) => {
+    dispatch(addToCart(id));
+  };
 
-  const handleAddFavorites = React.useCallback(
-    (id) => {
-      addToFavorites(id);
-    },
-    [addToFavorites],
-  );
+  const handleAddFavorites = (id) => {
+    dispatch(addToFavorites(id));
+  };
   const handleViewAllClick = () => {
     history.push('/shop');
   };
-
+  if (loading) {
+    return (
+      <div>
+        <Titles>LAST PRODUCTS</Titles>
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div style={{ paddingBottom: '12px' }}>
       <Titles>LAST PRODUCTS</Titles>
@@ -424,7 +420,7 @@ function PopularProducts({
                   </Link>
                   <div className={classes.containerButton}>
                     <div>
-                      <Box>
+                      <Box boxShadow={0}>
                         <div>
                           <Button className={classes.button}>
                             <DisplayFavoriteIcon
@@ -438,7 +434,7 @@ function PopularProducts({
                       </Box>
                     </div>
                     <div>
-                      <Box>
+                      <Box boxShadow={0}>
                         <div className={classes.textLink}>
                           <Button className={classes.button}>
                             <DisplayShoppingIcon
@@ -481,19 +477,4 @@ function PopularProducts({
   );
 }
 
-const mapStateToProps = (state) => ({
-  items: state.items,
-  lastProducts: state.lastProducts.lastProducts,
-  carts: state.carts,
-  favorites: state.favorites,
-});
-
-export default withRouter(
-  connect(mapStateToProps, {
-    addToCart,
-    addToFavorites,
-    removeFavorites,
-    removeCart,
-    fetchItems,
-  })(PopularProducts),
-);
+export default PopularProducts;
