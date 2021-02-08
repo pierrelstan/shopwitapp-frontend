@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Paper } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 
 const Alert = ({ alerts }) => {
@@ -32,4 +31,11 @@ const Alert = ({ alerts }) => {
 const mapStateToProps = (state) => ({
   alerts: state.alert,
 });
-export default connect(mapStateToProps)(Alert);
+export default connect(mapStateToProps)(
+  React.memo(Alert, (prev, next) => {
+    console.log(next);
+    if (prev === next.alerts) {
+      return true;
+    }
+  }),
+);
