@@ -122,37 +122,26 @@ const useStyles = makeStyles((theme) => ({
 
 function MyProducts({ products, isLoaded, auth }) {
   const classes = useStyles();
+
   React.useEffect(() => {
     if (auth.user._id) {
       fetchItemsByUserId(auth.user._id);
     }
   }, [auth.user._id]);
-
   if (!isLoaded) {
     return (
       <Container maxWidth='xl'>
-        <Titles>My Products </Titles>
+        <Titles>My Products</Titles>
         <div>
           <CircularProgress color='secondary' />
         </div>
       </Container>
     );
   }
-
   return (
     <Container maxWidth='xl'>
       <div className={classes.container}>
         <Titles>My Products</Titles>
-
-        <h1
-          style={{
-            textAlign: 'center',
-          }}
-        >
-          {' '}
-          {/* {products.length !== 0 ? '' : 'Products empty'} */}
-        </h1>
-
         <div className={classes.containerItems}>
           {products.map((data) => (
             <Card className={classes.card} key={data.title} elevation={1}>
