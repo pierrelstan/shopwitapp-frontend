@@ -1,25 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import Button from '@material-ui/core/Button';
-import { useSnackbar } from 'notistack';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Paper, Box, ButtonGroup } from '@material-ui/core';
 import {
   fetchItemById,
   removeItemById,
-  // removeCart,
-  // allCarts,
-  // addToCart,
+  removeCart,
+  allCarts,
+  addToCart,
 } from '../redux/actions/ItemsActions';
+import {
+  allFavorites,
+  addToFavorites,
+  removeFavorites,
+} from '../redux/actions/favorites';
 import Wrapper from '../components/Wrapper';
 import ScrollOnTop from '../components/ScrollOnTop';
 import Titles from '../components/Titles';
+import { Rating } from '@material-ui/lab';
 // import ScrollToTop from './ScrollOnTop';
 
 const useStyles = makeStyles((theme) => ({
@@ -62,43 +67,70 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Item = (props) => {
-  let {
-    item,
-    removeItemById,
-    fetchItemById,
-    history,
-    carts,
-    addToCart,
-    match: {
-      params: { id },
-    },
-  } = props;
-
+const Item = () => {
   const classes = useStyles();
-  const [loading, setLoading] = React.useState(false);
+  const [showCart, setShowCart] = React.useState(false);
+  const [showFav, setShowFav] = React.useState(false);
+
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const { carts, favorites, item } = useSelector((state) => ({
+    carts: state.carts.allCarts,
+    item: state.item,
+    favorites: state.favorites.allFavorites,
+    loading: state.lastProducts.isLoadingLast10Products,
+  }));
+  let history = useHistory();
+
+  useEffect(() => {
+    dispatch(fetchItemById(id));
+  }, [dispatch, id]);
 
   React.useEffect(() => {
-    if (id) {
-      setLoading(true);
+    let Carts = carts && carts.findIndex((item) => item.item._id === id) !== -1;
+    if (Carts) {
+      setShowCart(true);
     } else {
-      setLoading(false);
+      setShowCart(false);
     }
-  }, [id]);
+  }, [carts, id]);
 
   React.useEffect(() => {
-    fetchItemById(id);
-  }, [fetchItemById, id]);
+    let favs =
+      favorites && favorites.findIndex((item) => item.item._id === id) !== -1;
 
-  const handleClickAddToCart = async (id) => {
-    await addToCart(id);
+    if (favs) {
+      setShowFav(true);
+    } else {
+      setShowFav(false);
+    }
+  }, [favorites, id]);
+
+  const handleRemoveFavorite = (id) => {
+    let fav = favorites.find((item) => item.item._id === id);
+    dispatch(removeFavorites(fav._id));
+  };
+
+  const hanldeRemoveCart = (id) => {
+    let cart = carts.filter((item) => item.item._id === id);
+    const { _id } = cart[0];
+    dispatch(removeCart(_id));
+  };
+
+  const handleAddCart = (id) => {
+    dispatch(addToCart(id));
+  };
+
+  const handleAddFavorites = (id) => {
+    dispatch(addToFavorites(id));
   };
 
   const handleDeleteItem = (userId) => {
-    removeItemById(id, userId, props.history);
+    removeItemById(id, userId);
+    history.push('/myproducts');
   };
 
-  const data = props.item.item;
   if (!item.isLoaded) {
     return (
       <Wrapper>
@@ -111,47 +143,75 @@ const Item = (props) => {
     return <div>Error: {item.error.message}: : Please connect to Internet</div>;
   } else {
     return (
-      <div>
+      <div
+        style={{
+          marginBottom: '50px',
+        }}
+      >
         <ScrollOnTop />
-        <Wrapper>
+        <Container maxWidth='lg'>
           <Titles>Product</Titles>
           <div>
             <Paper elevation={0}>
               <div className={classes.container}>
                 <img
                   className={classes.image}
-                  src={data.imageUrl}
-                  alt={data.title}
+                  src={item.item.imageUrl}
+                  alt={item.item.title}
                 />
                 <div>
-                  <h1>{data.title}</h1>
-                  <h2>Details</h2>
-                  <p>{data.description}</p>
+                  <span>
+                    {' '}
+                    <h1>Title</h1>
+                    <p>{item.item.title}</p>
+                  </span>
 
-                  <p> Quantity: {data.quantityProducts}</p>
-                  <p>$ {data.price}</p>
+                  <h2>Details</h2>
+                  <p>{item.item.description}</p>
+
+                  <p> Quantity: {item.item.quantityProducts}</p>
+                  <p>$ {item.item.price}</p>
                   <Box
                     style={{
                       marginBottom: '20px',
                     }}
                   >
                     <h2>Ratings</h2>
-                    {/* <Rating
+                    <Rating
                       name='customized-empty'
                       defaultValue={2}
                       precision={0.5}
                       emptyIcon={<StarBorderIcon fontSize='inherit' />}
-                    /> */}
+                    />
                   </Box>
 
                   <ButtonGroup
                     size='small'
                     aria-label='small outlined button group'
                   >
-                    <Button onClick={() => handleClickAddToCart(data._id)}>
-                      Add to Cart
-                    </Button>
-                    <Button>Add to Favorites</Button>
+                    {showCart && (
+                      <Button onClick={() => hanldeRemoveCart(item.item._id)}>
+                        Remove Cart
+                      </Button>
+                    )}
+                    {!showCart && (
+                      <Button onClick={() => handleAddCart(item.item._id)}>
+                        Add to Cart
+                      </Button>
+                    )}
+
+                    {showFav && (
+                      <Button
+                        onClick={() => handleRemoveFavorite(item.item._id)}
+                      >
+                        Remove Favorite
+                      </Button>
+                    )}
+                    {!showFav && (
+                      <Button onClick={() => handleAddFavorites(item.item._id)}>
+                        Add to Favorite
+                      </Button>
+                    )}
                   </ButtonGroup>
                   <ButtonGroup
                     size='small'
@@ -160,12 +220,12 @@ const Item = (props) => {
                     <Button>
                       <Link
                         component={RouterLink}
-                        to={`/item/update/${data._id}`}
+                        to={`/item/update/${item.item._id}`}
                       >
                         Edit{' '}
                       </Link>
                     </Button>
-                    <Button onClick={() => handleDeleteItem(data.userId)}>
+                    <Button onClick={() => handleDeleteItem(item.item.userId)}>
                       Delete
                     </Button>
                   </ButtonGroup>
@@ -174,28 +234,18 @@ const Item = (props) => {
             </Paper>
           </div>
           <div>
-            <Typography variant='h4'>Feedback</Typography>
-            <Typography variant='p' className={classes.p}>
+            {/* <Typography variant='h4'>Feedback</Typography> */}
+            {/* <Typography variant='h6' className={classes.p}>
               Feel free to leave any feedback about the changes by commenting on
-              this post, reaching out via the support email, or on talk to me on
-              twitter @tradenba1.
-            </Typography>
+              this post
+            </Typography> */}
           </div>
           {/* <CommmentsItem /> */}
-        </Wrapper>
+        </Container>
         {/* <ContainerFooter /> */}
       </div>
     );
   }
 };
-const mapStateToProps = (state) => ({
-  item: state.item,
-  // carts: state.RootCarts.allCarts,
-});
-export default connect(mapStateToProps, {
-  fetchItemById,
-  removeItemById,
-  // removeCart,
-  // allCarts,
-  // addToCart,
-})(Item);
+
+export default Item;
