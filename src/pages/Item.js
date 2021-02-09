@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: '50px',
     justifyContent: 'center',
     marginTop: '50px',
