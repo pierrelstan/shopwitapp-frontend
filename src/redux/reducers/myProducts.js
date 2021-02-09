@@ -6,7 +6,6 @@ const initialState = {
   isLoaded: false,
   error: null,
 };
-
 export default function (state = initialState, action) {
   switch (action.type) {
     case FETCH_ITEMS_BY_USER_ID:
