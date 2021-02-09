@@ -1,4 +1,6 @@
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
+import store from '../store/store';
 import {
   FETCH_ITEMS,
   SEARCH_ITEMS,
@@ -18,6 +20,8 @@ import {
   FETCH_ITEMS_BY_USER_ID,
   FETCH_LAST_PRODUCTS,
   DELETE_ITEM_FAIL,
+  FETCH_LAST_PRODUCTS_START,
+  FETCH_LAST_PRODUCTS_SUCCESS,
 } from './types';
 import { setAlert } from './alert';
 
@@ -29,17 +33,18 @@ export const fetchLastProducts = (cancelToken) => async (dispatch) => {
     },
   };
   try {
+    dispatch({
+      type: FETCH_LAST_PRODUCTS_START,
+    });
     let items = await axios.get(
       'http://10.0.0.5:4000/api/item/lastproducts',
       config,
     );
     dispatch({
-      type: FETCH_LAST_PRODUCTS,
+      type: FETCH_LAST_PRODUCTS_SUCCESS,
       lastProducts: items.data,
     });
-  } catch (err) {
-    throw err;
-  }
+  } catch (err) {}
 };
 export const fetchItems = () => async (dispatch, getState) => {
   let config = {
@@ -60,7 +65,7 @@ export const fetchItems = () => async (dispatch, getState) => {
   }
 };
 
-export const CreateItem = (product, history, userId) => (dispatch) => {
+export const CreateItem = (product, history) => (dispatch) => {
   axios
     .post('http://10.0.0.5:4000/api/item/new', product, {
       headers: {
@@ -68,11 +73,13 @@ export const CreateItem = (product, history, userId) => (dispatch) => {
       },
     })
     .then((response) => {
+      dispatch(fetchLastProducts());
       dispatch(fetchItemsByUserId());
       dispatch({
         type: CREATE_ITEM,
         payload: response,
       });
+      dispatch(setAlert('Create item Successfully!', 'success'));
       history.push(`/myproducts`);
     })
     .catch((err) => {
@@ -147,31 +154,34 @@ export const fetchItemById = (id) => (dispatch) => {
     });
 };
 
-export const removeItemById = (id, userId, history) => (dispatch) => {
-  console.log(userId);
+export const removeItemById = (id) => (dispatch) => {
+  const token = store.getState().auth.token;
+  const { user } = jwtDecode(token);
+  let USER_ID = user.userId;
   let config = {
     headers: {
       'Content-Type': 'application/json',
     },
-    params: {
-      userId: userId,
+    userId: {
+      USER_ID: USER_ID,
     },
   };
 
   axios
-    .delete(`http://10.0.0.5:4000/api/item/${id}?`, config)
-    .then(() => {
+    .delete(`http://10.0.0.5:4000/api/item/${id}`, config)
+    .then((data) => {
+      dispatch(fetchLastProducts());
+      dispatch(fetchItems());
       dispatch({
         type: REMOVE_ITEM_BY_ID,
         payload: id,
       });
-      history.push('/myproducts');
-      dispatch(setAlert('Delete Item successfully!', 'success'));
-      dispatch(fetchLastProducts());
-      dispatch(fetchItems());
+      console.log(data);
+      dispatch(setAlert(data.data.message, 'success'));
     })
     .catch((error) => {
       const errors = error.response.data;
+      console.log(errors);
       if (errors) {
         dispatch(setAlert(errors.error, 'warning'));
       }
@@ -181,7 +191,10 @@ export const removeItemById = (id, userId, history) => (dispatch) => {
     });
 };
 
-export const fetchItemsByUserId = (id, cancelToken) => async (dispatch) => {
+export const fetchItemsByUserId = (cancelToken) => async (dispatch) => {
+  const token = store.getState().auth.token;
+  const { user } = jwtDecode(token);
+  let USER_ID = user.userId;
   let config = {
     headers: {
       'Content-Type': 'application/json',
@@ -190,7 +203,7 @@ export const fetchItemsByUserId = (id, cancelToken) => async (dispatch) => {
   };
   try {
     let itemsByUserId = await axios.get(
-      `http://10.0.0.5:4000/api/item/user/items/${id}`,
+      `http://10.0.0.5:4000/api/item/user/items/${USER_ID} `,
       config,
     );
 
@@ -204,7 +217,10 @@ export const fetchItemsByUserId = (id, cancelToken) => async (dispatch) => {
   }
 };
 
-export const updateItem = (id, state, userId) => async (dispatch) => {
+export const updateItem = (id, state) => async (dispatch) => {
+  const token = store.getState().auth.token;
+  const { user } = jwtDecode(token);
+  let USER_ID = user.userId;
   let config = {
     headers: {
       'Content-Type': 'application/json',
@@ -222,7 +238,7 @@ export const updateItem = (id, state, userId) => async (dispatch) => {
     });
     dispatch(setAlert('Updated cart successfully!', 'success'));
     dispatch(fetchItems());
-    dispatch(fetchItemsByUserId(userId));
+    dispatch(fetchItemsByUserId(USER_ID));
   } catch (error) {
     const errors = error.response.data;
     if (errors) {
@@ -265,7 +281,10 @@ export const addToCart = (id) => async (dispatch) => {
   }
 };
 
-export const allCarts = (id, cancelToken) => async (dispatch) => {
+export const allCarts = (cancelToken) => async (dispatch) => {
+  const token = store.getState().auth.token;
+  const { user } = jwtDecode(token);
+  let USER_ID = user.userId;
   let config = {
     headers: {
       'Content-Type': 'application/json',
@@ -274,7 +293,7 @@ export const allCarts = (id, cancelToken) => async (dispatch) => {
   };
   try {
     let carts = await axios.get(
-      `http://10.0.0.5:4000/api/item/cart/${id}`,
+      `http://10.0.0.5:4000/api/item/cart/${USER_ID}`,
       config,
     );
     dispatch({
