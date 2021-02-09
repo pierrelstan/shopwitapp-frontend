@@ -29,6 +29,7 @@ import Orders from './pages/orders';
 import Dashboard from './pages/dashboard';
 import Footer from './components/Footer';
 import { allCarts, fetchItemsByUserId } from './redux/actions/ItemsActions';
+import store from './redux/store/store';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,7 +73,7 @@ function App() {
 
   React.useEffect(() => {
     if (token !== null) {
-      dispatch(loadUser());
+      store.dispatch(loadUser());
       dispatch(allFavorites());
       dispatch(allCarts());
       dispatch(fetchItemsByUserId());
