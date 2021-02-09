@@ -366,26 +366,11 @@ function PopularProducts() {
     <div style={{ paddingBottom: '12px' }}>
       <Titles>LAST PRODUCTS</Titles>
       <div>
-        <Grid
-          container
-          spacing={3}
-          // className={classes.container}
-        >
+        <Grid container spacing={3}>
           {lastProducts &&
             lastProducts.map((data) => (
-              <Grid
-                //  className={classes.containerItems}
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-              >
-                <Card
-                  className={classes.card}
-                  key={data.title}
-                  elevation={matches ? 1 : 0}
-                >
+              <Grid item xs={12} sm={6} md={4} lg={3} key={data._id}>
+                <Card className={classes.card} elevation={matches ? 1 : 0}>
                   <div
                     style={{
                       display: 'flex',
