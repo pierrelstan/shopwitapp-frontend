@@ -1,4 +1,5 @@
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 import {
   REGISTER_FAIL,
   REGISTER_SUCCESS,
@@ -14,6 +15,7 @@ import {
   UPDATE_PROFILE_FAIL,
   REMOVE_UPDATE_SUCCESS_MESSAGE,
 } from './types';
+import store from '../store/store';
 import { setAlert } from './alert';
 import setAuthToken from '../../utils/setAuthToken';
 
@@ -24,23 +26,23 @@ export const loadUser = () => async (dispatch) => {
       'Content-Type': 'application/json',
     },
   };
-  let token = localStorage.getItem('token');
+  let TOKEN = localStorage.getItem('token');
 
-  if (token) {
-    setAuthToken(token);
-  }
-  try {
-    let data = await axios.get('http://10.0.0.5:4000/api/auth', config);
+  if (TOKEN !== null) {
+    setAuthToken(TOKEN);
+    try {
+      let data = await axios.get('http://10.0.0.5:4000/api/auth/me', config);
 
-    await dispatch({
-      type: USER_LOAD,
-      payload: data.data,
-    });
-    // await dispatch(fetchItemsByUserId(data.data._id))
-  } catch (error) {
-    dispatch({
-      type: AUTH_ERROR,
-    });
+      return dispatch({
+        type: USER_LOAD,
+        payload: data.data,
+      });
+      // await dispatch(fetchItemsByUserId(data.data._id))
+    } catch (error) {
+      dispatch({
+        type: AUTH_ERROR,
+      });
+    }
   }
 };
 
@@ -63,13 +65,21 @@ export const register = ({
   };
 
   try {
-    axios.post('http://10.0.0.5:4000/api/auth/signup', body).then((res) => {
-      dispatch({
-        type: REGISTER_SUCCESS,
-        payload: res.data,
+    await axios
+      .post('http://10.0.0.5:4000/api/auth/signup', body)
+      .then((res) => {
+        const token = res.data.token;
+        const user = jwtDecode(token); // decode your token here
+        localStorage.setItem('token', token);
+
+        Promise.all(
+          dispatch({
+            type: REGISTER_SUCCESS,
+            payload: token,
+          }),
+          dispatch(loadUser()),
+        );
       });
-      dispatch(loadUser());
-    });
   } catch (err) {
     dispatch({
       type: REGISTER_FAIL,
@@ -87,13 +97,16 @@ export const Log_in = (user) => (dispatch) => {
 
   axios.post('http://10.0.0.5:4000/api/auth/login', user, config).then(
     (res) => {
-      dispatch({
-        type: LOGIN_START,
-      });
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data,
-      });
+      Promise.all([
+        dispatch({
+          type: LOGIN_START,
+        }),
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data,
+        }),
+        dispatch(loadUser()),
+      ]);
     },
     (error) => {
       // error handling
@@ -140,34 +153,14 @@ export const newPassWord = (token, state, props) => async (dispatch) => {
   }
 };
 
-export const updateProfile = (
-  userId,
-  avatar,
-  firstname,
-  lastname,
-  location,
-  addressLine1,
-  addressLine2,
-  city,
-  stateProvinceRegion,
-  zipPostalCode,
-  country,
-) => async (dispatch) => {
+export const updateProfile = (User) => async (dispatch) => {
+  const token = store.getState().auth.token;
+  const { user } = jwtDecode(token);
+  let USER_ID = user.userId;
   try {
     let res = await axios.put(
-      `http://10.0.0.5:4000/api/auth/user/${userId}/edit`,
-      {
-        avatar,
-        firstname,
-        lastname,
-        location,
-        addressLine1,
-        addressLine2,
-        city,
-        stateProvinceRegion,
-        zipPostalCode,
-        country,
-      },
+      `http://10.0.0.5:4000/api/auth/user/${USER_ID}/edit`,
+      User,
       {
         headers: {
           'Content-Type': 'application/json',
