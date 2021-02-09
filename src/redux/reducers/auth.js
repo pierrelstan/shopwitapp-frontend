@@ -35,7 +35,6 @@ export default function (state = initialState, action) {
     case LOGIN_START:
       return { ...state, loadingLogin: true };
     case USER_LOAD:
-      localStorage.setItem('userId', payload._id);
       return {
         ...state,
         isAuthenticated: true,
@@ -46,7 +45,6 @@ export default function (state = initialState, action) {
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
     case NEW_PASSWORD:
-      localStorage.removeItem('token');
       localStorage.setItem('token', payload.token);
 
       return {
@@ -80,7 +78,7 @@ export default function (state = initialState, action) {
     case UPDATE_PROFILE_FAIL:
     case LOGOUT:
       localStorage.removeItem('token');
-      localStorage.removeItem('userId');
+
       return {
         ...state,
         loadingLogin: false,
