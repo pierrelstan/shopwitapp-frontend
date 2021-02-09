@@ -78,7 +78,7 @@ function Login({ Log_in, active, alert }) {
   const handleChange = (event) => {
     setUser({ ...user, [event.target.name]: event.target.value });
   };
-  console.log(alert.length);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     Log_in(user);
@@ -101,7 +101,13 @@ function Login({ Log_in, active, alert }) {
   }
 
   return (
-    <Container component='main' maxWidth='xs'>
+    <Container
+      component='main'
+      maxWidth='xs'
+      style={{
+        paddingBottom: '39px',
+      }}
+    >
       <CssBaseline />
       <div
         className={classes.paper}
