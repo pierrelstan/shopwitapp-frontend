@@ -1,22 +1,13 @@
 import React from 'react';
-import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  createMuiTheme,
-  responsiveFontSizes,
-  ThemeProvider,
-} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { connect } from 'react-redux';
 import { CreateItem } from '../redux/actions/ItemsActions';
 import Titles from '../components/Titles';
-
-let theme = createMuiTheme();
-theme = responsiveFontSizes(theme);
+import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,8 +45,18 @@ const iniTialState = {
 };
 const Sell = ({ CreateItem, history, userId }) => {
   const [product, setProduct] = React.useState(iniTialState);
-  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
+  const classes = useStyles();
+  const handleToggle = () => {
+    setOpen((prev) => !prev);
+  };
+
+  React.useEffect(() => {
+    if (alert.length === 1) {
+      setOpen(false);
+    }
+  }, []);
   const uploadedImage = React.useRef();
 
   const handleImageUpload = (e) => {
@@ -125,7 +126,6 @@ const Sell = ({ CreateItem, history, userId }) => {
                   id='imageUrl'
                   autoComplete='imageUrl'
                   ref={uploadedImage}
-                  // value={product.imageUrl}
                   onChange={handleImageUpload}
                 />
                 <div
@@ -178,8 +178,17 @@ const Sell = ({ CreateItem, history, userId }) => {
                   color='primary'
                   className={classes.submit}
                   value='Submit'
+                  onClick={handleToggle}
                 >
-                  Submit
+                  {!open ? (
+                    'Submit'
+                  ) : (
+                    <CircularProgress
+                      color='inherit'
+                      thickness={2.3}
+                      size={30}
+                    />
+                  )}
                 </Button>
               </div>
             </form>
@@ -192,6 +201,7 @@ const Sell = ({ CreateItem, history, userId }) => {
 
 const mapStateToProps = (state) => ({
   userId: state.auth.user._id,
+  alert: state.alert,
 });
 
 export default connect(mapStateToProps, { CreateItem })(Sell);
