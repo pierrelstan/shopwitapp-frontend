@@ -77,7 +77,6 @@ function Shop({ itemsPerPages, items, pagesControlled }) {
             style={{
               cursor: 'pointer',
             }}
-            // onClick={handleClick}
           >
             Home
           </Link>
@@ -136,7 +135,6 @@ function Shop({ itemsPerPages, items, pagesControlled }) {
   );
 }
 const mapStateToProps = (state) => ({
-  itemsPerPages: state.pages.itemsPerPages,
   items: state.items.items,
   page: state.pages.page,
 });
