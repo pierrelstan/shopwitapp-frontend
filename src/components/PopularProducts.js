@@ -1,12 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
-import {
-  addToCart,
-  removeCart,
-  fetchItems,
-} from '../redux/actions/ItemsActions';
+import { addToCart, removeCart } from '../redux/actions/ItemsActions';
 import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -281,7 +277,7 @@ const DisplayShoppingIcon = ({
   );
 };
 
-const DisplayFavoriteIcon = ({
+export const DisplayFavoriteIcon = ({
   id,
   Favs,
   handleRemoveFavorite,
