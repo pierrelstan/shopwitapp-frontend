@@ -7,7 +7,6 @@ function ProtectedRoutes({
   auth: { isAuthenticated, loading },
   ...rest
 }) {
-  console.log(loading, isAuthenticated);
   return (
     <Route
       {...rest}
