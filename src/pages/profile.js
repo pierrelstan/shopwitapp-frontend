@@ -1,23 +1,9 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { withStyles } from '@material-ui/core/styles';
+import React from 'react';
 import { connect } from 'react-redux';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import EditIcon from '@material-ui/icons/Edit';
 import { loadUser, updateProfile } from '../redux/actions/auth';
-// import MyProducts from '../components/MyProducts';
-import {
-  TextField,
-  Container,
-  Paper,
-  Typography,
-  Button,
-} from '@material-ui/core';
+import { Container, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import EditProfile from '../components/editProfile';
-import Footer from '../components/Footer';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -106,11 +92,10 @@ const Profile = (props) => {
       lastname: props.auth.user.lastname,
       email: props.auth.user.email,
       avatar: props.auth.user.avatar,
-      userId: props.auth.user._id,
     }));
   }, [props.auth.avatar, props.auth.user]);
 
-  const { lastname, userId, firstname, avatar } = User;
+  const { lastname, firstname, avatar } = User;
 
   return (
     <Container maxWidth='lg'>
@@ -145,7 +130,6 @@ const Profile = (props) => {
                       avatar={avatar}
                       firstname={firstname}
                       lastname={lastname}
-                      userId={userId}
                     />
                   </div>
                 </div>
@@ -164,6 +148,7 @@ const Profile = (props) => {
         <div>
           {menu.map((menu) => (
             <Button
+              key={menu.key}
               variant='outlined'
               color='primary'
               style={{
@@ -178,6 +163,7 @@ const Profile = (props) => {
         <div>
           {menu2.map((menu) => (
             <Button
+              key={menu.key}
               variant='outlined'
               color='primary'
               style={{
@@ -202,36 +188,46 @@ export default connect(mapStateToProps, { loadUser, updateProfile })(Profile);
 
 const menu = [
   {
+    key: 0,
     name: 'Shipping Address',
   },
   {
+    key: 1,
     name: 'Payment Method',
   },
   {
+    key: 2,
     name: 'Order History',
   },
   {
+    key: 3,
     name: 'Delivery Status',
   },
   {
+    key: 4,
     name: 'Language',
   },
 ];
 
 const menu2 = [
   {
+    key: 0,
     name: 'Notification Settings',
   },
   {
+    key: 1,
     name: 'Privacy Policy',
   },
   {
+    key: 2,
     name: 'Frequently Asked Quetions',
   },
   {
+    key: 3,
     name: 'Legal Information',
   },
   {
+    key: 4,
     name: 'Rate Our Information',
   },
 ];
