@@ -38,6 +38,9 @@ class WebAPI {
   static addToCart = async (id) => {
     return axiosService.post(`/api/item/add-to-cart/${id}`);
   };
+  static allCarts = async (USER_ID) => {
+    return axiosService.get(`/api/item/cart/${USER_ID}`);
+  };
   static getProfile = async (id) => {
     return axiosService.get(`/api/auth/me/${id}`);
   };
