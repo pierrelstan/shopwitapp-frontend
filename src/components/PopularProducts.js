@@ -8,7 +8,19 @@ import Titles from './Titles';
 import ListItems from './ListItems';
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    paddingBottom: '12px',
+  },
+  centered: {
+    marginTop: '100px',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  button: {
+    color: '#d13c6f',
+    borderColor: '#d13c6f',
+    padding: '8px 42px',
+  },
 }));
 
 function PopularProducts() {
@@ -32,7 +44,7 @@ function PopularProducts() {
     );
   }
   return (
-    <div style={{ paddingBottom: '12px' }}>
+    <div className={classes.root}>
       <Titles>LAST PRODUCTS</Titles>
       <div>
         <Grid container spacing={3}>
@@ -47,21 +59,11 @@ function PopularProducts() {
               />
             ))}
         </Grid>
-        <div
-          style={{
-            marginTop: '100px',
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
+        <div className={classes.centered}>
           <Button
             variant='outlined'
-            style={{
-              color: '#d13c6f',
-              borderColor: '#d13c6f',
-              padding: '8px 42px',
-            }}
             onClick={handleViewAllClick}
+            className={classes.button}
           >
             View all
           </Button>
