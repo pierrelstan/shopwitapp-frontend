@@ -13,6 +13,21 @@ class WebAPI {
   //   return axiosService.post(`/reset-password`, data);
   // };
 
+  static fetchItems = async () => {
+    return axiosService.get(`api/item/all`);
+  };
+
+  static fetchLastProducts = async () => {
+    return axiosService.get(`/api/item/lastproducts`);
+  };
+
+  static pagesControlled = async (page) => {
+    return axiosService.get(`api/item/page/${page}`);
+  };
+
+  static createItem = async (product) => {
+    return axiosService.post('/api/item/new', product);
+  };
   static getProfile = async (id) => {
     return axiosService.get(`/api/auth/me/${id}`);
   };
