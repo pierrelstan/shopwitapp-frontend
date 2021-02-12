@@ -1,4 +1,5 @@
 import axiosService from './axiosService';
+import { updateItem } from '../redux/actions/ItemsActions';
 
 class WebAPI {
   static Log_in = async (data) => {
@@ -21,6 +22,9 @@ class WebAPI {
   };
   static fetchLastProducts = async () => {
     return axiosService.get(`/api/item/lastproducts`);
+  };
+  static updateItem = async (id, state) => {
+    return axiosService.put(`/api/item/${id}`, state);
   };
 
   static pagesControlled = async (page) => {
