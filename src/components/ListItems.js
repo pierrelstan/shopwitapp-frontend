@@ -243,11 +243,9 @@ export default function ListItems({ id, price, title, image, description }) {
 
   const dispatch = useDispatch();
 
-  const { lastProducts, carts, favorites, loading } = useSelector((state) => ({
-    lastProducts: state.lastProducts.lastProducts,
+  const { carts, favorites } = useSelector((state) => ({
     carts: state.carts,
     favorites: state.favorites,
-    loading: state.lastProducts.isLoadingLast10Products,
   }));
 
   const handleRemoveFavorite = (id) => {
