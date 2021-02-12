@@ -16,7 +16,9 @@ class WebAPI {
   static fetchItems = async () => {
     return axiosService.get(`api/item/all`);
   };
-
+  static fetchItemsByUserId = async (USER_ID) => {
+    return axiosService.get(`/api/item/user/items/${USER_ID} `);
+  };
   static fetchLastProducts = async () => {
     return axiosService.get(`/api/item/lastproducts`);
   };
