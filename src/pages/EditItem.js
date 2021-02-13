@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { withRouter, useParams, useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { useParams, useHistory } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -10,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { updateItem, fetchItemById } from '../redux/actions/ItemsActions';
 import Titles from '../components/Titles';
+import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -53,6 +53,17 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
   });
   let { id } = useParams();
   let history = useHistory();
+  const [open, setOpen] = React.useState(false);
+
+  const handleToggle = () => {
+    setOpen((prev) => !prev);
+  };
+
+  React.useEffect(() => {
+    if (alert.length === 1) {
+      setOpen(false);
+    }
+  }, []);
 
   const uploadedImage = useRef();
   const classes = useStyles();
@@ -98,15 +109,12 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
     item.item.userId,
   ]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    let update = updateItem(id, product, userId);
-    if (update) {
-      history.push(`/myproducts/${userId}`);
-    }
+    updateItem(id, product, history);
   };
 
-  const { title, description, imageUrl, price, quantityProducts } = product;
+  const { title, description, price, quantityProducts } = product;
   if (!item.isLoaded) {
     return (
       <Container component='main' maxWidth='md'>
@@ -169,7 +177,6 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
                   id='imageUrl'
                   autoComplete='imageUrl'
                   ref={uploadedImage}
-                  // value={product.imageUrl}
                   onChange={handleImageUpload}
                 />
                 <div
@@ -224,8 +231,17 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
                   color='primary'
                   className={classes.submit}
                   value='Submit'
+                  onClick={handleToggle}
                 >
-                  Submit
+                  {!open ? (
+                    'Submit'
+                  ) : (
+                    <CircularProgress
+                      color='inherit'
+                      thickness={2.3}
+                      size={30}
+                    />
+                  )}
                 </Button>
               </div>
             </form>
