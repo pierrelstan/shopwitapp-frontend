@@ -1,6 +1,5 @@
-import React, { useCallback, memo } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -26,7 +25,8 @@ import { logout } from '../redux/actions/auth';
 import { openCart } from '../redux/actions/openCart';
 import { openFavoritesAndClosing } from '../redux/actions/OpenAndCloseFavorites';
 import { allFavorites } from '../redux/actions/favorites';
-import { fetchItemsByUserId, allCarts } from '../redux/actions/ItemsActions';
+import { fetchItemsByUserId } from '../redux/actions/ItemsActions';
+import { allCarts } from '../redux/actions/carts';
 import Cart from './Cart';
 import FavoritesItem from './Favorites';
 
