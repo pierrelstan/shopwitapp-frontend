@@ -8,31 +8,27 @@ import {
   REMOVE_FAVORITES,
   FETCH_FAVORITES,
 } from './types';
+import WebAPI from '../../utils/service';
 
 export const addToFavorites = (id) => async (dispatch) => {
   try {
-    await axios
-      .post(`http://10.0.0.5:4000/api/item/add-to-favorites/${id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then((data) => {
-        return Promise.all([
-          dispatch({
-            type: ADD_FAVORITES,
-            payload: data,
-            isLoaded: true,
-          }),
-          dispatch(allFavorites()),
-          dispatch(setAlert('Add to favorites  successfully!', 'success')),
-        ]);
-      });
-  } catch (err) {
-    console.log(err);
-    if (err.response.data) {
-      dispatch(setAlert('Please login first!', 'warning'));
-    } else {
+    let token = store.getState().auth.token;
+    let { user } = jwtDecode(token);
+    try {
+      let USER_ID = user.userId;
+      let data = await WebAPI.addToFavorites(id, USER_ID);
+      Promise.all([
+        dispatch({
+          type: ADD_FAVORITES,
+          payload: data,
+          isLoaded: true,
+        }),
+        dispatch(allFavorites()),
+        dispatch(setAlert('Add to favorites  successfully!', 'success')),
+      ]);
+    } catch (err) {
+      console.log(err);
+
       const errors = err.response.data.errors;
       if (errors) {
         errors.forEach((error) => dispatch(setAlert(error.msg, 'warning')));
@@ -41,21 +37,16 @@ export const addToFavorites = (id) => async (dispatch) => {
         type: ADD_FAVORITES_FAILED,
       });
     }
+  } catch (e) {
+    dispatch(setAlert('Please login first!', 'warning'));
   }
 };
 
 export const allFavorites = (cancelToken) => (dispatch) => {
-  let config = {
-    headers: {
-      'Content-Type': 'application/json',
-      cancelToken: cancelToken,
-    },
-  };
   const token = store.getState().auth.token;
   const { user } = jwtDecode(token);
   let USER_ID = user.userId;
-  axios
-    .get(`http://10.0.0.5:4000/api/item/favorites/${USER_ID}`, config)
+  WebAPI.allFavorites(USER_ID)
     .then((response) => {
       dispatch({
         type: FETCH_FAVORITES,
@@ -70,14 +61,11 @@ export const allFavorites = (cancelToken) => (dispatch) => {
 };
 
 export const removeFavorites = (id) => (dispatch) => {
-  let config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+  const token = store.getState().auth.token;
+  const { user } = jwtDecode(token);
+  let USER_ID = user.userId;
 
-  axios
-    .post(`http://10.0.0.5:4000/api/item/removeFavorites/${id}`, config)
+  WebAPI.removeFavorites(id, USER_ID)
     .then((res) => {
       return Promise.all([
         dispatch(allFavorites()),
