@@ -1,14 +1,13 @@
-import axios from 'axios';
-import { PAGES } from './types';
-import { fetchItems } from './ItemsActions';
+import { PAGES, LOADING_PAGE_START, LOADING_PAGE_SUCCESS } from './types';
+import WebAPI from '../../utils/service';
 
-export const pagesControlled = (page, cancelToken) => (dispatch) => {
-  axios
-    .get(`http://10.0.0.5:4000/api/item/page/${page}`, {
-      cancelToken: cancelToken,
-    })
-    .then(
-      (items) =>
+export const pagesControlled = (page) => (dispatch) => {
+  dispatch({
+    type: LOADING_PAGE_START,
+  });
+  WebAPI.pagesControlled(page)
+    .then((items) =>
+      Promise.all([
         dispatch({
           type: PAGES,
           payload: items,
@@ -16,7 +15,10 @@ export const pagesControlled = (page, cancelToken) => (dispatch) => {
           isLoaded: true,
           error: null,
         }),
-      dispatch(fetchItems()),
+        dispatch({
+          type: LOADING_PAGE_SUCCESS,
+        }),
+      ]),
     )
     .catch((error) => ({
       error: error,
