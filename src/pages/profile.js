@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { loadUser, updateProfile } from '../redux/actions/auth';
 import { Container, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EditProfile from '../components/editProfile';
@@ -184,7 +183,7 @@ const mapStateToProps = (state) => ({
   update: state.auth.update,
   success: state.auth.message,
 });
-export default connect(mapStateToProps, { loadUser, updateProfile })(Profile);
+export default connect(mapStateToProps, {})(Profile);
 
 const menu = [
   {
