@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, CircularProgress, Grid } from '@material-ui/core';
-
 import Titles from './Titles';
 import ListItems from './ListItems';
 
