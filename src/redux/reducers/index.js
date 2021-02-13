@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import auth from './auth';
 import alert from './alert';
 import scrollValues from './scrollValues';
@@ -12,9 +14,16 @@ import myProducts from './myProducts';
 import lastProducts from './lastProducts';
 import openFavoritesAndClosing from './OpenAndCloseFavorites';
 
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+  whitelist: ['token', 'user'],
+  blacklist: ['item'],
+};
+
 const allReducers = combineReducers({
   lastProducts,
-  auth,
+  auth: persistReducer(authPersistConfig, auth),
   alert,
   scrollValues,
   items,
