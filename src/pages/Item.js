@@ -9,18 +9,9 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Paper, Box, ButtonGroup } from '@material-ui/core';
-import {
-  fetchItemById,
-  removeItemById,
-  removeCart,
-  allCarts,
-  addToCart,
-} from '../redux/actions/ItemsActions';
-import {
-  allFavorites,
-  addToFavorites,
-  removeFavorites,
-} from '../redux/actions/favorites';
+import { fetchItemById, removeItemById } from '../redux/actions/ItemsActions';
+import { removeCart, addToCart } from '../redux/actions/carts';
+import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
 import Wrapper from '../components/Wrapper';
 import ScrollOnTop from '../components/ScrollOnTop';
 import Titles from '../components/Titles';
@@ -128,7 +119,7 @@ const Item = () => {
   };
 
   const handleDeleteItem = (userId) => {
-    removeItemById(id, userId);
+    dispatch(removeItemById(id, userId));
     history.push('/myproducts');
   };
 
