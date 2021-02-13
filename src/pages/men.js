@@ -15,6 +15,7 @@ import ShopAll from '../components/ShopAll';
 import { Paper } from '@material-ui/core';
 import SearchFromPagination from '../components/SearchFromPagination';
 import ScrollOnTop from '../components/ScrollOnTop';
+import pages from '../utils/pages';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,11 +104,7 @@ function Men({ itemsPerPages, items, pagesControlled }) {
           <div className={classes.root}>
             <Pagination
               className={classes.pagination}
-              count={
-                (items.length / 10) % 2 === 0
-                  ? Math.round(items.length / 10 + 1)
-                  : Math.floor(items.length / 10 + 1)
-              }
+              count={pages(items)}
               page={page}
               onChange={handleChange}
               style={{ color: '#cb436b' }}
@@ -120,11 +117,7 @@ function Men({ itemsPerPages, items, pagesControlled }) {
             <Typography>Page: {page}</Typography>
             <Pagination
               className={classes.pagination}
-              count={
-                (items.length / 10 + 1) % 2 === 0
-                  ? Math.round(items.length / 10 + 1)
-                  : Math.floor(items.length / 10 + 1)
-              }
+              count={pages(items)}
               page={page}
               onChange={handleChange}
               style={{ color: '#cb436b' }}
