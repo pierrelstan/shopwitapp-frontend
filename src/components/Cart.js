@@ -3,11 +3,7 @@ import { connect } from 'react-redux';
 import { Paper } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { openCart } from '../redux/actions/openCart';
-import {
-  allCarts,
-  removeCart,
-  updateCart,
-} from '../redux/actions/ItemsActions';
+import { allCarts, removeCart, updateCart } from '../redux/actions/carts';
 import { setAlert } from '../redux/actions/alert';
 import CartStyles from '../Styles/CartStyles';
 import CloseButton from '../Styles/CloseButton';
