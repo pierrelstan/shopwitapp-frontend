@@ -1,18 +1,9 @@
 import axiosService from './axiosService';
-import { updateItem } from '../redux/actions/ItemsActions';
 
 class WebAPI {
   static Log_in = async (data) => {
     return axiosService.post(`/api/auth/login`, data);
   };
-
-  // static requestPasswordReset = async (data) => {
-  //   return axiosService.post(`/request-password-reset`, data);
-  // };
-
-  // static resetPassword = async (data) => {
-  //   return axiosService.post(`/reset-password`, data);
-  // };
 
   static fetchItems = async () => {
     return axiosService.get(`api/item/all`);
@@ -23,28 +14,49 @@ class WebAPI {
   static fetchLastProducts = async () => {
     return axiosService.get(`/api/item/lastproducts`);
   };
-  static updateItem = async (id, state) => {
-    return axiosService.put(`/api/item/${id}`, state);
+  static updateItem = async (id, state, USER_ID) => {
+    return axiosService.put(`/api/item/${id}`, state, { userId: USER_ID });
   };
 
   static pagesControlled = async (page) => {
     return axiosService.get(`api/item/page/${page}`);
   };
 
-  static createItem = async (product) => {
-    return axiosService.post('/api/item/new', product);
+  static createItem = async (product, USER_ID) => {
+    return axiosService.post('/api/item/new', product, {
+      userId: USER_ID,
+    });
   };
 
   static addToCart = async (id, USER_ID) => {
-    return axiosService.post(`/api/item/add-to-cart/${id}`, {
+    return axiosService.post(`/api/add-to-cart/${id}`, {
       userId: USER_ID,
     });
   };
   static allCarts = async (USER_ID) => {
-    return axiosService.get(`/api/item/cart/${USER_ID}`);
+    return axiosService.get(`/api/cart/${USER_ID}`);
   };
-  static updateCart = async (id, number) => {
-    return axiosService.put(`/api/item/updateCart/${id}`, number);
+  static updateCart = async (id, number, USER_ID) => {
+    return axiosService.put(`/api/updateCart/${id}`, {
+      number,
+      userId: USER_ID,
+    });
+  };
+  static removeCart = async (id, USER_ID) => {
+    return axiosService.post(`/api/removecart/${id}`, { userId: USER_ID });
+  };
+  static addToFavorites = async (id, USER_ID) => {
+    return axiosService.post(`/api/item/add-to-favorites/${id}`, {
+      userId: USER_ID,
+    });
+  };
+  static allFavorites = async (USER_ID) => {
+    return axiosService.get(`/api/item/favorites/${USER_ID}`);
+  };
+  static removeFavorites = async (id, USER_ID) => {
+    return axiosService.post(`/api/item/removeFavorites/${id}`, {
+      userId: USER_ID,
+    });
   };
   static getProfile = async (id) => {
     return axiosService.get(`/api/auth/me/${id}`);
@@ -57,42 +69,6 @@ class WebAPI {
   static editProfile = async (USER_ID, User) => {
     return axiosService.put(`/api/auth/user/${USER_ID}/edit`, User);
   };
-
-  // static subscribeToPlan = (payload) => {
-  //   return axiosService.post(`/user_plans`, {
-  //     plan_id: payload.plan_id,
-  //   });
-  // };
-
-  // static getPlans = () => {
-  //   return axiosService.get(`/plans`);
-  // };
-
-  // static getMovies = (page) => {
-  //   return axiosService.get(`/movies?page=${page}`);
-  // };
-
-  // static getMovieDetails = (id) => {
-  //   return axiosService.get(`/movies/${id}`);
-  // };
-
-  // static getFavoriteMovies = (userId) => {
-  //   return axiosService.get(`/favorites-by-user?user_id=${userId}`);
-  // };
-
-  // static addFavoriteMovies = (user_id, movie_id) => {
-  //   return axiosService.post(`/favorites`, {
-  //     user_id,
-  //     movie_id,
-  //   });
-  // };
-
-  // static removeFavoriteMovies = (userId, movieId) => {
-  //   return axiosService({
-  //     method: 'DELETE',
-  //     url: `/favorites?user_id=${userId}&movie_id=${movieId}`,
-  //   });
-  // };
 }
 
 export default WebAPI;
