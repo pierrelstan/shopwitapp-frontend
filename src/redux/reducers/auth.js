@@ -1,3 +1,4 @@
+import storage from 'redux-persist/lib/storage';
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -78,6 +79,7 @@ export default function (state = initialState, action) {
     case UPDATE_PROFILE_FAIL:
     case LOGOUT:
       localStorage.removeItem('token');
+      storage.removeItem('persist:auth');
 
       return {
         ...state,
