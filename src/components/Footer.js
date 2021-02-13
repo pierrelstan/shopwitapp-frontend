@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     justifyItems: 'center',
-    paddingTop: '100px',
+    paddingTop: '21px',
     [theme.breakpoints.down('xs')]: {
       rowGap: '33px',
       display: 'grid',
@@ -79,6 +79,8 @@ export default function Footer() {
     <footer
       style={{
         backgroundColor: '#333',
+        position: 'relative',
+        bottom: '-20px',
       }}
     >
       <div className={classes.main_Container}>
@@ -169,8 +171,6 @@ export default function Footer() {
         <p
           style={{
             color: '#fff',
-            margin: '0px',
-            padding: '0px',
           }}
         >
           &copy; {new Date().getFullYear()} All rights reserved | Stanley Pierre
