@@ -12,6 +12,7 @@ import NewArrivals from '../components/NewArrivals';
 import { pagesControlled } from '../redux/actions/pages';
 import ShopAll from '../components/ShopAll';
 import ScrollOnTop from '../components/ScrollOnTop';
+import pages from '../utils/pages';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -100,11 +101,7 @@ function Woman({ items, pagesControlled }) {
           <div className={classes.root}>
             <Pagination
               className={classes.pagination}
-              count={
-                (items.length / 10) % 2 === 0
-                  ? Math.round(items.length / 10 + 1)
-                  : Math.floor(items.length / 10 + 1)
-              }
+              count={pages(items)}
               page={page}
               onChange={handleChange}
               style={{ color: '#cb436b' }}
@@ -117,11 +114,7 @@ function Woman({ items, pagesControlled }) {
             <Typography>Page: {page}</Typography>
             <Pagination
               className={classes.pagination}
-              count={
-                (items.length / 10 + 1) % 2 === 0
-                  ? Math.round(items.length / 10 + 1)
-                  : Math.floor(items.length / 10 + 1)
-              }
+              count={pages(items)}
               page={page}
               onChange={handleChange}
               style={{ color: '#cb436b' }}
