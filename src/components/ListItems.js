@@ -1,19 +1,16 @@
 import React from 'react';
 import Link from '@material-ui/core/Link';
 import { useSelector, useDispatch } from 'react-redux';
-import { addToCart, removeCart } from '../redux/actions/ItemsActions';
+import { addToCart, removeCart } from '../redux/actions/carts';
 import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { Box, Button, CircularProgress, Grid } from '@material-ui/core';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { Box, Button, Grid } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import FavoriteSharpIcon from '@material-ui/icons/FavoriteSharp';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+
 import { DisplayFavoriteCartIcon } from './DisplayFavoriteCartIcon';
 import DisplayShoppingCartIcon from './DisplayShoppingCartIcon';
 
