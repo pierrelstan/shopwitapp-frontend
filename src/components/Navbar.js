@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 const useStyles = makeStyles((theme) => ({
   containerApp: {
+    display: 'flex',
     color: '#A67A4B',
     backgroundColor: '#fff',
   },
