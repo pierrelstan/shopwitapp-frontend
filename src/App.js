@@ -7,7 +7,7 @@ import Home from './pages/home';
 import Navbar from './components/Navbar';
 import AuthLinks from './components/AuthLinks';
 import GuestLinks from './components/GuestLinks';
-import { loadUser } from './redux/actions/auth';
+import { getProfile } from './redux/actions/auth';
 import { allFavorites } from './redux/actions/favorites';
 import Login from './pages/Login';
 import Profile from './pages/profile';
@@ -28,13 +28,15 @@ import MyProducts from './pages/MyProducts';
 import Orders from './pages/orders';
 import Dashboard from './pages/dashboard';
 import Footer from './components/Footer';
-import { allCarts, fetchItemsByUserId } from './redux/actions/ItemsActions';
+import { fetchItemsByUserId } from './redux/actions/ItemsActions';
+import { allCarts } from './redux/actions/carts';
 import store from './redux/store/store';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
+    minHeight: '100vh',
   },
   paper: {
     padding: theme.spacing(2),
@@ -72,8 +74,8 @@ function App() {
   }));
 
   React.useEffect(() => {
-    if (token !== null) {
-      store.dispatch(loadUser());
+    if (token) {
+      store.dispatch(getProfile());
       dispatch(allFavorites());
       dispatch(allCarts());
       dispatch(fetchItemsByUserId());
@@ -113,10 +115,9 @@ function App() {
             <Route path='/shoes' component={Shoes} />
             <Route path='*' component={NoMatch} />
           </Switch>
-          <Footer />
         </div>
       </Router>
-
+      <Footer />
       {/* <MobileNavbar /> */}
     </div>
   );
