@@ -1,10 +1,10 @@
-import React from 'react'
-import { withRouter, Redirect, useHistory } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import { register } from '../redux/actions/auth'
-import { setAlert } from '../redux/actions/alert'
+import React from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { signUp } from '../redux/actions/auth';
+import { setAlert } from '../redux/actions/alert';
 import {
   Avatar,
   Button,
@@ -13,7 +13,7 @@ import {
   CssBaseline,
   TextField,
   Typography,
-} from '@material-ui/core'
+} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,144 +43,143 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
-}))
+}));
 
-const SignUp = ({ register, isAuthenticated, setAlert, active }) => {
+const SignUp = () => {
+  const dispatch = useDispatch();
+
+  const { isAuthenticated, active } = useSelector((state) => ({
+    register: state.register,
+    isAuthenticated: state.auth.isAuthenticated,
+    active: state.auth.user.active,
+  }));
   const [User, setUser] = React.useState({
     firstname: 'Stanley',
     lastname: 'Pierre-Louis',
     email: 'stanley01@gmail.com',
     password: '123456',
     confirmPassword: '123456',
-  })
-  let history = useHistory()
-  const classes = useStyles()
+  });
+  let history = useHistory();
+  const classes = useStyles();
   //   fix error binding
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
 
   const handleToggle = () => {
     if (active) {
-      setOpen(!open)
+      setOpen(!open);
     } else {
-      setOpen(!open)
+      setOpen(!open);
     }
-  }
+  };
   const handleChange = (e) => {
-    setUser({ ...User, [e.target.name]: e.target.value })
-  }
+    setUser({ ...User, [e.target.name]: e.target.value });
+  };
   React.useEffect(() => {
     if (active) {
-      history.push('/')
-      setUser({})
+      setUser({});
+      history.push('/');
     }
     if (alert.length === 1) {
-      setOpen(false)
+      setOpen(false);
     }
-  }, [active, history])
+  }, [active, history]);
 
   const handleSubmit = (e) => {
-    const { email, password, confirmPassword, firstname, lastname } = User
-
-    e.preventDefault()
+    e.preventDefault();
     if (password !== confirmPassword) {
-      setAlert('Password do not match', 'danger')
+      dispatch(setAlert('Password do not match', 'danger'));
     } else {
-      register({
-        email,
-        password,
-        confirmPassword,
-        firstname,
-        lastname,
-      })
+      dispatch(signUp(User));
     }
-  }
+  };
 
   if (isAuthenticated) {
-    return <Redirect to="/" />
+    return <Redirect to='/' />;
   }
-  const { email, password, confirmPassword, firstname, lastname } = User
+  const { email, password, confirmPassword, firstname, lastname } = User;
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component='main' maxWidth='xs'>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component='h1' variant='h5'>
           SignUp
         </Typography>
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
           <TextField
             fullWidth
             // error={Errors}
-            variant="outlined"
-            margin="normal"
-            type="text"
-            label="First Name"
-            name="firstname"
+            variant='outlined'
+            margin='normal'
+            type='text'
+            label='First Name'
+            name='firstname'
             value={firstname}
             onChange={handleChange}
-            placeholder=" Enter your firstname"
+            placeholder=' Enter your firstname'
           />
 
           <TextField
             fullWidth
             // error={Errors}
-            label="Last Name"
-            variant="outlined"
-            margin="normal"
-            type="text"
-            name="lastname"
+            label='Last Name'
+            variant='outlined'
+            margin='normal'
+            type='text'
+            name='lastname'
             value={lastname}
             onChange={handleChange}
-            placeholder=" Enter your lastname"
+            placeholder=' Enter your lastname'
           />
 
           <TextField
             fullWidth
             // error={Errors}
-            label="Email"
-            variant="outlined"
-            margin="normal"
-            type="text"
-            name="email"
+            label='Email'
+            variant='outlined'
+            margin='normal'
+            type='text'
+            name='email'
             value={email}
             onChange={handleChange}
-            placeholder=" Enter the email"
+            placeholder=' Enter the email'
           />
 
           <TextField
             fullWidth
             // error={Errors}
-            label="Password"
-            variant="outlined"
-            margin="normal"
-            type="password"
-            name="password"
+            label='Password'
+            variant='outlined'
+            margin='normal'
+            type='password'
+            name='password'
             value={password}
             onChange={handleChange}
-            placeholder="Enter the password"
+            placeholder='Enter the password'
           />
 
           <TextField
-            variant="outlined"
-            margin="normal"
+            variant='outlined'
+            margin='normal'
             required
             fullWidth
-            label="Confirm password"
-            type="password"
-            name="confirmPassword"
+            label='Confirm password'
+            type='password'
+            name='confirmPassword'
             value={confirmPassword}
             onChange={handleChange}
-            placeholder="Enter the password"
+            placeholder='Enter the password'
           />
 
           <Button
-            type="submit"
+            type='submit'
             fullWidth
-            variant="contained"
-            color="primary"
-            value="Submit"
+            variant='contained'
+            color='primary'
+            value='Submit'
             className={classes.submit}
             onClick={handleToggle}
           >
@@ -188,21 +187,13 @@ const SignUp = ({ register, isAuthenticated, setAlert, active }) => {
             {!open ? (
               'SignUp'
             ) : (
-              <CircularProgress color="inherit" thickness={2.3} size={30} />
+              <CircularProgress color='inherit' thickness={2.3} size={30} />
             )}
           </Button>
         </form>
       </div>
     </Container>
-  )
-}
+  );
+};
 
-const mapStateToProps = (state) => ({
-  register: state.register,
-  isAuthenticated: state.auth.isAuthenticated,
-  active: state.auth.user.active,
-})
-
-export default withRouter(
-  connect(mapStateToProps, { register, setAlert })(SignUp)
-)
+export default SignUp;
