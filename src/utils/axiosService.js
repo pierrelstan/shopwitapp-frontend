@@ -32,4 +32,7 @@ axiosService.interceptors.request.use(
   (err) => Promise.reject(err),
 );
 
+axiosService.CancelToken = axios.CancelToken;
+axiosService.isCancel = axios.isCancel;
+
 export default axiosService;
