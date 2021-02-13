@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import PhotoCameraRoundedIcon from '@material-ui/icons/PhotoCameraRounded';
-import { loadUser, updateProfile } from '../redux/actions/auth';
+import { editProfile } from '../redux/actions/auth';
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'grid',
@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProfile = ({ updateProfile, auth, loadUser }) => {
+const EditProfile = ({ editProfile, auth, loadUser }) => {
   const [User, setUser] = React.useState({
     firstname: '',
     lastname: '',
@@ -116,7 +116,7 @@ const EditProfile = ({ updateProfile, auth, loadUser }) => {
     console.table(User);
 
     try {
-      await updateProfile(User);
+      await editProfile(User);
       console.log(User);
     } catch (error) {
       console.log(error);
@@ -265,7 +265,7 @@ const mapStateToProps = (state) => ({
   update: state.auth.update,
 });
 
-export default connect(mapStateToProps, { loadUser, updateProfile })(
+export default connect(mapStateToProps, { editProfile })(
   React.memo(EditProfile, (prev, next) => {
     if (prev.user !== next.user) {
       return true;
