@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { CircularProgress, Container } from '@material-ui/core';
 import { fetchItemsByUserId } from '../redux/actions/ItemsActions';
-import { loadUser } from '../redux/actions/auth';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -183,7 +182,7 @@ const mapStateToProps = (state) => ({
   isLoaded: state.myProducts.isLoaded,
 });
 
-export default connect(mapStateToProps, { fetchItemsByUserId, loadUser })(
+export default connect(mapStateToProps, { fetchItemsByUserId })(
   React.memo(MyProducts, (prev, next) => {
     if (prev.products === next.products) {
       return true;
