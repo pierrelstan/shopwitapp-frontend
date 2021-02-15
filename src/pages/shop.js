@@ -5,15 +5,12 @@ import Pagination from '@material-ui/lab/Pagination';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
-import axios from 'axios';
 import { Container } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NewArrivals from '../components/NewArrivals';
 import { pagesControlled } from '../redux/actions/pages';
-import { fetchItems } from '../redux/actions/ItemsActions';
 import ShopAll from '../components/ShopAll';
-import { Paper } from '@material-ui/core';
-import SearchFromPagination from '../components/SearchFromPagination';
+
 import ScrollOnTop from '../components/ScrollOnTop';
 import pages from '../utils/pages';
 
