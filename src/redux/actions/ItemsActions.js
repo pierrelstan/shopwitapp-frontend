@@ -113,14 +113,7 @@ export const clearSearchItems = () => (dispatch) => {
   });
 };
 export const fetchItemById = (id) => (dispatch) => {
-  let config = {
-    headers: {
-      'content-type': 'application/json',
-    },
-  };
-
-  axiosService
-    .get(`/api/item/${id}`, config)
+  WebAPI.fetchItemById(id)
     .then((item) =>
       dispatch({
         type: FETCH_ITEM_BY_ID,
@@ -134,44 +127,35 @@ export const fetchItemById = (id) => (dispatch) => {
     });
 };
 
-export const removeItemById = (id) => (dispatch) => {
-  const token = store.getState().auth.token;
-  const { user } = jwtDecode(token);
-  let USER_ID = user.userId;
-  let config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    userId: {
-      USER_ID: USER_ID,
-    },
-  };
+export const removeItemById = (id) => async (dispatch) => {
+  try {
+    const token = store.getState().auth.token;
+    const { user } = jwtDecode(token);
+    let USER_ID = user.userId;
 
-  axiosService
-    .delete(`/api/item/${id}`, config)
-    .then((data) => {
-      dispatch(fetchLastProducts());
-      dispatch(fetchItems());
+    let data = await WebAPI.removeItemById(id, USER_ID);
+    Promise.all([
       dispatch({
         type: REMOVE_ITEM_BY_ID,
-        payload: id,
-      });
-      console.log(data);
-      dispatch(setAlert(data.data.message, 'success'));
-    })
-    .catch((error) => {
-      const errors = error.response.data;
-      console.log(errors);
-      if (errors) {
-        dispatch(setAlert(errors.error, 'warning'));
-      }
-      dispatch({
-        type: DELETE_ITEM_FAIL,
-      });
+        payload: data.data,
+      }),
+      dispatch(setAlert(data.data.message, 'success')),
+      dispatch(fetchLastProducts()),
+      dispatch(fetchItemsByUserId()),
+    ]);
+  } catch (error) {
+    const errors = error.response.data;
+    console.log(errors);
+    if (errors) {
+      dispatch(setAlert(errors.error, 'warning'));
+    }
+    dispatch({
+      type: DELETE_ITEM_FAIL,
     });
+  }
 };
 
-export const fetchItemsByUserId = (cancelToken) => async (dispatch) => {
+export const fetchItemsByUserId = () => async (dispatch) => {
   const token = store.getState().auth.token;
   const { user } = jwtDecode(token);
   let USER_ID = user.userId;
@@ -203,8 +187,6 @@ export const updateItem = (id, state, history) => async (dispatch) => {
     });
     history.push(`/myproducts/${USER_ID}`);
     dispatch(setAlert('Updated cart successfully!', 'success'));
-    dispatch(fetchItems());
-    dispatch(fetchItemsByUserId(USER_ID));
   } catch (error) {
     const errors = error.response.data;
     if (errors) {
