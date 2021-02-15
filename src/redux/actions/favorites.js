@@ -1,4 +1,3 @@
-import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import store from '../store/store';
 import { setAlert } from './alert';
