@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '30px',
   },
   image: {
-    width: '320px',
+    width: '273px',
   },
 }));
 const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
@@ -191,7 +191,7 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
                       src={product.imageUrl}
                       alt='preview'
                       style={{
-                        width: '320px',
+                        width: '230px',
                       }}
                     />
                   )}
