@@ -84,7 +84,7 @@ function App() {
 
   return (
     <div className={classes.root}>
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <Navbar>
           {active && <AuthLinks />}
           {!active && <GuestLinks />}
@@ -99,21 +99,25 @@ function App() {
               path='/register'
               render={(props) => <SignUp {...props} />}
             />
-            <ProtectedRoutes path='/profile' component={Profile} />
-            <ProtectedRoutes path='/orders' component={Orders} />
-            <ProtectedRoutes path='/dashboard' component={Dashboard} />
-            <ProtectedRoutes path='/item/new' component={Sell} />
-            <ProtectedRoutes path='/item/update/:id' component={EditItem} />
-            <ProtectedRoutes path='/item/:id' component={Item} />
-            <Route path='/newpassword/:id' component={NewPassword} />
-            <ProtectedRoutes path='/myproducts' component={MyProducts} />
-            <Route path='/login' component={Login} />
-            <Route path='/resetpassword' component={ResetPassword} />
-            <Route path='/shop' component={Shop} />
-            <Route path='/woman' component={Woman} />
-            <Route path='/men' component={Men} />
-            <Route path='/shoes' component={Shoes} />
-            <Route path='*' component={NoMatch} />
+            <ProtectedRoutes exact path='/profile' component={Profile} />
+            <ProtectedRoutes exact path='/orders' component={Orders} />
+            <ProtectedRoutes exact path='/dashboard' component={Dashboard} />
+            <ProtectedRoutes exact path='/item/new' component={Sell} />
+            <ProtectedRoutes
+              exact
+              path='/item/update/:id'
+              component={EditItem}
+            />
+            <ProtectedRoutes exact path='/item/:id' component={Item} />
+            <Route exact path='/newpassword/:id' component={NewPassword} />
+            <ProtectedRoutes exact path='/myproducts' component={MyProducts} />
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/resetpassword' component={ResetPassword} />
+            <Route exact path='/shop' component={Shop} />
+            <Route exact path='/woman' component={Woman} />
+            <Route exact path='/men' component={Men} />
+            <Route exact path='/shoes' component={Shoes} />
+            <Route exact path='*' component={NoMatch} />
           </Switch>
         </div>
       </Router>
