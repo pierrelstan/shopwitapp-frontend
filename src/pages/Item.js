@@ -118,8 +118,8 @@ const Item = () => {
     dispatch(addToFavorites(id));
   };
 
-  const handleDeleteItem = (userId) => {
-    dispatch(removeItemById(id, userId));
+  const handleDeleteItem = (id) => {
+    dispatch(removeItemById(id));
     history.push('/myproducts');
   };
 
@@ -217,7 +217,7 @@ const Item = () => {
                         Edit{' '}
                       </Link>
                     </Button>
-                    <Button onClick={() => handleDeleteItem(item.item.userId)}>
+                    <Button onClick={() => handleDeleteItem(item.item._id)}>
                       Delete
                     </Button>
                   </ButtonGroup>
