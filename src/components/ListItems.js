@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { Box, Button, Grid } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-
+import { Link as RouterLink } from 'react-router-dom';
 import { DisplayFavoriteCartIcon } from './DisplayFavoriteCartIcon';
 import DisplayShoppingCartIcon from './DisplayShoppingCartIcon';
 
@@ -56,10 +56,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   imageCard: {
-    maxWidth: '317px',
-    verticalAlign: 'middle',
-    position: 'relative',
-    top: '-88px',
+    maxWidth: '100%',
     objectFit: 'cover',
     margin: 0,
     padding: 0,
@@ -72,10 +69,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.between('sm', 'lg')]: {
       objectFit: 'cover',
     },
-    [theme.breakpoints.only('xs')]: {
-      objectFit: 'contain',
-      position: 'relative',
-      top: '-89px',
+    [theme.breakpoints.down('xs')]: {
+      objectFit: 'cover',
+      width: '100%',
     },
     [theme.breakpoints.up('sm')]: {
       objectFit: 'cover',
@@ -83,9 +79,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       objectFit: 'cover',
       top: '-180px',
-      maxWidth: '70%',
-      width: '85%',
-      left: '53px',
     },
     [theme.breakpoints.down('md')]: {
       objectFit: 'cover',
@@ -119,6 +112,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover:before': {
       opacity: 1,
     },
+
     '&:before': {
       content: '""',
       position: 'absolute',
@@ -133,6 +127,10 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: '24px',
       background:
         'linear-gradient(to bottom, rgb(0 0 0 / 14%),rgb(0 0 0 / 87%))',
+    },
+    '&:hover img': {
+      position: 'relative',
+      top: '-90px',
     },
     '&:hover $price': {
       background: '#fff',
@@ -176,9 +174,7 @@ const useStyles = makeStyles((theme) => ({
       opacity: 1,
       transform: 'translateY(0px)',
     },
-    '& button': {
-      position: 'relative',
-      top: `${-437}px`,
+    '& $button': {
       zIndex: 4,
       color: '#fff',
       opacity: 0,
@@ -228,8 +224,9 @@ const useStyles = makeStyles((theme) => ({
   containerButton: {
     display: 'flex',
     justifyContent: 'space-around',
-    position: 'relative',
-    top: '200px',
+    position: 'absolute',
+    top: '227px',
+    width: '100%',
   },
 }));
 
@@ -264,27 +261,37 @@ export default function ListItems({ id, price, title, image, description }) {
     dispatch(addToFavorites(id));
   };
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3} key={id}>
+    <Grid item xs={12} sm={6} md={4} lg={3}>
       <Card className={classes.card} elevation={matches ? 1 : 0}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: '20px',
-          }}
+        <Link
+          component={RouterLink}
+          to={`/item/${id}`}
+          className={classes.textLink}
+          key={id}
         >
-          <Typography component='span' className={classes.price}>
-            ${price}
-          </Typography>
-        </div>
-
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              padding: '20px',
+            }}
+          >
+            <Typography component='span' className={classes.price}>
+              ${price}
+            </Typography>
+          </div>
+        </Link>
         <img
           alt={title}
           src={image}
           title={title}
           className={classes.imageCard}
         />
-        <Link href={`/item/${id}`} className={classes.textLink}>
+        <Link
+          component={RouterLink}
+          to={`/item/${id}`}
+          className={classes.textLink}
+        >
           <CardContent>
             <div>
               <h1>{title}</h1>
