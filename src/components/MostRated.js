@@ -11,7 +11,7 @@ import SwiperCore, {
 } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Rating } from '@material-ui/lab';
-
+import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
@@ -195,7 +195,8 @@ function MostRated() {
                 <div className={classes.card}>
                   <div className={classes.container_image}>
                     <Link
-                      href={`/item/${data._id}`}
+                      component={RouterLink}
+                      to={`/item/${data._id}`}
                       className={classes.textLink}
                     >
                       <img
