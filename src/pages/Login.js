@@ -190,17 +190,14 @@ function Login({ Log_in, active, alert }) {
 
 const mapStateToProps = (state) => {
   const {
-    auth: {
-      isAuthenticated,
-      user: { active },
-    },
+    auth: { isAuthenticated },
     loading,
     alert,
   } = state;
   return {
     isAuthenticated,
     loading,
-    active,
+    active: state.auth.user === null ? false : state.auth.user.active,
     alert,
   };
 };
