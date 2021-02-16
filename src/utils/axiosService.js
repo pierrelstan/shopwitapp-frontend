@@ -13,18 +13,14 @@ const axiosService = axios.create(axiosOptions);
 
 axiosService.interceptors.request.use(
   (config) => {
-    try {
-      if (config.baseURL) {
-        const TOKEN = store.getState().auth.token;
+    if (config.baseURL) {
+      const TOKEN = store.getState().auth.token;
 
-        if (TOKEN) {
-          config.headers.common['x-auth-token'] = TOKEN;
-          // } else {
-          //   delete config.headers.common['x-auth-token'];
-        }
+      if (TOKEN) {
+        config.headers.common['x-auth-token'] = TOKEN;
+        // } else {
+        //   delete config.headers.common['x-auth-token'];
       }
-    } catch (e) {
-      console.log(e);
     }
 
     return config;
