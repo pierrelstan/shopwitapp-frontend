@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
   imageCard: {
     maxWidth: '100%',
     objectFit: 'cover',
+    position: 'relative',
     margin: 0,
     padding: 0,
     width: '322px',
@@ -128,10 +129,6 @@ const useStyles = makeStyles((theme) => ({
       background:
         'linear-gradient(to bottom, rgb(0 0 0 / 14%),rgb(0 0 0 / 87%))',
     },
-    '&:hover img': {
-      position: 'relative',
-      top: '-90px',
-    },
     '&:hover $price': {
       background: '#fff',
       color: '#333',
@@ -182,7 +179,7 @@ const useStyles = makeStyles((theme) => ({
       transition: '0.5s all',
     },
 
-    '&:hover button': {
+    '&:hover $button': {
       opacity: 1,
       transform: 'translateY(0px)',
     },
@@ -262,25 +259,19 @@ export default function ListItems({ id, price, title, image, description }) {
   };
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Card className={classes.card} elevation={matches ? 1 : 0}>
-        <Link
-          component={RouterLink}
-          to={`/item/${id}`}
-          className={classes.textLink}
-          key={id}
+      <Card className={classes.card} elevation={matches ? 1 : 0} key={id}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: '20px',
+          }}
         >
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              padding: '20px',
-            }}
-          >
-            <Typography component='span' className={classes.price}>
-              ${price}
-            </Typography>
-          </div>
-        </Link>
+          <Typography component='span' className={classes.price}>
+            ${price}
+          </Typography>
+        </div>
+
         <img
           alt={title}
           src={image}
