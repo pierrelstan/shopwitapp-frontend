@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     objectFit: 'cover',
     position: 'relative',
+    top: '-80px',
     margin: 0,
     padding: 0,
     width: '322px',
