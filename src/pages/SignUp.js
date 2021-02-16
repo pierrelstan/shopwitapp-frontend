@@ -48,10 +48,10 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = () => {
   const dispatch = useDispatch();
 
-  const { isAuthenticated, active } = useSelector((state) => ({
+  const { active } = useSelector((state) => ({
     register: state.register,
     isAuthenticated: state.auth.isAuthenticated,
-    active: state.auth.user.active,
+    active: state.auth.user === null ? false : state.auth.user.active,
   }));
   const [User, setUser] = React.useState({
     firstname: 'Stanley',
@@ -77,8 +77,8 @@ const SignUp = () => {
   };
   React.useEffect(() => {
     if (active) {
-      setUser({});
       history.push('/');
+      setUser({});
     }
     if (alert.length === 1) {
       setOpen(false);
@@ -90,11 +90,11 @@ const SignUp = () => {
     if (password !== confirmPassword) {
       dispatch(setAlert('Password do not match', 'danger'));
     } else {
-      dispatch(signUp(User));
+      dispatch(signUp(User, history));
     }
   };
 
-  if (isAuthenticated) {
+  if (active) {
     return <Redirect to='/' />;
   }
   const { email, password, confirmPassword, firstname, lastname } = User;
