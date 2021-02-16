@@ -5,7 +5,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
-import { HashRouter } from 'react-router-dom';
 import store, { persistor } from './redux/store/store';
 import './index.css';
 import 'swiper/swiper-bundle.css';
@@ -26,9 +25,7 @@ ReactDOM.render(
         <PersistGate loading={null} persistor={persistor}>
           <SnackbarProvider maxSnack={1}>
             <ThemeProvider theme={theme}>
-              <HashRouter>
-                <App />
-              </HashRouter>
+              <App />
             </ThemeProvider>
           </SnackbarProvider>
         </PersistGate>
