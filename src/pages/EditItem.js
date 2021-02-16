@@ -49,7 +49,6 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
     price: '',
     imageUrl: '',
     quantityProducts: '',
-    userId: '',
   });
   let { id } = useParams();
   let history = useHistory();
@@ -95,7 +94,6 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
       price: item.item.price,
       imageUrl: item.item.imageUrl,
       quantityProducts: item.item.quantityProducts,
-      userId: item.item.userId,
     }));
   }, [
     fetchItemById,
@@ -106,7 +104,6 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
     item.item.price,
     item.item.quantityProducts,
     item.item.title,
-    item.item.userId,
   ]);
 
   const handleSubmit = (e) => {
