@@ -179,13 +179,13 @@ export const updateItem = (id, state, history) => async (dispatch) => {
     const { user } = jwtDecode(token);
     let USER_ID = user.userId;
     let data = await WebAPI.updateItem(id, state, USER_ID);
-
+    dispatch(fetchItemsByUserId());
     dispatch({
       type: UPDATE_ITEM,
       payload: data.data,
       isLoaded: true,
     });
-    history.push(`/myproducts/${USER_ID}`);
+    history.push(`/myproducts`);
     dispatch(setAlert('Updated cart successfully!', 'success'));
   } catch (error) {
     const errors = error.response.data;
