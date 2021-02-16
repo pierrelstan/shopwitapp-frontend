@@ -18,8 +18,8 @@ axiosService.interceptors.request.use(
 
       if (TOKEN) {
         config.headers.common['x-auth-token'] = TOKEN;
-        // } else {
-        //   delete config.headers.common['x-auth-token'];
+      } else {
+        delete config.headers.common['x-auth-token'];
       }
     }
 
