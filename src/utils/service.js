@@ -17,10 +17,8 @@ class WebAPI {
   static fetchLastProducts = async () => {
     return axiosService.get(`/api/item/lastproducts`);
   };
-  static updateItem = async (id, USER_ID) => {
-    return axiosService.put(`/api/item/${id}`, {
-      userId: USER_ID,
-    });
+  static updateItem = async (id, state, USER_ID) => {
+    return axiosService.put(`/api/item/${id}`, state);
   };
   static removeItemById = async (id, USER_ID) => {
     return axiosService.post(`/api/item/item_id=${id}`, {
@@ -31,13 +29,8 @@ class WebAPI {
     return axiosService.get(`api/item/page/${page}`);
   };
 
-  static createItem = async (product, USER_ID) => {
-    return axiosService.post('/api/item/new', {
-      body: {
-        product,
-        userId: USER_ID,
-      },
-    });
+  static createItem = async (product) => {
+    return axiosService.post('/api/item/new', product);
   };
 
   static addToCart = async (id, USER_ID) => {
