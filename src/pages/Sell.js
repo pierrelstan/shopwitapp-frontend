@@ -43,7 +43,7 @@ const iniTialState = {
   imageUrl: '',
   quantityProducts: '',
 };
-const Sell = ({ CreateItem, history, userId }) => {
+const Sell = ({ CreateItem, history }) => {
   const [product, setProduct] = React.useState(iniTialState);
   const [open, setOpen] = React.useState(false);
 
@@ -79,7 +79,7 @@ const Sell = ({ CreateItem, history, userId }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    CreateItem(product, history, userId);
+    CreateItem(product, history);
   };
 
   return (
@@ -200,7 +200,6 @@ const Sell = ({ CreateItem, history, userId }) => {
 };
 
 const mapStateToProps = (state) => ({
-  userId: state.auth.user._id,
   alert: state.alert,
 });
 
