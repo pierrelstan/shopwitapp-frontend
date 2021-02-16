@@ -28,7 +28,11 @@ import MyProducts from './pages/MyProducts';
 import Orders from './pages/orders';
 import Dashboard from './pages/dashboard';
 import Footer from './components/Footer';
-import { fetchItemsByUserId } from './redux/actions/ItemsActions';
+import {
+  fetchItemsByUserId,
+  fetchLastProducts,
+  fetchItems,
+} from './redux/actions/ItemsActions';
 import { allCarts } from './redux/actions/carts';
 import store from './redux/store/store';
 
@@ -74,6 +78,8 @@ function App() {
   }));
 
   React.useEffect(() => {
+    dispatch(fetchLastProducts());
+    dispatch(fetchItems());
     if (token) {
       store.dispatch(getProfile());
       dispatch(allFavorites());
