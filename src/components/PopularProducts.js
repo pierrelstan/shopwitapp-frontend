@@ -50,6 +50,7 @@ function PopularProducts() {
           {lastProducts &&
             lastProducts.map((data) => (
               <ListItems
+                key={data._id}
                 id={data._id}
                 price={data.price}
                 title={data.title}
