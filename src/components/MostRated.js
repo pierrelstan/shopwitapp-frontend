@@ -161,8 +161,6 @@ function MostRated() {
           slidesPerView={4}
           centeredSlides={false}
           pagination={{ clickable: true }}
-          onSwiper={(swiper) => console.log(swiper)}
-          onSlideChange={() => console.log('slide change')}
           breakpoints={{
             320: {
               width: 320,

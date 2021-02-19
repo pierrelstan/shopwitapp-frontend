@@ -122,9 +122,7 @@ export const fetchItemById = (id) => (dispatch) => {
         error: null,
       }),
     )
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 };
 
 export const removeItemById = (id) => async (dispatch) => {
@@ -145,7 +143,6 @@ export const removeItemById = (id) => async (dispatch) => {
     ]);
   } catch (error) {
     const errors = error.response.data;
-    console.log(errors);
     if (errors) {
       dispatch(setAlert(errors.error, 'warning'));
     }

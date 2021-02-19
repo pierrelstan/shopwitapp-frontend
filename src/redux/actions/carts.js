@@ -78,12 +78,6 @@ export const updateCart = (id, number) => async (dispatch) => {
     dispatch({
       type: SET_ALERT,
     });
-    if (axiosService.isCancel(error)) {
-      console.log('request cancelled');
-    } else {
-      console.log('some other reason');
-      throw error;
-    }
   }
 };
 export const removeCart = (id) => (dispatch) => {
@@ -102,5 +96,5 @@ export const removeCart = (id) => (dispatch) => {
       dispatch(setAlert('Remove to cart successfully!', 'success'));
       dispatch(allCarts());
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {});
 };

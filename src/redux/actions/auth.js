@@ -27,14 +27,12 @@ export const getProfile = () => async (dispatch) => {
     let userId = decodeToken.user.userId;
     if (token !== null) {
       let data = await WebAPI.getProfile(userId);
-      console.log(data);
       dispatch({
         type: USER_LOAD,
         payload: data.data,
       });
     }
   } catch (error) {
-    console.log(error);
     dispatch({
       type: AUTH_ERROR,
     });
@@ -120,7 +118,6 @@ export const editProfile = (User) => async (dispatch) => {
   let USER_ID = user.userId;
   try {
     let res = await WebAPI.editProfile(USER_ID, User);
-    console.log(res);
     if (res) {
       dispatch({
         type: UPDATE_PROFILE,
@@ -136,11 +133,10 @@ export const editProfile = (User) => async (dispatch) => {
       }, 3000);
       dispatch(getProfile());
     } else {
-      console.log('connect to internet');
+      dispatch(setAlert('Please connect to internet!', 'dander'));
     }
   } catch (error) {
     // error handling
-    console.log(error.response);
     let errors = error.response.data.errors;
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));

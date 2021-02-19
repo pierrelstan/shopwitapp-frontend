@@ -11,7 +11,10 @@ import 'swiper/swiper-bundle.css';
 import App from './App';
 import { theme } from './Theme/theme';
 import * as serviceWorker from './serviceWorker';
+import { fetchLastProducts, fetchItems } from './redux/actions/ItemsActions';
 
+store.dispatch(fetchLastProducts());
+store.dispatch(fetchItems());
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

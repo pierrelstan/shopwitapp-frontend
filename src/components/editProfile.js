@@ -107,20 +107,15 @@ const EditProfile = ({ editProfile, auth, loadUser }) => {
     }
   };
   const handleChange = (e) => {
-    console.log(e.target.value);
     setUser({ ...User, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.table(User);
 
     try {
       await editProfile(User);
-      console.log(User);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   React.useEffect(() => {

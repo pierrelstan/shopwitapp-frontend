@@ -26,8 +26,6 @@ export const addToFavorites = (id) => async (dispatch) => {
         dispatch(setAlert('Add to favorites  successfully!', 'success')),
       ]);
     } catch (err) {
-      console.log(err);
-
       const errors = err.response.data.errors;
       if (errors) {
         errors.forEach((error) => dispatch(setAlert(error.msg, 'warning')));
@@ -77,5 +75,5 @@ export const removeFavorites = (id) => (dispatch) => {
         dispatch(setAlert('Remove to favorites successfully!', 'success')),
       ]);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {});
 };

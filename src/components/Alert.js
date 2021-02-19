@@ -33,7 +33,6 @@ const mapStateToProps = (state) => ({
 });
 export default connect(mapStateToProps)(
   React.memo(Alert, (prev, next) => {
-    console.log(next);
     if (prev === next.alerts) {
       return true;
     }

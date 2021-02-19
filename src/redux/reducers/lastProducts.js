@@ -17,7 +17,7 @@ export default function (state = initialState, action) {
     case FETCH_LAST_PRODUCTS_SUCCESS:
       return {
         ...state,
-        lastProducts: [...lastProducts],
+        lastProducts: lastProducts,
         isLoadingLast10Products: false,
       };
     default:
