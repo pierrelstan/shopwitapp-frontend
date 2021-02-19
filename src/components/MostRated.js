@@ -49,12 +49,14 @@ const useStyles = makeStyles((theme) => ({
     height: '337px',
     objectFit: 'cover',
 
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+      height: '337px',
+      objectFit: 'contain',
+    },
     [theme.breakpoints.down('xs')]: {
       width: '241px',
       height: '200px',
-    },
-    [theme.breakpoints.between('1200', '1368')]: {
-      width: '321px',
     },
   },
 
@@ -165,7 +167,7 @@ function MostRated() {
             320: {
               width: 320,
               slidesPerView: 1,
-              spaceBetween: 5,
+              spaceBetween: 10,
               centeredSlides: true,
             },
             430: {
@@ -175,6 +177,11 @@ function MostRated() {
             520: {
               width: 520,
               slidesPerView: 2,
+            },
+            768: {
+              width: 520,
+              slidesPerView: 2,
+              spaceBetween: 20,
             },
             900: {
               width: 900,
