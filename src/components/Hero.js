@@ -126,6 +126,9 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '32px',
       textAlign: 'left',
     },
+    [theme.breakpoints.down('md')]: {
+      fontSize: '44px',
+    },
   },
 
   h1: {
@@ -135,6 +138,9 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     [theme.breakpoints.down('xs')]: {
       display: 'none',
+    },
+    [theme.breakpoints.down('md')]: {
+      fontSize: '16px',
     },
   },
 
