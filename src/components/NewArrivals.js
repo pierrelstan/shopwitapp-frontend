@@ -153,6 +153,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       fontSize: '18px',
     },
+    [theme.breakpoints.down('md')]: {
+      fontSize: '16px',
+    },
   },
   button: {
     backgroundColor: '#cb436b',
