@@ -35,6 +35,11 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     margin: '30px',
   },
+  square: {
+    height: '400px',
+    width: '300px',
+    backgroundColor: '#e3e3e3',
+  },
 }));
 const iniTialState = {
   title: '',
@@ -84,107 +89,114 @@ const Sell = ({ CreateItem, history }) => {
 
   return (
     <div>
-      <Container component='main' maxWidth='md'>
+      <Container component="main" maxWidth="md">
         <Titles>Add Product</Titles>
         <CssBaseline />
-        <div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+          }}
+        >
+          <div
+            style={{
+              display: 'grid',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '500px',
+            }}
+          >
+            {product.imageUrl && (
+              <img
+                src={product.imageUrl}
+                alt="preview"
+                style={{
+                  width: '320px',
+                }}
+              />
+            )}
+            {!product.imageUrl && <div className={classes.square}></div>}
+          </div>
           <div>
             <form className={classes.form} noValidate onSubmit={handleSubmit}>
               <TextField
-                variant='outlined'
-                margin='normal'
+                variant="outlined"
+                margin="normal"
                 required={true}
                 fullWidth
-                id='title'
-                label='Title'
-                name='title'
-                autoComplete='title'
+                id="title"
+                label="Title"
+                name="title"
+                autoComplete="title"
                 value={product.title}
                 onChange={handleChange}
               />
               <TextField
-                variant='outlined'
-                margin='normal'
+                variant="outlined"
+                margin="normal"
                 required={true}
                 fullWidth
-                name='description'
-                label='Description'
-                id='description'
-                autoComplete='description'
+                name="description"
+                label="Description"
+                id="description"
+                autoComplete="description"
                 value={product.description}
                 onChange={handleChange}
               />
               <div style={{ display: 'flex', gap: '30px' }}>
                 <TextField
-                  margin='normal'
+                  margin="normal"
                   required={true}
-                  type='file'
-                  accept='image/*'
-                  name='imageUrl'
-                  label='Add image'
-                  multiple='false'
-                  id='imageUrl'
-                  autoComplete='imageUrl'
+                  type="file"
+                  accept="image/*"
+                  name="imageUrl"
+                  label="Add image"
+                  multiple={false}
+                  id="imageUrl"
+                  autoComplete="imageUrl"
                   ref={uploadedImage}
                   onChange={handleImageUpload}
                 />
-                <div
-                  style={{
-                    display: 'grid',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  {product.imageUrl && (
-                    <img
-                      src={product.imageUrl}
-                      alt='preview'
-                      style={{
-                        width: '320px',
-                      }}
-                    />
-                  )}
-                </div>
               </div>
               <TextField
-                variant='outlined'
-                margin='normal'
+                variant="outlined"
+                margin="normal"
                 required={true}
                 fullWidth
-                name='price'
-                label='Price'
-                id='price'
-                autoComplete='price'
+                name="price"
+                label="Price"
+                id="price"
+                autoComplete="price"
                 value={product.price}
                 onChange={handleChange}
               />
 
               <TextField
-                variant='outlined'
-                margin='normal'
+                variant="outlined"
+                margin="normal"
                 required={true}
                 fullWidth
-                id='quantityProducts'
-                label='Quantity'
-                name='quantityProducts'
-                autoComplete='quantityProducts'
+                id="quantityProducts"
+                label="Quantity"
+                name="quantityProducts"
+                autoComplete="quantityProducts"
                 value={product.quantityProducts}
                 onChange={handleChange}
               />
               <div className={classes.containerSubmit}>
                 <Button
-                  type='submit'
-                  variant='outlined'
-                  color='primary'
+                  type="submit"
+                  variant="outlined"
+                  color="primary"
                   className={classes.submit}
-                  value='Submit'
+                  value="Submit"
                   onClick={handleToggle}
                 >
                   {!open ? (
                     'Submit'
                   ) : (
                     <CircularProgress
-                      color='inherit'
+                      color="inherit"
                       thickness={2.3}
                       size={30}
                     />
