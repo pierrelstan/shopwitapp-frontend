@@ -18,6 +18,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { CircularProgress } from '@material-ui/core';
 import Titles from './Titles';
 import Wrapper from './Wrapper';
+import {BACKEND_URL} from "../config";
 
 SwiperCore.use([
   Navigation,
@@ -205,7 +206,7 @@ function MostRated() {
                       className={classes.textLink}
                     >
                       <img
-                        src={data.imageUrl}
+                        src={`${BACKEND_URL}/${data.imageUrl}`}
                         alt={data.title}
                         className={classes.imageCard}
                       />
