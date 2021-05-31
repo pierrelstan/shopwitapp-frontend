@@ -13,12 +13,12 @@ const initialState = {
   error: null,
 };
 
-export default function (state = initialState, action) {
+export default function (state = initialState, action) { 
   switch (action.type) {
     case CREATE_ITEM:
       return {
         ...state,
-        createItem: action.payload,
+        createItem: action.payload.data,
         isLoaded: true,
         error: null,
       };
