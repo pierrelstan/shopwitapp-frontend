@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button, CircularProgress, Grid } from '@material-ui/core';
 import Titles from './Titles';
 import ListItems from './ListItems';
+import { BACKEND_URL } from '../config';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,7 +55,7 @@ function PopularProducts() {
                 id={data._id}
                 price={data.price}
                 title={data.title}
-                image={data.imageUrl}
+                image={`${BACKEND_URL}/${data.imageUrl}`}
                 description={data.description}
               />
             ))}
