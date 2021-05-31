@@ -17,6 +17,7 @@ import ScrollOnTop from '../components/ScrollOnTop';
 import Titles from '../components/Titles';
 import { Rating } from '@material-ui/lab';
 // import ScrollToTop from './ScrollOnTop';
+import { BACKEND_URL } from '../config';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,7 +75,6 @@ const Item = () => {
     loading: state.lastProducts.isLoadingLast10Products,
   }));
   let history = useHistory();
-
   useEffect(() => {
     dispatch(fetchItemById(id));
   }, [dispatch, id]);
@@ -148,7 +148,7 @@ const Item = () => {
               <div className={classes.container}>
                 <img
                   className={classes.image}
-                  src={item.item.imageUrl}
+                  src={`${BACKEND_URL}/${item.item.imageUrl}`}
                   alt={item.item.title}
                 />
                 <div>
