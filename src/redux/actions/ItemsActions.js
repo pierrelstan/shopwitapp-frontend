@@ -113,10 +113,8 @@ export const clearSearchItems = () => (dispatch) => {
   });
 };
 export const fetchItemById = (id) => (dispatch) => {
-  console.log(id)
   WebAPI.fetchItemById(id)
     .then((item) =>{
-    console.log(item)
       dispatch({
         type: FETCH_ITEM_BY_ID,
         payload: item,
