@@ -29,6 +29,7 @@ import { fetchItemsByUserId } from '../redux/actions/ItemsActions';
 import { allCarts } from '../redux/actions/carts';
 import Cart from './Cart';
 import FavoritesItem from './Favorites';
+import {BACKEND_URL} from "../config";
 
 const minWidth = 140;
 
@@ -316,10 +317,10 @@ function AuthLinks({
         }}
       >
         <Typography
-          variant='h6'
+          variant="h6"
           className={classes.title}
           component={RouterLink}
-          to='/'
+          to="/"
         >
           SHopwit
         </Typography>
@@ -343,7 +344,7 @@ function AuthLinks({
                 {text.toUpperCase()}
               </Link>
             </ListItem>
-          ),
+          )
         )}
       </List>
       <Divider />
@@ -365,10 +366,10 @@ function AuthLinks({
     <React.Fragment>
       <Box className={classes.containerTitle}>
         <Typography
-          variant='h6'
+          variant="h6"
           className={classes.title}
           component={RouterLink}
-          to='/'
+          to="/"
         >
           SHopwit
         </Typography>
@@ -377,40 +378,40 @@ function AuthLinks({
       <Box className={classes.containerSubMenu}>
         <Button
           component={RouterLink}
-          to='/'
-          color='inherit'
+          to="/"
+          color="inherit"
           className={classes.menuTextSize}
         >
           Home
         </Button>
         <Button
           component={RouterLink}
-          color='inherit'
-          to='/shop'
+          color="inherit"
+          to="/shop"
           className={classes.menuTextSize}
         >
           shop
         </Button>
         <Button
           component={RouterLink}
-          color='inherit'
-          to='/item/new'
+          color="inherit"
+          to="/item/new"
           className={classes.menuTextSize}
         >
           Sell
         </Button>
         <Button
           component={RouterLink}
-          color='inherit'
-          to='/men'
+          color="inherit"
+          to="/men"
           className={classes.menuTextSize}
         >
           Men
         </Button>
         <Button
           component={RouterLink}
-          color='inherit'
-          to='/woman'
+          color="inherit"
+          to="/woman"
           className={classes.menuTextSize}
         >
           Woman
@@ -447,17 +448,17 @@ function AuthLinks({
           <IconButton onClick={handleClickFav}>
             <StyledBadge
               badgeContent={`${!favs ? '0' : favs.length}`}
-              color='secondary'
+              color="secondary"
             >
               <FavoriteBorderIcon />
             </StyledBadge>
           </IconButton>
         </Box>
         <Box>
-          <IconButton aria-label='cart' onClick={handleClickCart}>
+          <IconButton aria-label="cart" onClick={handleClickCart}>
             <StyledBadge
               badgeContent={`${!carts ? '0' : carts.length}`}
-              color='secondary'
+              color="secondary"
             >
               <ShoppingCartIcon />
             </StyledBadge>
@@ -466,13 +467,13 @@ function AuthLinks({
         <Box className={classes.hambergeurMargin}>
           <div className={classes.hideOnDeskTop}>
             <IconButton
-              color='inherit'
-              aria-label='open drawer'
-              edge='end'
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
               onClick={toggleDrawer('left', true)}
               // className={clsx(open && classes.hide)}
             >
-              <MenuIcon fontSize='small' />
+              <MenuIcon fontSize="small" />
             </IconButton>
             <Drawer
               anchor={'left'}
@@ -488,25 +489,29 @@ function AuthLinks({
         </Box>
         <Box>
           <IconButton
-            aria-label='account of current user'
-            aria-controls='simple-menu'
-            aria-haspopup='true'
-            color='inherit'
+            aria-label="account of current user"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            color="inherit"
             className={classes.hideOnMobile}
             onClick={handleClick}
-          >
+         >
             <Avatar
-              src={avatar.user === null ? '' : avatar.user.avatar}
-              alt='profile'
-              aria-controls='simple-menu'
-              color='inherit'
-              aria-haspopup='true'
+              src={
+                avatar.user === null
+                  ? ''
+                  : `${BACKEND_URL}/${avatar.user.avatar}`
+              }
+              alt="profile"
+              aria-controls="simple-menu"
+              color="inherit"
+              aria-haspopup="true"
               onMouseEnter={handleClick}
             />
           </IconButton>
           <div onClick={handleClose}>
             <Menu
-              id='simple-menu'
+              id="simple-menu"
               anchorEl={anchorEl}
               keepMounted
               open={Boolean(anchorEl)}
@@ -525,23 +530,23 @@ function AuthLinks({
               <MenuItem
                 onClick={handleClose}
                 component={RouterLink}
-                to='/profile'
+                to="/profile"
               >
                 Profile
               </MenuItem>
               <MenuItem>
                 <Link
                   component={RouterLink}
-                  to='/myproducts'
+                  to="/myproducts"
                   className={classes.link}
                 >
                   My Products
                 </Link>
               </MenuItem>
-              <MenuItem component={RouterLink} to='/orders'>
+              <MenuItem component={RouterLink} to="/orders">
                 Orders
               </MenuItem>
-              <MenuItem component={RouterLink} to='/dashboard'>
+              <MenuItem component={RouterLink} to="/dashboard">
                 Dashboard
               </MenuItem>
               <MenuItem
@@ -580,5 +585,5 @@ export default withRouter(
     allFavorites,
     fetchItemsByUserId,
     allCarts,
-  })(AuthLinks),
+  })(AuthLinks)
 );
