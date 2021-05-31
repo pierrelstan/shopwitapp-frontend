@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Container, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EditProfile from '../components/editProfile';
+import { BACKEND_URL } from '../config';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -113,7 +114,7 @@ const Profile = (props) => {
                     <img
                       className={`${classes.avatar}`}
                       alt='profile_image'
-                      src={avatar}
+                      src={`${BACKEND_URL}/${avatar}`}
                     />
                   </div>
 
