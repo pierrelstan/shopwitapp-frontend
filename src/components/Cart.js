@@ -11,6 +11,8 @@ import Supreme from '../Styles/Supreme';
 // import formatMoney from './formatMoney';
 import SickButton from '../Styles/SickButton';
 import { CalculatePriceTotal } from '../utils/CalcutateCartTotal';
+import {BACKEND_URL} from "../config";
+
 function Cart({
   open,
   openCart,
@@ -72,16 +74,19 @@ function Cart({
                   ) : (
                     <>
                       <h2> {cart.item.title}</h2>
-                      <img src={cart.item.imageUrl} alt={cart.item.title} />
+                      <img
+                        src={`${BACKEND_URL}/${cart.item.imageUrl}`}
+                        alt={cart.item.title}
+                      />
                       <h2>Quantity</h2>
                       <input
-                        className='cart_input'
-                        type='number'
-                        name='quantity'
+                        className="cart_input"
+                        type="number"
+                        name="quantity"
                         defaultValue={cart.quantity}
                         onChange={handleChange(cart._id)}
-                        min='1'
-                        max='250'
+                        min="1"
+                        max="250"
                       />
                       <h2>
                         Price <span> ${cart.item.price} </span>
@@ -122,5 +127,5 @@ export default withRouter(
     setAlert,
     allCarts,
     openCart,
-  })(Cart),
+  })(Cart)
 );
