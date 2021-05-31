@@ -8,6 +8,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import PhotoCameraRoundedIcon from '@material-ui/icons/PhotoCameraRounded';
 import { editProfile } from '../redux/actions/auth';
+import { BACKEND_URL } from '../config';
+
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'grid',
@@ -79,6 +81,7 @@ const EditProfile = ({ editProfile, auth, loadUser }) => {
     avatar: '',
     location: '',
   });
+  const [PreviewImage, setPreviewImage] = React.useState();
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
   let uploadedImage = React.useRef(null);
@@ -98,9 +101,8 @@ const EditProfile = ({ editProfile, auth, loadUser }) => {
       const { current } = uploadedImage;
       current.file = file;
       reader.onload = (e) => {
-        current.src = e.target.result;
-
-        setUser({ ...User, avatar: e.target.result });
+        setPreviewImage(reader.result);
+        setUser({ ...User, avatar: file });
       };
 
       reader.readAsDataURL(file);
@@ -112,9 +114,15 @@ const EditProfile = ({ editProfile, auth, loadUser }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const formData = new FormData();
+    formData.append('firstname', User.firstname);
+    formData.append('lastname', User.lastname);
+    formData.append('image', User.avatar);
+    formData.append('location', User.location);
+    console.log(formData);
+    console.log(User);
     try {
-      await editProfile(User);
+      await editProfile(formData);
     } catch (error) {}
   };
 
@@ -124,7 +132,7 @@ const EditProfile = ({ editProfile, auth, loadUser }) => {
       firstname: auth.user.firstname,
       lastname: auth.user.lastname,
       email: auth.user.email,
-      avatar: auth.user.avatar,
+      avatar: `${BACKEND_URL}/${auth.user.avatar}`,
     }));
   }, [
     auth.user.avatar,
@@ -205,7 +213,7 @@ const EditProfile = ({ editProfile, auth, loadUser }) => {
                           className={classes.avatarOpacity}
                           ref={uploadedImage}
                           alt='profile_image'
-                          src={avatar}
+                          src={!PreviewImage ? avatar : PreviewImage}
                         />
                         <div className={classes.containerCameraIcon}>
                           <PhotoCameraRoundedIcon fontSize='large' />
