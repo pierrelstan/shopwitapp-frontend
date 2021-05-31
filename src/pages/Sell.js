@@ -51,6 +51,7 @@ const iniTialState = {
 const Sell = ({ CreateItem, history }) => {
   const [product, setProduct] = React.useState(iniTialState);
   const [open, setOpen] = React.useState(false);
+  const [PreviewImage, setPreviewImage] = React.useState();
 
   const classes = useStyles();
   const handleToggle = () => {
@@ -68,11 +69,9 @@ const Sell = ({ CreateItem, history }) => {
     const [file] = e.target.files;
     if (file) {
       const reader = new FileReader();
-      const { current } = uploadedImage;
-      current.file = file;
       reader.onload = (e) => {
-        current.src = e.target;
-        setProduct({ ...product, imageUrl: e.target.result });
+        setPreviewImage(reader.result);
+        setProduct({ ...product, imageUrl: file });
       };
 
       reader.readAsDataURL(file);
@@ -84,7 +83,13 @@ const Sell = ({ CreateItem, history }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    CreateItem(product, history);
+    const formData = new FormData();
+    formData.append('title', product.title);
+    formData.append('description', product.description);
+    formData.append('image', product.imageUrl);
+    formData.append('quantity', product.quantityProducts);
+    formData.append('price', product.price);
+    CreateItem(formData, history);
   };
 
   return (
@@ -106,16 +111,16 @@ const Sell = ({ CreateItem, history }) => {
               width: '500px',
             }}
           >
-            {product.imageUrl && (
+            {PreviewImage && (
               <img
-                src={product.imageUrl}
+                src={PreviewImage}
                 alt="preview"
                 style={{
                   width: '320px',
                 }}
               />
             )}
-            {!product.imageUrl && <div className={classes.square}></div>}
+            {!PreviewImage && <div className={classes.square}></div>}
           </div>
           <div>
             <form className={classes.form} noValidate onSubmit={handleSubmit}>
