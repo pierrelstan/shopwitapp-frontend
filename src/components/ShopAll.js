@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 
 import ListItems from './ListItems';
 import { CircularProgress } from '@material-ui/core';
+import {BACKEND_URL} from "../config"
 
 function ShopAll() {
   const { itemsPerPages, loading } = useSelector((state) => ({
@@ -32,7 +33,7 @@ function ShopAll() {
               id={data._id}
               price={data.price}
               title={data.title}
-              image={data.imageUrl}
+              image={`${BACKEND_URL}/${data.imageUrl}`}
               description={data.description}
             />
           ))}
