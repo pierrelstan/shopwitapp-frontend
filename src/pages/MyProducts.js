@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { CircularProgress, Container } from '@material-ui/core';
 import { fetchItemsByUserId } from '../redux/actions/ItemsActions';
+import { BACKEND_URL } from '../config';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -142,7 +143,7 @@ function MyProducts({ products, isLoaded, auth }) {
       <div className={classes.container}>
         <Titles>My Products</Titles>
         <div className={classes.containerItems}>
-          {products.map((data) => (
+          {products?.map((data) => (
             <Card className={classes.card} key={data.title} elevation={1}>
               <Link
                 component={RouterLink}
@@ -163,7 +164,7 @@ function MyProducts({ products, isLoaded, auth }) {
 
                 <img
                   alt={data.title}
-                  src={data.imageUrl}
+                  src={`${BACKEND_URL}/${data.imageUrl}`}
                   title={data.title}
                   className={classes.imageCard}
                 />
@@ -187,5 +188,5 @@ export default connect(mapStateToProps, { fetchItemsByUserId })(
     if (prev.products === next.products) {
       return true;
     }
-  }),
+  })
 );
