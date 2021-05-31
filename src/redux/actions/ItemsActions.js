@@ -46,12 +46,12 @@ export const fetchItems = () => async (dispatch, getState) => {
   }
 };
 
-export const CreateItem = (product, history) => (dispatch) => {
+export const CreateItem = (formData, history) => (dispatch) => {
   const token = store.getState().auth.token;
   const { user } = jwtDecode(token);
   let USER_ID = user.userId;
 
-  WebAPI.createItem(product, USER_ID)
+  WebAPI.createItem(formData)
     .then((response) => {
       dispatch(fetchLastProducts());
       dispatch(fetchItemsByUserId());
@@ -59,7 +59,7 @@ export const CreateItem = (product, history) => (dispatch) => {
         type: CREATE_ITEM,
         payload: response,
       });
-      dispatch(setAlert('Create item Successfully!', 'success'));
+      dispatch(setAlert(response.data.message, 'success'));
       history.push(`/myproducts`);
     })
     .catch((err) => {
@@ -113,15 +113,17 @@ export const clearSearchItems = () => (dispatch) => {
   });
 };
 export const fetchItemById = (id) => (dispatch) => {
+  console.log(id)
   WebAPI.fetchItemById(id)
-    .then((item) =>
+    .then((item) =>{
+    console.log(item)
       dispatch({
         type: FETCH_ITEM_BY_ID,
         payload: item,
         isLoaded: true,
         error: null,
-      }),
-    )
+      })
+    })
     .catch((error) => {});
 };
 
@@ -185,10 +187,11 @@ export const updateItem = (id, state, history) => async (dispatch) => {
     history.push(`/myproducts`);
     dispatch(setAlert('Updated cart successfully!', 'success'));
   } catch (error) {
-    const errors = error.response.data;
-    if (errors) {
-      dispatch(setAlert(errors.error, 'warning'));
-    }
+    const errors = error.response;
+    console.log(errors)
+    // if (errors) {
+    //   dispatch(setAlert(errors.error, 'warning'));
+    // }
     dispatch({
       type: UPDATE_ITEM_FAIL,
     });
