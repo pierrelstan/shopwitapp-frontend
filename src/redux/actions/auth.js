@@ -78,7 +78,7 @@ export const Log_in = (user) => (dispatch) => {
       .catch((error) => {
         // error handling
         let errors = error.response.data.errors;
-        errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+        errors.forEach((error) => dispatch(setAlert(error.msg, 'warning')));
 
         dispatch({
           type: LOGIN_FAILURE,
