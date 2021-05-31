@@ -8,6 +8,7 @@ import { setAlert } from '../redux/actions/alert';
 import FavStyles from '../Styles/FavStyles';
 import CloseButton from '../Styles/CloseButton';
 import Supreme from '../Styles/Supreme';
+import {BACKEND_URL} from "../config";
 
 function FavoritesItem(props) {
   const handleDeleteCart = (id) => {
@@ -47,7 +48,10 @@ function FavoritesItem(props) {
                   ) : (
                     <>
                       <h2> {cart.item.title}</h2>
-                      <img src={cart.item.imageUrl} alt={cart.item.title} />
+                      <img
+                        src={`${BACKEND_URL}/${cart.item.imageUrl}`}
+                        alt={cart.item.title}
+                      />
 
                       <div>Quantity {cart.quantity}</div>
                       <h2>
@@ -79,5 +83,5 @@ export default withRouter(
     removeFavorites,
     setAlert,
     openFavoritesAndClosing,
-  })(FavoritesItem),
+  })(FavoritesItem)
 );
