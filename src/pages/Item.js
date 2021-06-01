@@ -16,12 +16,10 @@ import Wrapper from '../components/Wrapper';
 import ScrollOnTop from '../components/ScrollOnTop';
 import Titles from '../components/Titles';
 import { Rating } from '@material-ui/lab';
-// import ScrollToTop from './ScrollOnTop';
-import { BACKEND_URL } from '../config';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 345
+        maxWidth: 345,
     },
     image: {
         width: '100%',
@@ -31,13 +29,13 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             width: '278px',
             objectFit: 'cover',
-            justifySelf: 'center'
-        }
+            justifySelf: 'center',
+        },
     },
     containerItem: {
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     container: {
         display: 'flex',
@@ -45,19 +43,19 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         gap: '50px',
         justifyContent: 'center',
-        marginTop: '50px'
+        marginTop: '50px',
     },
     p: {
         fontSize: '18px',
         [theme.breakpoints.down('xs')]: {
-            fontSize: '15px'
-        }
+            fontSize: '15px',
+        },
     },
     centered: {
         position: 'fixed',
         top: '50%',
-        left: '50%'
-    }
+        left: '50%',
+    },
 }));
 
 const Item = () => {
@@ -72,7 +70,7 @@ const Item = () => {
         carts: state.carts.allCarts,
         item: state.item,
         favorites: state.favorites.allFavorites,
-        loading: state.lastProducts.isLoadingLast10Products
+        loading: state.lastProducts.isLoadingLast10Products,
     }));
     let history = useHistory();
     useEffect(() => {
@@ -141,7 +139,7 @@ const Item = () => {
         return (
             <div
                 style={{
-                    marginBottom: '50px'
+                    marginBottom: '50px',
                 }}
             >
                 <ScrollOnTop />
@@ -152,7 +150,7 @@ const Item = () => {
                             <div className={classes.container}>
                                 <img
                                     className={classes.image}
-                                    src={`${BACKEND_URL}/${item.item.imageUrl}`}
+                                    src={item.item.imageUrl}
                                     alt={item.item.title}
                                 />
                                 <div>
@@ -170,7 +168,7 @@ const Item = () => {
                                     <p>$ {item.item.price}</p>
                                     <Box
                                         style={{
-                                            marginBottom: '20px'
+                                            marginBottom: '20px',
                                         }}
                                     >
                                         <h2>Ratings</h2>
