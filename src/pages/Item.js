@@ -12,6 +12,7 @@ import { Paper, Box, ButtonGroup } from '@material-ui/core';
 import { fetchItemById, removeItemById } from '../redux/actions/ItemsActions';
 import { removeCart, addToCart } from '../redux/actions/carts';
 import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
+import { addRatings, fetchRatingById } from '../redux/actions/ratings';
 import Wrapper from '../components/Wrapper';
 import ScrollOnTop from '../components/ScrollOnTop';
 import Titles from '../components/Titles';
@@ -66,16 +67,27 @@ const Item = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
 
-    const { carts, favorites, item } = useSelector((state) => ({
+    const {
+        carts,
+        favorites,
+        item,
+        ratings = {},
+    } = useSelector((state) => ({
         carts: state.carts.allCarts,
         item: state.item,
         favorites: state.favorites.allFavorites,
         loading: state.lastProducts.isLoadingLast10Products,
+        ratings: state.ratings.rating,
     }));
+    const [rating, setRating] = React.useState(0);
+    const [showRating, setShowRatings] = React.useState(ratings?.rating);
     let history = useHistory();
+    console.log(rating);
     useEffect(() => {
         dispatch(fetchItemById(id));
-    }, [dispatch, id]);
+        dispatch(fetchRatingById(id));
+        setRating(ratings?.rating);
+    }, [dispatch, id, ratings?.rating]);
 
     React.useEffect(() => {
         let Carts =
@@ -121,6 +133,11 @@ const Item = () => {
     const handleDeleteItem = (id) => {
         dispatch(removeItemById(id));
         history.push('/myproducts');
+    };
+
+    const handleChangeRating = (newValue) => {
+        dispatch(addRatings(id, newValue));
+        dispatch(fetchRatingById(id));
     };
 
     if (!item.isLoaded) {
@@ -174,11 +191,14 @@ const Item = () => {
                                         <h2>Ratings</h2>
                                         <Rating
                                             name="customized-empty"
-                                            defaultValue={2}
-                                            precision={0.5}
+                                            value={rating ? rating : 0}
+                                            max={5}
                                             emptyIcon={
                                                 <StarBorderIcon fontSize="inherit" />
                                             }
+                                            onChange={(event, newValue) => {
+                                                handleChangeRating(newValue);
+                                            }}
                                         />
                                     </Box>
 

@@ -2,6 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Paper } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import {
+    CardElement,
+    Elements,
+    useStripe,
+    useElements,
+} from '@stripe/react-stripe-js';
 import { openCart } from '../redux/actions/openCart';
 import { allCarts, removeCart, updateCart } from '../redux/actions/carts';
 import { setAlert } from '../redux/actions/alert';
@@ -11,6 +21,21 @@ import Supreme from '../Styles/Supreme';
 // import formatMoney from './formatMoney';
 import SickButton from '../Styles/SickButton';
 import { CalculatePriceTotal } from '../utils/CalcutateCartTotal';
+import Payments from './Payments';
+
+const useStyles = makeStyles((theme) => ({
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(10, 15, 10),
+    },
+}));
 
 function Cart({
     open,
@@ -25,6 +50,17 @@ function Cart({
     const [total, setTotal] = React.useState();
 
     const [cartImage, setCartImage] = React.useState();
+    const classes = useStyles();
+    const [Open, setOpen] = React.useState(false);
+    const stripe = useStripe();
+    const elements = useElements();
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     React.useEffect(() => {
         CalculatePriceTotal(carts, setCartImage, setTotal);
@@ -44,6 +80,15 @@ function Cart({
         openCart(false);
     };
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: elements.getElement(CardElement),
+        });
+        console.log(paymentMethod);
+    };
+
     return (
         <CartStyles open={open}>
             <header>
@@ -51,13 +96,17 @@ function Cart({
                 <CloseButton onClick={handleClickOpenCart}>&times;</CloseButton>
                 {<h1>You have {carts.length} items in your cart</h1>}
             </header>
-            <div>
+            <div
+                style={{
+                    marginTop: '10px',
+                }}
+            >
                 <ul>
                     {carts &&
                         carts.map((cart) => (
                             <Paper
                                 style={{
-                                    margin: '10px',
+                                    margin: '5px',
                                 }}
                                 key={cart._id}
                             >
@@ -75,7 +124,7 @@ function Cart({
                                                     handleDeleteCart(cart._id)
                                                 }
                                             >
-                                                Delete
+                                                Remove
                                             </button>
                                         </div>
                                     ) : (
@@ -106,11 +155,14 @@ function Cart({
                                             </h2>
 
                                             <button
+                                                style={{
+                                                    borderRadius: '5px',
+                                                }}
                                                 onClick={() =>
                                                     handleDeleteCart(cart._id)
                                                 }
                                             >
-                                                Delete
+                                                Remove
                                             </button>
                                         </>
                                     )}
@@ -127,7 +179,7 @@ function Cart({
                 >
                     {total}$
                 </p>
-                <SickButton>Check</SickButton>
+                <Payments />
             </footer>
         </CartStyles>
     );

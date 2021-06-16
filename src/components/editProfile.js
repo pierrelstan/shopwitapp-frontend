@@ -118,8 +118,6 @@ const EditProfile = ({ editProfile, auth, loadUser }) => {
         formData.append('lastname', User.lastname);
         formData.append('image', User.avatar);
         formData.append('location', User.location);
-        console.log(formData);
-        console.log(User);
         try {
             await editProfile(formData);
         } catch (error) {}

@@ -21,7 +21,7 @@ import {
 import { loadStripe } from '@stripe/stripe-js';
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe('pk_test_dxcReE3fa16rOEUusnoX7EXY00bRxrmqpf');
+const stripePromise = loadStripe(process.env.REACT_APP_PUBLISHABLE_KEY);
 
 store.dispatch(fetchLastProducts());
 store.dispatch(fetchItems());

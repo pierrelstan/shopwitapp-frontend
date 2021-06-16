@@ -1,4 +1,4 @@
-import jwtDecode from "jwt-decode";
+import jwtDecode from 'jwt-decode';
 import {
     REGISTER_FAIL,
     REGISTER_SUCCESS,
@@ -12,12 +12,12 @@ import {
     NEW_PASSWORD_FAIL,
     UPDATE_PROFILE,
     UPDATE_PROFILE_FAIL,
-    REMOVE_UPDATE_SUCCESS_MESSAGE
-} from "./types";
-import store from "../store/store";
-import { setAlert } from "./alert";
-import axiosService from "../../utils/axiosService";
-import WebAPI from "../../utils/service";
+    REMOVE_UPDATE_SUCCESS_MESSAGE,
+} from './types';
+import store from '../store/store';
+import { setAlert } from './alert';
+import axiosService from '../../utils/axiosService';
+import WebAPI from '../../utils/service';
 
 // Load user
 export const getProfile = () => async (dispatch) => {
@@ -27,22 +27,22 @@ export const getProfile = () => async (dispatch) => {
         console.log(decodeToken);
         let userId = decodeToken.user.userId;
 
-        const expirationTime = decodeToken.exp * 1000 - 60000;
-        if (Date.now() >= expirationTime) {
+        const expirationTime = decodeToken.exp;
+        if (expirationTime < Date.now() / 1000) {
             dispatch({
-                type: AUTH_ERROR
+                type: AUTH_ERROR,
             });
         }
         if (token !== null) {
             let data = await WebAPI.getProfile(userId);
             dispatch({
                 type: USER_LOAD,
-                payload: data.data
+                payload: data.data,
             });
         }
     } catch (error) {
         dispatch({
-            type: AUTH_ERROR
+            type: AUTH_ERROR,
         });
     }
 };
@@ -55,14 +55,14 @@ export const signUp = (User) => async (dispatch) => {
             return Promise.all([
                 dispatch({
                     type: REGISTER_SUCCESS,
-                    payload: data
+                    payload: data,
                 }),
-                dispatch(getProfile())
+                dispatch(getProfile()),
             ]);
         });
     } catch (err) {
         dispatch({
-            type: REGISTER_FAIL
+            type: REGISTER_FAIL,
         });
     }
 };
@@ -74,24 +74,24 @@ export const Log_in = (user) => (dispatch) => {
             .then((res) => {
                 Promise.all([
                     dispatch({
-                        type: LOGIN_START
+                        type: LOGIN_START,
                     }),
                     dispatch({
                         type: LOGIN_SUCCESS,
-                        payload: res.data
+                        payload: res.data,
                     }),
-                    dispatch(getProfile())
+                    dispatch(getProfile()),
                 ]);
             })
             .catch((error) => {
                 // error handling
-                let errors = error.response.data.errors;
-                errors.forEach((error) =>
-                    dispatch(setAlert(error.msg, "warning"))
-                );
+                // let errors = error.response.data.errors;
+                // errors.forEach((error) =>
+                //     dispatch(setAlert(error.msg, 'warning'))
+                // );
 
                 dispatch({
-                    type: LOGIN_FAILURE
+                    type: LOGIN_FAILURE,
                 });
             });
     } catch (e) {}
@@ -101,7 +101,7 @@ export const Log_in = (user) => (dispatch) => {
 
 export const logout = () => (dispatch) => {
     dispatch({
-        type: LOGOUT
+        type: LOGOUT,
     });
 };
 
@@ -114,13 +114,13 @@ export const newPassWord = (token, state, props) => async (dispatch) => {
 
         dispatch({
             type: NEW_PASSWORD,
-            payload: res.data
+            payload: res.data,
         });
 
-        props.history.push("/");
+        props.history.push('/');
     } catch (error) {
         dispatch({
-            type: NEW_PASSWORD_FAIL
+            type: NEW_PASSWORD_FAIL,
         });
     }
 };
@@ -135,26 +135,26 @@ export const editProfile = (User) => async (dispatch) => {
             dispatch({
                 type: UPDATE_PROFILE,
                 payload: res.data,
-                update: true
+                update: true,
             });
-            dispatch(setAlert("Update profile successfully!", "success"));
+            dispatch(setAlert('Update profile successfully!', 'success'));
             setTimeout(() => {
                 dispatch({
                     type: REMOVE_UPDATE_SUCCESS_MESSAGE,
-                    update: false
+                    update: false,
                 });
             }, 3000);
             dispatch(getProfile());
         } else {
-            dispatch(setAlert("Please connect to internet!", "dander"));
+            dispatch(setAlert('Please connect to internet!', 'dander'));
         }
     } catch (error) {
         // error handling
         let errors = error.response.data.errors;
         if (errors) {
-            errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+            errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
             dispatch({
-                type: UPDATE_PROFILE_FAIL
+                type: UPDATE_PROFILE_FAIL,
             });
         }
     }
