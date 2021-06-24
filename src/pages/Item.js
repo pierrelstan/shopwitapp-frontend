@@ -12,16 +12,15 @@ import { Paper, Box, ButtonGroup } from '@material-ui/core';
 import { fetchItemById, removeItemById } from '../redux/actions/ItemsActions';
 import { removeCart, addToCart } from '../redux/actions/carts';
 import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
+import { addRatings, fetchRatingById } from '../redux/actions/ratings';
 import Wrapper from '../components/Wrapper';
 import ScrollOnTop from '../components/ScrollOnTop';
 import Titles from '../components/Titles';
 import { Rating } from '@material-ui/lab';
-// import ScrollToTop from './ScrollOnTop';
-import { BACKEND_URL } from '../config';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 345
+        maxWidth: 345,
     },
     image: {
         width: '100%',
@@ -31,13 +30,13 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             width: '278px',
             objectFit: 'cover',
-            justifySelf: 'center'
-        }
+            justifySelf: 'center',
+        },
     },
     containerItem: {
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     container: {
         display: 'flex',
@@ -45,19 +44,19 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         gap: '50px',
         justifyContent: 'center',
-        marginTop: '50px'
+        marginTop: '50px',
     },
     p: {
         fontSize: '18px',
         [theme.breakpoints.down('xs')]: {
-            fontSize: '15px'
-        }
+            fontSize: '15px',
+        },
     },
     centered: {
         position: 'fixed',
         top: '50%',
-        left: '50%'
-    }
+        left: '50%',
+    },
 }));
 
 const Item = () => {
@@ -68,16 +67,27 @@ const Item = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
 
-    const { carts, favorites, item } = useSelector((state) => ({
+    const {
+        carts,
+        favorites,
+        item,
+        ratings = {},
+    } = useSelector((state) => ({
         carts: state.carts.allCarts,
         item: state.item,
         favorites: state.favorites.allFavorites,
-        loading: state.lastProducts.isLoadingLast10Products
+        loading: state.lastProducts.isLoadingLast10Products,
+        ratings: state.ratings.rating,
     }));
+    const [rating, setRating] = React.useState(0);
+    const [showRating, setShowRatings] = React.useState(ratings?.rating);
     let history = useHistory();
+    console.log(rating);
     useEffect(() => {
         dispatch(fetchItemById(id));
-    }, [dispatch, id]);
+        dispatch(fetchRatingById(id));
+        setRating(ratings?.rating);
+    }, [dispatch, id, ratings?.rating]);
 
     React.useEffect(() => {
         let Carts =
@@ -125,6 +135,11 @@ const Item = () => {
         history.push('/myproducts');
     };
 
+    const handleChangeRating = (newValue) => {
+        dispatch(addRatings(id, newValue));
+        dispatch(fetchRatingById(id));
+    };
+
     if (!item.isLoaded) {
         return (
             <Wrapper>
@@ -141,7 +156,7 @@ const Item = () => {
         return (
             <div
                 style={{
-                    marginBottom: '50px'
+                    marginBottom: '50px',
                 }}
             >
                 <ScrollOnTop />
@@ -152,7 +167,7 @@ const Item = () => {
                             <div className={classes.container}>
                                 <img
                                     className={classes.image}
-                                    src={`${BACKEND_URL}/${item.item.imageUrl}`}
+                                    src={item.item.imageUrl}
                                     alt={item.item.title}
                                 />
                                 <div>
@@ -170,17 +185,20 @@ const Item = () => {
                                     <p>$ {item.item.price}</p>
                                     <Box
                                         style={{
-                                            marginBottom: '20px'
+                                            marginBottom: '20px',
                                         }}
                                     >
                                         <h2>Ratings</h2>
                                         <Rating
                                             name="customized-empty"
-                                            defaultValue={2}
-                                            precision={0.5}
+                                            value={rating ? rating : 0}
+                                            max={5}
                                             emptyIcon={
                                                 <StarBorderIcon fontSize="inherit" />
                                             }
+                                            onChange={(event, newValue) => {
+                                                handleChangeRating(newValue);
+                                            }}
                                         />
                                     </Box>
 

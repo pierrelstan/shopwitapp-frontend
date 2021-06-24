@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 import { updateItem, fetchItemById } from '../redux/actions/ItemsActions';
 import Titles from '../components/Titles';
 import { CircularProgress } from '@material-ui/core';
-import { BACKEND_URL } from '../config';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -202,7 +201,7 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
                                         <img
                                             src={
                                                 !PreviewImage
-                                                    ? `${BACKEND_URL}/${Product.imageUrl}`
+                                                    ? Product.imageUrl
                                                     : PreviewImage
                                             }
                                             alt="preview"

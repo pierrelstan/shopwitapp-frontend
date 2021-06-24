@@ -74,6 +74,17 @@ class WebAPI {
   static editProfile = async (USER_ID, formData) => {
     return axiosService.put(`/api/auth/user/${USER_ID}/edit`, formData);
   };
+  static addPayments = async (token) => {
+    return axiosService.post(`/api/orders/payments`, token);
+  };
+  static addRatings = async (id, newValue) => {
+    return axiosService.post(`/api/ratings/${id}`, {
+      rating: newValue,
+    });
+  };
+  static fetchRatingById = async (id) => {
+    return axiosService.get(`/api/ratings/${id}`);
+  };
 }
 
 export default WebAPI;
