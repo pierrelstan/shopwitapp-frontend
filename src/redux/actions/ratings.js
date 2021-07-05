@@ -1,14 +1,10 @@
-import jwtDecode from 'jwt-decode';
-import store from '../store/store';
 import {
   ADD_RATINGS,
   ADD_RATINGS_FAILED,
   FETCH_RATING,
   FETCH_ALL_GREATEST_RATINGS_AVERAGE,
+  FETCH_ALL_GREATEST_RATINGS_AVERAGE_FAILED,
 } from './types';
-import { setAlert } from './alert';
-
-import axiosService from '../../utils/axiosService';
 import WebAPI from '../../utils/service';
 
 export const addRatings = (id, newValue) => async (dispatch) => {
@@ -52,5 +48,9 @@ export const fetchAllGreatertRatingsAverage = (id) => (dispatch) => {
         error: null,
       });
     })
-    .catch((error) => {});
+    .catch((error) => {
+      dispatch({
+        type: FETCH_ALL_GREATEST_RATINGS_AVERAGE_FAILED,
+      });
+    });
 };
