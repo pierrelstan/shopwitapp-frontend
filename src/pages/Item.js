@@ -188,6 +188,7 @@ const Item = () => {
                     <Rating
                       name='customized-empty'
                       value={rating ? rating : 0}
+                      precision={0.5}
                       max={5}
                       emptyIcon={<StarBorderIcon fontSize='inherit' />}
                       onChange={(event, newValue) => {
