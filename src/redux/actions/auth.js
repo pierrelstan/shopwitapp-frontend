@@ -26,12 +26,6 @@ export const getProfile = () => async (dispatch) => {
     let decodeToken = jwtDecode(token);
     let userId = decodeToken.user.userId;
 
-    const expirationTime = decodeToken.exp;
-    if (expirationTime < Date.now() / 1000) {
-      dispatch({
-        type: AUTH_ERROR,
-      });
-    }
     if (token !== null) {
       let data = await WebAPI.getProfile(userId);
       dispatch({
@@ -84,10 +78,8 @@ export const Log_in = (user) => (dispatch) => {
       })
       .catch((error) => {
         // error handling
-        // let errors = error.response.data.errors;
-        // errors.forEach((error) =>
-        //     dispatch(setAlert(error.msg, 'warning'))
-        // );
+        let errors = error.response.data.errors;
+        errors.forEach((error) => dispatch(setAlert(error.msg, 'warning')));
 
         dispatch({
           type: LOGIN_FAILURE,
