@@ -13,36 +13,38 @@ import { theme } from './Theme/theme';
 import * as serviceWorker from './serviceWorker';
 import { fetchLastProducts, fetchItems } from './redux/actions/ItemsActions';
 import {
-    CardElement,
-    Elements,
-    useStripe,
-    useElements,
+  CardElement,
+  Elements,
+  useStripe,
+  useElements,
 } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { fetchAllGreatertRatingsAverage } from './redux/actions/ratings';
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(process.env.REACT_APP_PUBLISHABLE_KEY);
 
 store.dispatch(fetchLastProducts());
 store.dispatch(fetchItems());
+store.dispatch(fetchAllGreatertRatingsAverage());
 ReactDOM.render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <Elements stripe={stripePromise}>
-                <Provider store={store}>
-                    <PersistGate loading={null} persistor={persistor}>
-                        <SnackbarProvider maxSnack={1}>
-                            <ThemeProvider theme={theme}>
-                                <App />
-                            </ThemeProvider>
-                        </SnackbarProvider>
-                    </PersistGate>
-                </Provider>
-            </Elements>
-        </BrowserRouter>
-        ,
-    </React.StrictMode>,
-    document.getElementById('root')
+  <React.StrictMode>
+    <BrowserRouter>
+      <Elements stripe={stripePromise}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <SnackbarProvider maxSnack={1}>
+              <ThemeProvider theme={theme}>
+                <App />
+              </ThemeProvider>
+            </SnackbarProvider>
+          </PersistGate>
+        </Provider>
+      </Elements>
+    </BrowserRouter>
+    ,
+  </React.StrictMode>,
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change
