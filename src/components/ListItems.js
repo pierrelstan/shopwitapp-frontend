@@ -248,6 +248,7 @@ export default function ListItems({ id, price, title, image, description }) {
   const hanldeRemoveCart = (id) => {
     let cart = carts.allCarts.filter((item) => item.item._id === id);
     const { _id } = cart[0];
+    console.log(_id);
     dispatch(removeCart(_id));
   };
 
