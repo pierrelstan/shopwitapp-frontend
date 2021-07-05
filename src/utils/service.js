@@ -20,10 +20,9 @@ class WebAPI {
   static updateItem = async (id, formData, USER_ID) => {
     return axiosService.put(`/api/items/${id}`, formData);
   };
-  static removeItemById = async (id, USER_ID) => {
-    return axiosService.post(`/api/items/${id}`, {
-      userId: USER_ID,
-    });
+  static removeItemById = async (id) => {
+    console.log(id);
+    return axiosService.post(`/api/items/${id}`);
   };
   static pagesControlled = async (page) => {
     return axiosService.get(`/api/items/page/${page}`);
@@ -47,8 +46,9 @@ class WebAPI {
       userId: USER_ID,
     });
   };
-  static removeCart = async (id, USER_ID) => {
-    return axiosService.post(`/api/carts/${id}`, { userId: USER_ID });
+  static removeCart = async (id) => {
+    console.log(id);
+    return axiosService.delete(`/api/carts/${id}`);
   };
   static addToFavorites = async (id, USER_ID) => {
     return axiosService.post(`/api/favorites/${id}`, {
@@ -58,10 +58,8 @@ class WebAPI {
   static allFavorites = async (USER_ID) => {
     return axiosService.get(`/api/favorites/${USER_ID}`);
   };
-  static removeFavorites = async (id, USER_ID) => {
-    return axiosService.post(`/api/favorites/remove/${id}`, {
-      userId: USER_ID,
-    });
+  static removeFavorites = async (id) => {
+    return axiosService.delete(`/api/favorites/remove/${id}`);
   };
   static getProfile = async (id) => {
     return axiosService.get(`/api/auth/me/${id}`);
@@ -84,6 +82,9 @@ class WebAPI {
   };
   static fetchRatingById = async (id) => {
     return axiosService.get(`/api/ratings/${id}`);
+  };
+  static fetchAllGreatertRatingsAverage = async (id) => {
+    return axiosService.get(`/api/ratings`);
   };
 }
 
