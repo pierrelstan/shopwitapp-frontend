@@ -93,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     borderRadius: '24px',
     transition: '0.5s ease-in-out ',
+    padding: '10px',
     zIndex: 1,
     [theme.breakpoints.down('xs')]: {
       width: '277px',
@@ -128,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
       opacity: 0,
       borderRadius: '24px',
       background:
-        'linear-gradient(to bottom, rgb(0 0 0 / 14%),rgb(0 0 0 / 87%))',
+        'linear-gradient(to bottom, rgb(0 0 0 / 35%),rgb(0 0 0 / 55%))',
     },
     '&:hover $price': {
       background: '#fff',
@@ -148,9 +149,11 @@ const useStyles = makeStyles((theme) => ({
       opacity: 0,
       transform: 'translateY(30px)',
       transition: '0.5s all',
-      fontSize: '14px',
+      fontSize: '18px',
       wordWrap: 'break-all',
       display: 'none',
+      padding: '4px',
+      textAlign: 'center',
     },
     '&:hover p': {
       display: 'block',
@@ -221,10 +224,10 @@ const useStyles = makeStyles((theme) => ({
   },
   containerButton: {
     display: 'flex',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     position: 'absolute',
     top: '227px',
-    width: '100%',
+    width: '94%',
   },
 }));
 
@@ -248,7 +251,6 @@ export default function ListItems({ id, price, title, image, description }) {
   const hanldeRemoveCart = (id) => {
     let cart = carts.allCarts.filter((item) => item.item._id === id);
     const { _id } = cart[0];
-    console.log(_id);
     dispatch(removeCart(_id));
   };
 
@@ -285,19 +287,19 @@ export default function ListItems({ id, price, title, image, description }) {
           to={`/item/${id}`}
           className={classes.textLink}
         >
-          <CardContent>
+          <Box>
             <div>
               <h1>{title}</h1>
             </div>
             <p>
               <span>{description}</span>
             </p>
-          </CardContent>
+          </Box>
         </Link>
         <div className={classes.containerButton}>
           <div>
             <Box boxShadow={0}>
-              <div>
+              <div className={classes.textLink}>
                 <Button className={classes.button}>
                   <DisplayFavoriteCartIcon
                     id={id}
