@@ -12,12 +12,7 @@ import App from './App';
 import { theme } from './Theme/theme';
 import * as serviceWorker from './serviceWorker';
 import { fetchLastProducts, fetchItems } from './redux/actions/ItemsActions';
-import {
-  CardElement,
-  Elements,
-  useStripe,
-  useElements,
-} from '@stripe/react-stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { fetchAllGreatertRatingsAverage } from './redux/actions/ratings';
 // Make sure to call `loadStripe` outside of a component’s render to avoid
@@ -28,22 +23,19 @@ store.dispatch(fetchLastProducts());
 store.dispatch(fetchItems());
 store.dispatch(fetchAllGreatertRatingsAverage());
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Elements stripe={stripePromise}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <SnackbarProvider maxSnack={1}>
-              <ThemeProvider theme={theme}>
-                <App />
-              </ThemeProvider>
-            </SnackbarProvider>
-          </PersistGate>
-        </Provider>
-      </Elements>
-    </BrowserRouter>
-    ,
-  </React.StrictMode>,
+  <BrowserRouter>
+    <Elements stripe={stripePromise}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <SnackbarProvider maxSnack={1}>
+            <ThemeProvider theme={theme}>
+              <App />
+            </ThemeProvider>
+          </SnackbarProvider>
+        </PersistGate>
+      </Provider>
+    </Elements>
+  </BrowserRouter>,
   document.getElementById('root'),
 );
 
