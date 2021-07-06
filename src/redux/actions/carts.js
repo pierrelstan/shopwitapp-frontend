@@ -1,3 +1,5 @@
+import jwtDecode from 'jwt-decode';
+import store from '../store/store';
 import {
   ADD_TO_CART_BY_ID,
   FAILED_ADD_TO_CART_BY_ID,
@@ -10,8 +12,11 @@ import { setAlert } from './alert';
 import WebAPI from '../../utils/service';
 
 export const addToCart = (id) => async (dispatch) => {
+  const token = store.getState().auth.token;
+  const { user } = jwtDecode(token);
+  let USER_ID = user.userId;
   try {
-    let data = await WebAPI.addToCart(id);
+    let data = await WebAPI.addToCart(id, USER_ID);
     dispatch({
       type: ADD_TO_CART_BY_ID,
       payload: data,
@@ -63,7 +68,6 @@ export const updateCart = (id, number) => async (dispatch) => {
   }
 };
 export const removeCart = (id) => (dispatch) => {
-  console.log(id);
   WebAPI.removeCart(id)
     .then((res) => {
       dispatch({
