@@ -48,7 +48,7 @@ class WebAPI {
   };
   static removeCart = async (id) => {
     console.log(id);
-    return axiosService.delete(`/api/carts/${id}`);
+    return axiosService.delete(`/api/carts/remove/${id}`);
   };
   static addToFavorites = async (id, USER_ID) => {
     return axiosService.post(`/api/favorites/${id}`, {
