@@ -26,7 +26,7 @@ import NewPassword from './components/NewPassword';
 import ResetPassword from './components/ResetPassword';
 import MyProducts from './pages/MyProducts';
 import Orders from './pages/orders';
-import Dashboard from './pages/dashboard';
+
 import Footer from './components/Footer';
 import { fetchItemsByUserId } from './redux/actions/ItemsActions';
 import { allCarts } from './redux/actions/carts';
@@ -88,11 +88,12 @@ function App() {
   return (
     <div className={classes.root}>
       <Router basename={process.env.PUBLIC_URL}>
+        <Alert />
         <Navbar>
           {active && <AuthLinks />}
           {!active && <GuestLinks />}
         </Navbar>
-        <Alert />
+
         <div className={classes.main}>
           <Switch>
             <Route exact path='/' render={(props) => <Home {...props} />} />
@@ -104,7 +105,6 @@ function App() {
             />
             <ProtectedRoutes exact path='/profile' component={Profile} />
             <ProtectedRoutes exact path='/orders' component={Orders} />
-            <ProtectedRoutes exact path='/dashboard' component={Dashboard} />
             <ProtectedRoutes exact path='/item/new' component={Sell} />
             <ProtectedRoutes
               exact
