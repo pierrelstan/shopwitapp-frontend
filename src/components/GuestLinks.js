@@ -1,12 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-// import { Link, withRouter } from 'react-router-dom';
-import { Link, withRouter } from 'react-router-dom';
-// import Link from '@material-ui/core/Link';
+import { Link as RouterLink, withRouter } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 
 import Box from '@material-ui/core/Box';
 import { Grid } from '@material-ui/core';
@@ -68,6 +64,11 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'center',
     },
   },
+  menuTextSize: {
+    fontSize: '16px',
+    padding: '14px',
+    textTransform: 'uppercase',
+  },
 }));
 
 function GuestLinks() {
@@ -77,26 +78,41 @@ function GuestLinks() {
     <div className={classes.mainContainer}>
       <Grid className={classes.subContainer}>
         <Typography variant='h4' className={classes.title}>
-          <Link to='/' className={classes.containerTitle}>
+          <Link to='/' className={classes.containerTitle} component={Link}>
             SHOPWIT
           </Link>
         </Typography>
       </Grid>
       <Grid className={classes.moveToRight}>
         <Box>
-          <Button component={Link} to={'/'} color='inherit'>
+          <Link
+            component={RouterLink}
+            to='/'
+            color='inherit'
+            className={classes.menuTextSize}
+          >
             Home
-          </Button>
+          </Link>
         </Box>
         <Box>
-          <Button component={Link} to={'/register'} color='inherit'>
+          <Link
+            component={RouterLink}
+            to='/register'
+            color='inherit'
+            className={classes.menuTextSize}
+          >
             Register
-          </Button>
+          </Link>
         </Box>
         <Box>
-          <Button component={Link} to={'/login'} color='inherit'>
+          <Link
+            component={RouterLink}
+            to='/login'
+            color='inherit'
+            className={classes.menuTextSize}
+          >
             Login
-          </Button>
+          </Link>
         </Box>
       </Grid>
     </div>
