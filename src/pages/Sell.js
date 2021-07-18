@@ -4,10 +4,26 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
+
 import { connect } from 'react-redux';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import { CircularProgress } from '@material-ui/core';
 import { CreateItem } from '../redux/actions/ItemsActions';
 import Titles from '../components/Titles';
-import { CircularProgress } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import FilledInput from '@material-ui/core/FilledInput';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
     width: '300px',
     backgroundColor: '#e3e3e3',
   },
+  input: {
+    display: 'none',
+  },
 }));
 const iniTialState = {
   title: '',
@@ -47,6 +66,7 @@ const iniTialState = {
   price: '',
   imageUrl: '',
   quantityProducts: '',
+  gender: 'women',
 };
 const Sell = ({ CreateItem, history }) => {
   const [product, setProduct] = React.useState(iniTialState);
@@ -57,7 +77,7 @@ const Sell = ({ CreateItem, history }) => {
   const handleToggle = () => {
     setOpen((prev) => !prev);
   };
-
+  console.log(product.gender);
   React.useEffect(() => {
     if (alert.length === 1) {
       setOpen(false);
@@ -89,12 +109,13 @@ const Sell = ({ CreateItem, history }) => {
     formData.append('image', product.imageUrl);
     formData.append('quantity', product.quantityProducts);
     formData.append('price', product.price);
+    formData.append('gender', product.gender);
     CreateItem(formData, history);
   };
 
   return (
     <div>
-      <Container component="main" maxWidth="md">
+      <Container component='main' maxWidth='md'>
         <Titles>Add Product</Titles>
         <CssBaseline />
         <div
@@ -114,7 +135,7 @@ const Sell = ({ CreateItem, history }) => {
             {PreviewImage && (
               <img
                 src={PreviewImage}
-                alt="preview"
+                alt='preview'
                 style={{
                   width: '320px',
                 }}
@@ -124,84 +145,120 @@ const Sell = ({ CreateItem, history }) => {
           </div>
           <div>
             <form className={classes.form} noValidate onSubmit={handleSubmit}>
+              <FormLabel component='legend'>For:</FormLabel>
+              <RadioGroup
+                aria-label='gender'
+                name='gender'
+                value={product.gender}
+                onChange={handleChange}
+              >
+                <FormControlLabel
+                  value='women'
+                  control={<Radio />}
+                  label='Women'
+                />
+                <FormControlLabel value='men' control={<Radio />} label='Men' />
+                <FormControlLabel
+                  value='sneakers'
+                  control={<Radio />}
+                  label='Sneakers'
+                />
+              </RadioGroup>
               <TextField
-                variant="outlined"
-                margin="normal"
+                variant='outlined'
+                margin='normal'
                 required={true}
                 fullWidth
-                id="title"
-                label="Title"
-                name="title"
-                autoComplete="title"
+                id='title'
+                label='Title'
+                name='title'
+                autoComplete='title'
                 value={product.title}
                 onChange={handleChange}
               />
               <TextField
-                variant="outlined"
-                margin="normal"
+                variant='outlined'
+                margin='normal'
                 required={true}
                 fullWidth
-                name="description"
-                label="Description"
-                id="description"
-                autoComplete="description"
+                name='description'
+                label='Description'
+                id='description'
+                autoComplete='description'
                 value={product.description}
                 onChange={handleChange}
               />
               <div style={{ display: 'flex', gap: '30px' }}>
-                <TextField
-                  margin="normal"
+                <input
+                  margin='normal'
                   required={true}
-                  type="file"
-                  accept="image/*"
-                  name="imageUrl"
-                  label="Add image"
+                  type='file'
+                  accept='image/*'
+                  name='imageUrl'
+                  label='Add image'
                   multiple={false}
-                  id="imageUrl"
-                  autoComplete="imageUrl"
+                  id='imageUrl'
+                  autoComplete='imageUrl'
                   ref={uploadedImage}
+                  className={classes.input}
                   onChange={handleImageUpload}
                 />
+                <label htmlFor='imageUrl'>
+                  <Button variant='contained' color='primary' component='span'>
+                    Upload
+                  </Button>
+                </label>
               </div>
               <TextField
-                variant="outlined"
-                margin="normal"
+                margin='normal'
                 required={true}
                 fullWidth
-                name="price"
-                label="Price"
-                id="price"
-                autoComplete="price"
+                name='price'
+                label='Price'
+                id='price'
                 value={product.price}
+                type='number'
                 onChange={handleChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>$</InputAdornment>
+                  ),
+                }}
+                min='0'
+                max='10000'
+                variant='filled'
               />
 
               <TextField
-                variant="outlined"
-                margin="normal"
+                margin='normal'
                 required={true}
                 fullWidth
-                id="quantityProducts"
-                label="Quantity"
-                name="quantityProducts"
-                autoComplete="quantityProducts"
+                id='quantityProducts'
+                label='Quantity'
+                name='quantityProducts'
+                autoComplete='quantityProducts'
                 value={product.quantityProducts}
                 onChange={handleChange}
+                defaultValue={0}
+                variant='filled'
+                type='number'
+                min='0'
+                max='10000'
               />
               <div className={classes.containerSubmit}>
                 <Button
-                  type="submit"
-                  variant="outlined"
-                  color="primary"
+                  type='submit'
+                  variant='outlined'
+                  color='primary'
                   className={classes.submit}
-                  value="Submit"
+                  value='Submit'
                   onClick={handleToggle}
                 >
                   {!open ? (
                     'Submit'
                   ) : (
                     <CircularProgress
-                      color="inherit"
+                      color='inherit'
                       thickness={2.3}
                       size={30}
                     />
