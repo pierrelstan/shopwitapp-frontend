@@ -14,10 +14,25 @@ import {
   DELETE_ITEM_FAIL,
   FETCH_LAST_PRODUCTS_START,
   FETCH_LAST_PRODUCTS_SUCCESS,
+  FETCH_COUNTS_ITEMS_START,
+  FETCH_COUNTS_ITEMS_SUCCESS,
 } from './types';
 import { setAlert } from './alert';
 import axiosService from '../../utils/axiosService';
 import WebAPI from '../../utils/service';
+
+export const fetchCountsItems = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: FETCH_COUNTS_ITEMS_START,
+    });
+    let items = await WebAPI.fetchCountsItems();
+    dispatch({
+      type: FETCH_COUNTS_ITEMS_SUCCESS,
+      countsItems: items.data,
+    });
+  } catch (err) {}
+};
 
 export const fetchLastProducts = (cancelToken) => async (dispatch) => {
   try {
