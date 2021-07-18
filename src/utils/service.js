@@ -17,6 +17,9 @@ class WebAPI {
   static fetchLastProducts = async () => {
     return axiosService.get('/api/items/lastproducts');
   };
+  static fetchCountsItems = async () => {
+    return axiosService.get('/api/items/counts');
+  };
   static updateItem = async (id, formData, USER_ID) => {
     return axiosService.put(`/api/items/${id}`, formData);
   };
@@ -35,6 +38,14 @@ class WebAPI {
   static addToCart = async (id, USER_ID) => {
     return axiosService.post(`/api/carts/${id}`, {
       userId: USER_ID,
+    });
+  };
+
+  static createOrderPayments = async (cartIds, Payment, id) => {
+    return axiosService.post(`/api/orders/payments`, {
+      cartIds,
+      Payment,
+      id,
     });
   };
   static allCarts = async (USER_ID) => {
