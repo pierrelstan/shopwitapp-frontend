@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 import { updateItem, fetchItemById } from '../redux/actions/ItemsActions';
 import Titles from '../components/Titles';
 import { CircularProgress } from '@material-ui/core';
@@ -40,6 +43,14 @@ const useStyles = makeStyles((theme) => ({
   image: {
     width: '273px',
   },
+  input: {
+    display: 'none',
+  },
+  square: {
+    height: '400px',
+    width: '300px',
+    backgroundColor: '#e3e3e3',
+  },
 }));
 const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
   const [Product, setProduct] = useState({
@@ -49,9 +60,10 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
     price: '',
     imageUrl: '',
     quantityProducts: '',
+    gender: 'women',
   });
   let { id } = useParams();
-  console.log(id);
+
   let history = useHistory();
   const [open, setOpen] = React.useState(false);
   const [PreviewImage, setPreviewImage] = React.useState();
@@ -88,6 +100,7 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
 
   useEffect(() => {
     fetchItemById(id);
+
     setProduct((prevState) => ({
       ...prevState,
       id: item.item._id,
@@ -96,6 +109,7 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
       price: item.item.price,
       imageUrl: item.item.imageUrl,
       quantityProducts: item.item.quantityProducts,
+      gender: item.item.gender,
     }));
   }, [
     fetchItemById,
@@ -106,12 +120,19 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
     item.item.price,
     item.item.quantityProducts,
     item.item.title,
+    item.item.gender,
   ]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { title, description, price, quantityProducts, imageUrl, id } =
-      Product;
+    const {
+      title,
+      description,
+      price,
+      quantityProducts,
+      imageUrl,
+      id,
+      gender,
+    } = Product;
     let formData = new FormData();
     formData.append('title', title);
     formData.append('id', id);
@@ -119,9 +140,10 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
     formData.append('image', imageUrl);
     formData.append('quantity', quantityProducts);
     formData.append('price', price);
+    formData.append('gender', gender);
     updateItem(id, formData, history);
   };
-  const { title, description, price, quantityProducts } = Product;
+  const { title, description, price, quantityProducts, gender } = Product;
   if (!item.isLoaded) {
     return (
       <Container component='main' maxWidth='md'>
@@ -133,126 +155,144 @@ const EditItem = ({ item, updateItem, userId, fetchItemById }) => {
     <Container component='main' maxWidth='md'>
       <Titles> Edit Product</Titles>
       <CssBaseline />
-      <div>
-        <Typography variant='h4' className={classes.title}></Typography>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+        }}
+      >
+        <div
+          style={{
+            display: 'grid',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '500px',
+          }}
+        >
+          {Product.imageUrl && (
+            <img
+              src={!PreviewImage ? Product.imageUrl : PreviewImage}
+              alt='preview'
+              style={{
+                width: '320px',
+              }}
+            />
+          )}
+        </div>
+
         <div>
-          <div>
-            <form className={classes.form} noValidate onSubmit={handleSubmit}>
-              <TextField
-                variant='outlined'
-                margin='normal'
-                required={true}
-                fullWidth
-                id='title'
-                label='Title'
-                name='title'
-                autoComplete='title'
-                value={Product.title}
-                onChange={handleChange}
-                defaultValue={title}
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+            <FormLabel component='legend'>For:</FormLabel>
+            <RadioGroup
+              aria-label='gender'
+              name='gender'
+              value={Product.gender ? Product.gender : ''}
+              onChange={handleChange}
+            >
+              <FormControlLabel
+                value='women'
+                control={<Radio />}
+                label='Women'
               />
-              <TextField
-                variant='outlined'
-                margin='normal'
-                required={true}
-                fullWidth
-                name='description'
-                label='Description'
-                id='description'
-                autoComplete='description'
-                value={Product.description}
-                onChange={handleChange}
-                defaultValue={description}
+              <FormControlLabel value='men' control={<Radio />} label='Men' />
+              <FormControlLabel
+                value='sneakers'
+                control={<Radio />}
+                label='Sneakers'
               />
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '30px',
-                  alignItems: 'center',
+            </RadioGroup>
+            <TextField
+              variant='outlined'
+              margin='normal'
+              required={true}
+              fullWidth
+              id='title'
+              label='Title'
+              name='title'
+              autoComplete='title'
+              value={Product.title}
+              onChange={handleChange}
+              defaultValue={title}
+            />
+            <TextField
+              variant='outlined'
+              margin='normal'
+              required={true}
+              fullWidth
+              name='description'
+              label='Description'
+              id='description'
+              autoComplete='description'
+              value={Product.description}
+              onChange={handleChange}
+              defaultValue={description}
+            />
 
-                  height: '234px',
-                }}
-              >
-                <TextField
-                  margin='normal'
-                  required={true}
-                  type='file'
-                  accept='image/*'
-                  name='imageUrl'
-                  label='Add image'
-                  multiple='false'
-                  id='imageUrl'
-                  autoComplete='imageUrl'
-                  ref={uploadedImage}
-                  onChange={handleImageUpload}
-                />
-                <div
-                  style={{
-                    display: 'grid',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  {Product.imageUrl && (
-                    <img
-                      src={!PreviewImage ? Product.imageUrl : PreviewImage}
-                      alt='preview'
-                      style={{
-                        width: '230px',
-                      }}
-                    />
-                  )}
-                </div>
-              </div>
-              <TextField
-                variant='outlined'
+            <div style={{ display: 'flex', gap: '30px' }}>
+              <input
                 margin='normal'
                 required={true}
-                fullWidth
-                name='price'
-                label='Price'
-                id='price'
-                autoComplete='price'
-                value={Product.price}
-                onChange={handleChange}
-                defaultValue={price}
+                type='file'
+                accept='image/*'
+                name='imageUrl'
+                label='Add image'
+                multiple={false}
+                id='imageUrl'
+                autoComplete='imageUrl'
+                ref={uploadedImage}
+                className={classes.input}
+                onChange={handleImageUpload}
               />
-
-              <TextField
-                variant='outlined'
-                margin='normal'
-                required={true}
-                fullWidth
-                id='quantityProducts'
-                label='Quantity'
-                name='quantityProducts'
-                autoComplete='quantityProducts'
-                value={Product.quantityProducts}
-                onChange={handleChange}
-                defaultValue={quantityProducts}
-              />
-              <div className={classes.containerSubmit}>
-                <Button
-                  type='submit'
-                  variant='outlined'
-                  color='primary'
-                  className={classes.submit}
-                  value='Submit'
-                  onClick={handleToggle}
-                >
-                  {!open ? (
-                    'Submit'
-                  ) : (
-                    <CircularProgress
-                      color='inherit'
-                      thickness={2.3}
-                      size={30}
-                    />
-                  )}
+              <label htmlFor='imageUrl'>
+                <Button variant='contained' color='primary' component='span'>
+                  Upload
                 </Button>
-              </div>
-            </form>
-          </div>
+              </label>
+            </div>
+            <TextField
+              variant='outlined'
+              margin='normal'
+              required={true}
+              fullWidth
+              name='price'
+              label='Price'
+              id='price'
+              autoComplete='price'
+              value={Product.price}
+              onChange={handleChange}
+              defaultValue={price}
+            />
+
+            <TextField
+              variant='outlined'
+              margin='normal'
+              required={true}
+              fullWidth
+              id='quantityProducts'
+              label='Quantity'
+              name='quantityProducts'
+              autoComplete='quantityProducts'
+              value={Product.quantityProducts}
+              onChange={handleChange}
+              defaultValue={quantityProducts}
+            />
+            <div className={classes.containerSubmit}>
+              <Button
+                type='submit'
+                variant='outlined'
+                color='primary'
+                className={classes.submit}
+                value='Submit'
+                onClick={handleToggle}
+              >
+                {!open ? (
+                  'Submit'
+                ) : (
+                  <CircularProgress color='inherit' thickness={2.3} size={30} />
+                )}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </Container>
