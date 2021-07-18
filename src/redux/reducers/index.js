@@ -15,28 +15,30 @@ import lastProducts from './lastProducts';
 import openFavoritesAndClosing from './OpenAndCloseFavorites';
 import orderPayments from './order';
 import ratings from './ratings';
+import countsItems from './countsItems';
+import payments from './Payments';
 
 const authPersistConfig = {
-    key: 'auth',
-    storage,
-    whitelist: ['token', 'user'],
-    blacklist: ['item'],
+  key: 'auth',
+  storage,
 };
 
 const allReducers = combineReducers({
-    lastProducts,
-    auth: persistReducer(authPersistConfig, auth),
-    alert,
-    scrollValues,
-    items,
-    myProducts,
-    item,
-    pages,
-    openCart,
-    carts,
-    favorites,
-    openFavoritesAndClosing,
-    orderPayments,
-    ratings,
+  payments,
+  countsItems,
+  lastProducts,
+  auth: persistReducer(authPersistConfig, auth),
+  alert,
+  scrollValues,
+  items,
+  myProducts,
+  item,
+  pages,
+  openCart,
+  carts,
+  favorites,
+  openFavoritesAndClosing,
+  orderPayments,
+  ratings,
 });
 export default allReducers;
