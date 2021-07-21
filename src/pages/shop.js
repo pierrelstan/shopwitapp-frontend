@@ -2,17 +2,15 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
+import { useDispatch, useSelector } from 'react-redux';
 import { Container } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NewArrivals from '../components/NewArrivals';
-import { pagesControlled } from '../redux/actions/pages';
 import ShopAll from '../components/ShopAll';
-
 import ScrollOnTop from '../components/ScrollOnTop';
 import pages from '../utils/pages';
+import { PagesShop } from '../redux/actions/Pageshop';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,17 +39,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Shop({ itemsPerPages, items, pagesControlled }) {
+function Shop() {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [page, setPage] = React.useState(1);
+
+  const { items } = useSelector((state) => ({
+    items: state.pages.itemsPerPages,
+    page: state.pages.page,
+  }));
 
   const handleChange = (event, value) => {
     setPage(value);
   };
 
   useEffect(() => {
-    pagesControlled(page);
-  }, [page, pagesControlled]);
+    dispatch(PagesShop(page));
+  }, [dispatch, page]);
 
   return (
     <div>
@@ -120,9 +124,4 @@ function Shop({ itemsPerPages, items, pagesControlled }) {
     </div>
   );
 }
-const mapStateToProps = (state) => ({
-  items: state.items.items,
-  page: state.pages.page,
-});
-
-export default withRouter(connect(mapStateToProps, { pagesControlled })(Shop));
+export default Shop;
