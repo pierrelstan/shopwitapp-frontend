@@ -214,13 +214,7 @@ function Hero(props) {
       </div>
 
       <ImageContainer {...props}>
-        <img
-          src={image}
-          alt='hero_image'
-          width='640'
-          height='360'
-          className={classes.imageHero}
-        />
+        <img src={image} alt='hero_image' className={classes.imageHero} />
       </ImageContainer>
     </div>
   );
