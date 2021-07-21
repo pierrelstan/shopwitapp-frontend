@@ -21,7 +21,7 @@ import Item from './pages/Item';
 import Shop from './pages/shop';
 import Woman from './pages/woman';
 import Men from './pages/men';
-import Shoes from './pages/shoes';
+import Sneakers from './pages/sneakers';
 import NewPassword from './components/NewPassword';
 import ResetPassword from './components/ResetPassword';
 import MyProducts from './pages/MyProducts';
@@ -117,9 +117,9 @@ function App() {
             <Route exact path='/login' component={Login} />
             <Route exact path='/resetpassword' component={ResetPassword} />
             <Route exact path='/shop' component={Shop} />
-            <Route exact path='/woman' component={Woman} />
+            <Route exact path='/women' component={Woman} />
             <Route exact path='/men' component={Men} />
-            <Route exact path='/shoes' component={Shoes} />
+            <Route exact path='/sneakers' component={Sneakers} />
             <Route exact path='*' component={NoMatch} />
           </Switch>
         </div>
