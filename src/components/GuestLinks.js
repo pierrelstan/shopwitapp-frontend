@@ -3,8 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
-
-import Box from '@material-ui/core/Box';
 import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,9 +52,8 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '20px',
     },
   },
-  moveToRight: {
+  containerLinks: {
     display: 'flex',
-    justifyContent: 'flex-end',
     [theme.breakpoints.down('xs')]: {
       justifyContent: 'center',
     },
@@ -83,37 +80,63 @@ function GuestLinks() {
           </Link>
         </Typography>
       </Grid>
-      <Grid className={classes.moveToRight}>
-        <Box>
-          <Link
-            component={RouterLink}
-            to='/'
-            color='inherit'
-            className={classes.menuTextSize}
-          >
-            Home
-          </Link>
-        </Box>
-        <Box>
-          <Link
-            component={RouterLink}
-            to='/register'
-            color='inherit'
-            className={classes.menuTextSize}
-          >
-            Register
-          </Link>
-        </Box>
-        <Box>
-          <Link
-            component={RouterLink}
-            to='/login'
-            color='inherit'
-            className={classes.menuTextSize}
-          >
-            Login
-          </Link>
-        </Box>
+      <Grid className={classes.containerLinks}>
+        <Link
+          component={RouterLink}
+          to='/'
+          color='inherit'
+          className={classes.menuTextSize}
+        >
+          Home
+        </Link>
+
+        <Link
+          component={RouterLink}
+          color='inherit'
+          to='/men'
+          className={classes.menuTextSize}
+          type='submit'
+        >
+          Men
+        </Link>
+
+        <Link
+          component={RouterLink}
+          color='inherit'
+          to='/women'
+          className={classes.menuTextSize}
+          type='submit'
+        >
+          Woman
+        </Link>
+
+        <Link
+          component={RouterLink}
+          color='inherit'
+          to='/sneakers'
+          className={classes.menuTextSize}
+          type='submit'
+        >
+          Sneakers
+        </Link>
+
+        <Link
+          component={RouterLink}
+          to='/register'
+          color='inherit'
+          className={classes.menuTextSize}
+        >
+          Register
+        </Link>
+
+        <Link
+          component={RouterLink}
+          to='/login'
+          color='inherit'
+          className={classes.menuTextSize}
+        >
+          Login
+        </Link>
       </Grid>
     </div>
   );
