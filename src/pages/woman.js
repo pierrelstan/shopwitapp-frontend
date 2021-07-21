@@ -51,7 +51,8 @@ function Woman({ items, pagesControlled }) {
 
   useEffect(() => {
     const cancelTokenSource = axios.CancelToken.source();
-    pagesControlled(page, cancelTokenSource.token);
+    let query = 'women';
+    pagesControlled(page, query);
     return () => {
       cancelTokenSource.cancel();
     };
