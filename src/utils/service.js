@@ -24,10 +24,12 @@ class WebAPI {
     return axiosService.put(`/api/items/${id}`, formData);
   };
   static removeItemById = async (id) => {
-    console.log(id);
     return axiosService.post(`/api/items/${id}`);
   };
-  static pagesControlled = async (page) => {
+  static pagesControlled = async (page, query) => {
+    return axiosService.get(`/api/items/page/${page}/${query}`);
+  };
+  static pagesShop = async (page) => {
     return axiosService.get(`/api/items/page/${page}`);
   };
 
