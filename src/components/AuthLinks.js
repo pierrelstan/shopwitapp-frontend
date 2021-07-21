@@ -416,11 +416,20 @@ function AuthLinks({
         <Link
           component={RouterLink}
           color='inherit'
-          to='/woman'
+          to='/women'
           className={classes.menuTextSize}
           type='submit'
         >
           Woman
+        </Link>
+        <Link
+          component={RouterLink}
+          color='inherit'
+          to='/sneakers'
+          className={classes.menuTextSize}
+          type='submit'
+        >
+          Sneakers
         </Link>
       </Box>
       <Box className={classes.containerMenu}>
