@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 import Titles from './Titles';
 import image1 from '../utils/images/image1.jpg';
 import image2 from '../utils/images/image2.jpg';
@@ -108,6 +110,7 @@ function MenuNavigation() {
       height: '550px',
       margin: '0px',
       count: countsItems[0] || 0,
+      link: 'men',
     },
 
     {
@@ -117,6 +120,7 @@ function MenuNavigation() {
       height: '550px',
       margin: '40px',
       count: countsItems[2] || 0,
+      link: 'sneakers',
     },
     {
       url: image2,
@@ -125,6 +129,7 @@ function MenuNavigation() {
       height: '550px',
       margin: '0px',
       count: countsItems[1] || 0,
+      link: 'women',
     },
   ];
 
@@ -151,17 +156,24 @@ function MenuNavigation() {
               }}
             />
             <span className={classes.imageBackdrop} />
-            <span className={classes.imageButton}>
-              <Typography
-                component='span'
-                variant='subtitle1'
-                color='inherit'
-                className={classes.imageTitle}
-              >
-                {image.title} {image.count}
-                <span className={classes.imageMarked} />
-              </Typography>
-            </span>
+            <Link
+              component={RouterLink}
+              to={`/${image.link}`}
+              color='inherit'
+              className={classes.menuTextSize}
+            >
+              <span className={classes.imageButton}>
+                <Typography
+                  component='span'
+                  variant='subtitle1'
+                  color='inherit'
+                  className={classes.imageTitle}
+                >
+                  {image.title} {image.count}
+                  <span className={classes.imageMarked} />
+                </Typography>
+              </span>
+            </Link>
           </ButtonBase>
         ))}
       </div>
