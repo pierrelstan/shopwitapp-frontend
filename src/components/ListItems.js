@@ -5,7 +5,6 @@ import { addToCart, removeCart } from '../redux/actions/carts';
 import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { Box, Button, Grid } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
@@ -154,6 +153,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
       padding: '4px',
       textAlign: 'center',
+      backgroundColor: '#555',
     },
     '&:hover p': {
       display: 'block',
