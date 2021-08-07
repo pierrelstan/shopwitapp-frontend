@@ -4,6 +4,7 @@ import {
   ADD_TO_CART_BY_ID,
   FAILED_ADD_TO_CART_BY_ID,
   FETCH_CARTS,
+  REMOVE_CART_BY_IDS,
   REMOVE_CART_BY_ID,
   UPDATE_CART,
   SET_ALERT,
@@ -77,6 +78,21 @@ export const removeCart = (id) => (dispatch) => {
         error: null,
       });
       dispatch(setAlert('Remove to cart successfully!', 'success'));
+      dispatch(allCarts());
+    })
+    .catch((err) => {});
+};
+
+export const removeManyCarts = (cartIds) => (dispatch) => {
+  WebAPI.removeManyCarts(cartIds)
+    .then((res) => {
+      dispatch({
+        type: REMOVE_CART_BY_IDS,
+        payload: res.data,
+        isLoaded: true,
+        error: null,
+      });
+      dispatch(setAlert('Remove  carts successfully!', 'success'));
       dispatch(allCarts());
     })
     .catch((err) => {});
