@@ -1,6 +1,7 @@
 import {
   ADD_TO_CART_BY_ID,
   REMOVE_CART_BY_ID,
+  REMOVE_CART_BY_IDS,
   FETCH_CARTS,
   LOGOUT,
   UPDATE_CART,
@@ -15,6 +16,7 @@ const initialState = {
   allCarts: [],
   removeCart: [],
   updateCart: [],
+  removeCarts: [],
 };
 
 export default function (state = initialState, action) {
@@ -35,6 +37,13 @@ export default function (state = initialState, action) {
         error: null,
       };
 
+    case REMOVE_CART_BY_IDS:
+      return {
+        ...state,
+        removeCarts: action.payload,
+        isLoaded: false,
+        error: null,
+      };
     case FETCH_CARTS:
       return {
         ...state,
