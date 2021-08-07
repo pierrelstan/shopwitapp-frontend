@@ -460,14 +460,22 @@ function AuthLinks({
           </IconButton> */}
         </Box>
         <Box>
-          <IconButton onClick={handleClickFav}>
-            <StyledBadge
-              badgeContent={`${!favs ? '0' : favs.length}`}
-              color='secondary'
-            >
-              <FavoriteBorderIcon />
-            </StyledBadge>
-          </IconButton>
+          <Link
+            component={RouterLink}
+            color='inherit'
+            to='/favorites'
+            className={classes.menuTextSize}
+            type='submit'
+          >
+            <IconButton>
+              <StyledBadge
+                badgeContent={`${!favs ? '0' : favs.length}`}
+                color='secondary'
+              >
+                <FavoriteBorderIcon />
+              </StyledBadge>
+            </IconButton>
+          </Link>
         </Box>
         <Box>
           <IconButton aria-label='cart' onClick={handleClickCart}>
@@ -526,7 +534,6 @@ function AuthLinks({
               anchorEl={anchorEl}
               keepMounted
               open={Boolean(anchorEl)}
-              // onClose={handleClose}
               getContentAnchorEl={null}
               anchorOrigin={{
                 vertical: 'bottom',
