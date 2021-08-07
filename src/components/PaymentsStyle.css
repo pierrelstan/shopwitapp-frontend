@@ -26,7 +26,7 @@
   /* background-color: #7795f8; */
   will-change: opacity, transform;
   box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 #829fff;
+    inset 0 1px 0 #cb436b;
   border-radius: 4px;
 }
 
@@ -36,7 +36,7 @@
   -ms-flex-align: center;
   align-items: center;
   margin-left: 15px;
-  border-top: 1px solid #819efc;
+  /* border-top: 1px solid #819efc; */
 }
 
 .FormRow:first-child {
@@ -95,10 +95,11 @@
   width: calc(100% - 30px);
   height: 40px;
   margin: 40px 15px 0;
-  background-color: #f6a4eb;
+  background-color: #cb436b;
   box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 #ffb9f6;
+    inset 0 1px 0 #cb436b;
   border-radius: 4px;
+  border-color: #cb436b;
   color: #fff;
   font-weight: 600;
   cursor: pointer;
@@ -107,9 +108,9 @@
 }
 
 .SubmitButton:active {
-  background-color: #d782d9;
+  background-color: #cb436b;
   box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 #e298d8;
+    inset 0 1px 0 #cb436b;
   transform: scale(0.99);
 }
 
