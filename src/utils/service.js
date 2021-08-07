@@ -50,6 +50,11 @@ class WebAPI {
       id,
     });
   };
+  static removeManyCarts = async (cartIds) => {
+    return axiosService.post(`/api/carts/remove/carts`, {
+      cartIds,
+    });
+  };
   static allCarts = async (USER_ID) => {
     return axiosService.get(`/api/carts/${USER_ID}`);
   };
@@ -60,9 +65,9 @@ class WebAPI {
     });
   };
   static removeCart = async (id) => {
-    console.log(id);
     return axiosService.delete(`/api/carts/remove/${id}`);
   };
+
   static addToFavorites = async (id, USER_ID) => {
     return axiosService.post(`/api/favorites/${id}`, {
       userId: USER_ID,
