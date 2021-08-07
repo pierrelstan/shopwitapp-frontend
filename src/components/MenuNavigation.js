@@ -119,7 +119,7 @@ function MenuNavigation() {
       width: '30%',
       height: '550px',
       margin: '40px',
-      count: countsItems[2] || 0,
+      count: countsItems[1] || 0,
       link: 'sneakers',
     },
     {
@@ -128,7 +128,7 @@ function MenuNavigation() {
       width: '30%',
       height: '550px',
       margin: '0px',
-      count: countsItems[1] || 0,
+      count: countsItems[2] || 0,
       link: 'women',
     },
   ];
