@@ -26,6 +26,7 @@ import NewPassword from './components/NewPassword';
 import ResetPassword from './components/ResetPassword';
 import MyProducts from './pages/MyProducts';
 import Orders from './pages/orders';
+import Favorites from './pages/favorites';
 
 import Footer from './components/Footer';
 import { fetchItemsByUserId } from './redux/actions/ItemsActions';
@@ -114,6 +115,7 @@ function App() {
             <ProtectedRoutes exact path='/item/:id' component={Item} />
             <Route exact path='/newpassword/:id' component={NewPassword} />
             <ProtectedRoutes exact path='/myproducts' component={MyProducts} />
+            <ProtectedRoutes exact path='/favorites' component={Favorites} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/resetpassword' component={ResetPassword} />
             <Route exact path='/shop' component={Shop} />
