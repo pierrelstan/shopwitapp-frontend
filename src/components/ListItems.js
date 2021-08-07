@@ -231,7 +231,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ListItems({ id, price, title, image, description }) {
+export default function ListItems({ id, price, title, image }) {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
@@ -291,9 +291,6 @@ export default function ListItems({ id, price, title, image, description }) {
             <div>
               <h1>{title}</h1>
             </div>
-            <p>
-              <span>{description}</span>
-            </p>
           </Box>
         </Link>
         <div className={classes.containerButton}>
