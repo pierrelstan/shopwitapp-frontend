@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import axios from 'axios';
 import { Container } from '@material-ui/core';
@@ -41,9 +40,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Sneakers({ itemsPerPages, items, pagesControlled }) {
+function Sneakers() {
   const classes = useStyles();
   const [page, setPage] = React.useState(1);
+  const dispatch = useDispatch();
+
+  const { items } = useSelector((state) => ({
+    itemsPerPages: state.pages.itemsPerPages,
+    items: state.items.items,
+    page: state.pages.page,
+  }));
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -52,11 +58,13 @@ function Sneakers({ itemsPerPages, items, pagesControlled }) {
   useEffect(() => {
     const cancelTokenSource = axios.CancelToken.source();
     let query = 'sneakers';
-    pagesControlled(page, query);
+
+    dispatch(pagesControlled(page, query));
+
     return () => {
       cancelTokenSource.cancel();
     };
-  }, [page, pagesControlled]);
+  }, [dispatch, page]);
 
   return (
     <div>
@@ -126,12 +134,5 @@ function Sneakers({ itemsPerPages, items, pagesControlled }) {
     </div>
   );
 }
-const mapStateToProps = (state) => ({
-  itemsPerPages: state.pages.itemsPerPages,
-  items: state.items.items,
-  page: state.pages.page,
-});
 
-export default withRouter(
-  connect(mapStateToProps, { pagesControlled })(Sneakers),
-);
+export default Sneakers;
