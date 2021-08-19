@@ -1,31 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import clsx from 'clsx';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-  sticky: {
-    position: 'fixed',
-    zIndex: 100,
-  },
-}));
+import { useSnackbar } from 'notistack';
 
 const Alert = ({ alerts }) => {
-  const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   return (
-    <div className={clsx(classes.sticky, classes.root)}>
-      {alerts !== null && alerts.length > 0 && (
-        <div>
-          <LinearProgress color='primary' />
-        </div>
-      )}
+    <div
+      style={{
+        display: 'none',
+      }}
+    >
+      {alerts !== null &&
+        alerts.length > 0 &&
+        alerts.map((alert) => (
+          <div key={alert.id}>
+            {enqueueSnackbar(`${alert.msg}`, {
+              variant: `${alert.alertTypes}`,
+              preventDuplicate: true,
+              anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right',
+              },
+            })}
+          </div>
+        ))}
     </div>
   );
 };
