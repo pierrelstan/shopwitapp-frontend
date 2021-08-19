@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Avatar from '@material-ui/core/Avatar';
@@ -271,6 +271,7 @@ function AuthLinks({
 
   const classes = useStyles();
   let history = useHistory();
+  const { id } = useParams();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -327,22 +328,23 @@ function AuthLinks({
       </Box>
       <Divider />
       <List>
-        {['Home', 'Men', 'Women', 'Sell', 'Order', 'Favorites'].map(
+        {['Home', 'Men', 'Women', 'Sell', 'Orders', 'Favorites'].map(
           (text, index) => (
-            <ListItem button key={text}>
-              <Link
-                className={classes.linkColor}
-                component={RouterLink}
-                to={`${
-                  text === 'Home'
-                    ? '/'
-                    : text === 'Sell'
-                    ? '/item/new'
-                    : '/' + text.toLocaleLowerCase()
-                }`}
-              >
-                {text.toUpperCase()}
-              </Link>
+            <ListItem
+              button
+              key={text}
+              component={RouterLink}
+              to={`${
+                text === 'Home'
+                  ? '/'
+                  : text === 'Orders'
+                  ? `/orders/${id}`
+                  : text === 'Sell'
+                  ? '/item/new'
+                  : '/' + text.toLocaleLowerCase()
+              }`}
+            >
+              <Link className={classes.linkColor}>{text.toUpperCase()}</Link>
             </ListItem>
           ),
         )}
@@ -372,7 +374,7 @@ function AuthLinks({
           to='/'
           type='submit'
         >
-          SHopwit
+          SHOPWIT
         </Typography>
       </Box>
 
@@ -496,7 +498,7 @@ function AuthLinks({
               onClick={toggleDrawer('left', true)}
               // className={clsx(open && classes.hide)}
             >
-              <MenuIcon fontSize='small' />
+              <MenuIcon fontSize='large' />
             </IconButton>
             <Drawer
               anchor={'left'}
@@ -561,7 +563,10 @@ function AuthLinks({
                   My Products
                 </Link>
               </MenuItem>
-              <MenuItem component={RouterLink} to='/orders'>
+              <MenuItem
+                component={RouterLink}
+                to={`/orders/${avatar.user._id}`}
+              >
                 Orders
               </MenuItem>
               <MenuItem
