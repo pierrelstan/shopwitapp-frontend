@@ -31,7 +31,7 @@ import Favorites from './pages/favorites';
 import Footer from './components/Footer';
 import { fetchItemsByUserId } from './redux/actions/ItemsActions';
 import { allCarts } from './redux/actions/carts';
-import store from './redux/store/store';
+import axiosService from './utils/axiosService';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,13 +77,15 @@ function App() {
   React.useEffect(() => {
     if (token) {
       Promise.all([
-        store.dispatch(getProfile()),
-
+        dispatch(getProfile()),
         dispatch(allFavorites()),
         dispatch(allCarts()),
         dispatch(fetchItemsByUserId()),
       ]);
     }
+    return () => {
+      axiosService();
+    };
   }, [dispatch, token]);
 
   return (
@@ -105,7 +107,7 @@ function App() {
               render={(props) => <SignUp {...props} />}
             />
             <ProtectedRoutes exact path='/profile' component={Profile} />
-            <ProtectedRoutes exact path='/orders' component={Orders} />
+            <ProtectedRoutes exact path='/orders/:id' component={Orders} />
             <ProtectedRoutes exact path='/item/new' component={Sell} />
             <ProtectedRoutes
               exact
