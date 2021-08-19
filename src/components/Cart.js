@@ -26,11 +26,15 @@ function Cart({
   const [cartImage, setCartImage] = React.useState();
 
   const [cartIds, setCartIds] = React.useState([]);
+  const [IdItems, setIdItems] = React.useState([]);
 
   React.useEffect(() => {
     (() => {
       carts.map((cart) => {
         return setCartIds((prevArray) => [...prevArray, cart._id]);
+      });
+      carts.map((item) => {
+        return setIdItems((prevArray) => [...prevArray, item.item._id]);
       });
     })();
   }, [carts]);
@@ -89,13 +93,13 @@ function Cart({
                       <img src={cart.item.imageUrl} alt={cart.item.title} />
                       <h2>Quantity</h2>
                       <input
-                        className='cart_input'
-                        type='number'
-                        name='quantity'
+                        className="cart_input"
+                        type="number"
+                        name="quantity"
                         defaultValue={cart.quantity}
                         onChange={handleChange(cart._id)}
-                        min='1'
-                        max='250'
+                        min="1"
+                        max="250"
                       />
                       <h2>
                         Price <span> ${cart.item.price} </span>
@@ -124,7 +128,7 @@ function Cart({
         >
           {total}$
         </p>
-        <Payments total={total} cartIds={cartIds} />
+        <Payments total={total} cartIds={cartIds} IdItems={IdItems} />
       </footer>
     </CartStyles>
   );
