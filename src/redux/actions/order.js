@@ -1,4 +1,8 @@
-import { ADD_PAYMENTS, ADD_PAYEMNTS_FAILED } from './types';
+import {
+  ADD_PAYMENTS,
+  ADD_PAYEMNTS_FAILED,
+  FETCH_ORDER_BY_USER_ID,
+} from './types';
 import WebAPI from '../../utils/service';
 
 export const AddPayments = (token) => (dispatch) => {
@@ -19,4 +23,17 @@ export const AddPayments = (token) => (dispatch) => {
         payload: err,
       });
     });
+};
+
+export const fetchOrderByUserId = (id) => (dispatch) => {
+  WebAPI.fetchOrderByUserId(id)
+    .then((item) => {
+      dispatch({
+        type: FETCH_ORDER_BY_USER_ID,
+        payload: item,
+        isLoaded: true,
+        error: null,
+      });
+    })
+    .catch((error) => {});
 };

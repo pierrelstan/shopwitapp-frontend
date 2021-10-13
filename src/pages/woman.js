@@ -4,15 +4,14 @@ import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
 import axios from 'axios';
 import { Container } from '@material-ui/core';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NewArrivals from '../components/NewArrivals';
 import { pagesControlled } from '../redux/actions/pages';
 import ShopAll from '../components/ShopAll';
 import ScrollOnTop from '../components/ScrollOnTop';
 import pages from '../utils/pages';
+import MenuNavigation from '../components/MenuNavigation';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,29 +62,6 @@ function Woman({ items, pagesControlled }) {
       <NewArrivals />
       <Container>
         <ScrollOnTop />
-
-        <Breadcrumbs
-          maxItems={2}
-          aria-label='breadcrumb'
-          style={{
-            marginTop: '10px',
-          }}
-        >
-          <Link
-            color='textPrimary'
-            style={{
-              cursor: 'pointer',
-            }}
-            // onClick={handleClick}
-          >
-            Home
-          </Link>
-
-          <Typography color='inherit' variant='h6'>
-            Shop
-          </Typography>
-        </Breadcrumbs>
-
         <Typography
           variant='h6'
           style={{
@@ -97,7 +73,6 @@ function Woman({ items, pagesControlled }) {
         >
           Shop All
         </Typography>
-
         <div>
           <div className={classes.root}>
             <Pagination
@@ -122,6 +97,7 @@ function Woman({ items, pagesControlled }) {
             />
           </div>
         </div>
+        <MenuNavigation />
       </Container>
     </div>
   );

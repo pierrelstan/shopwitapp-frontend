@@ -27,10 +27,10 @@ export const addRatings = (id, newValue) => async (dispatch) => {
 
 export const fetchRatingById = (id) => (dispatch) => {
   WebAPI.fetchRatingById(id)
-    .then((item) => {
+    .then((data) => {
       dispatch({
         type: FETCH_RATING,
-        payload: item,
+        payload: data,
         isLoaded: true,
         error: null,
       });

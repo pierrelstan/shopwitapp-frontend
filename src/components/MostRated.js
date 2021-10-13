@@ -15,7 +15,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Container } from '@material-ui/core';
 import Titles from './Titles';
 
 SwiperCore.use([
@@ -152,7 +152,7 @@ function MostRated() {
   return (
     <div>
       <Titles>MOST RATED</Titles>
-      <div>
+      <Container component='main' maxWidth='lg'>
         <Swiper
           loop={true}
           navigation
@@ -223,7 +223,7 @@ function MostRated() {
               </SwiperSlide>
             ))}
         </Swiper>
-      </div>
+      </Container>
     </div>
   );
 }

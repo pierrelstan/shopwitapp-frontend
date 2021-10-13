@@ -7,6 +7,8 @@ export const DisplayFavoriteCartIcon = ({
   Favs,
   handleRemoveFavorite,
   handleAddFavorites,
+  disabled,
+  image,
 }) => {
   const [show, setShow] = React.useState(false);
 
@@ -22,22 +24,26 @@ export const DisplayFavoriteCartIcon = ({
 
   return (
     <div>
-      {show && (
-        <FavoriteSharpIcon
-          onClick={() => handleRemoveFavorite(id)}
-          style={{
-            fontSize: 62,
-            color: '#cb436b',
-          }}
-        />
-      )}
-      {!show && (
-        <FavoriteBorderIcon
-          style={{
-            fontSize: 62,
-          }}
-          onClick={() => handleAddFavorites(id)}
-        />
+      {image && (
+        <div>
+          {show && (
+            <FavoriteSharpIcon
+              onClick={() => handleRemoveFavorite(id)}
+              style={{
+                fontSize: 62,
+                color: '#cb436b',
+              }}
+            />
+          )}
+          {!show && (
+            <FavoriteBorderIcon
+              style={{
+                fontSize: 62,
+              }}
+              onClick={() => handleAddFavorites(id)}
+            />
+          )}
+        </div>
       )}
     </div>
   );

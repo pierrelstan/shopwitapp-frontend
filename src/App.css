@@ -36,3 +36,7 @@
 #root {
   overflow: hidden;
 }
+
+.MuiCardMedia-root {
+  background-size: contain !important;
+}

@@ -11,31 +11,33 @@ import {
 } from './types';
 import { setAlert } from './alert';
 import WebAPI from '../../utils/service';
+import { openCart } from './openCart';
 
 export const addToCart = (id) => async (dispatch) => {
-  const token = store.getState().auth.token;
-  const { user } = jwtDecode(token);
-  let USER_ID = user.userId;
   try {
-    let data = await WebAPI.addToCart(id, USER_ID);
-    dispatch({
-      type: ADD_TO_CART_BY_ID,
-      payload: data,
-      isLoaded: true,
-    });
-    dispatch(allCarts());
-    dispatch(setAlert('Add to cart successfully!', 'success'));
-  } catch (err) {
-    if (err.response.data.msg) {
-      dispatch(setAlert('Please login first!', 'warning'));
+    let token = store.getState().auth.token;
+    let { user } = jwtDecode(token);
+    try {
+      let USER_ID = user.userId;
+      let data = await WebAPI.addToCart(id, USER_ID);
+      dispatch({
+        type: ADD_TO_CART_BY_ID,
+        payload: data,
+        isLoaded: true,
+      });
+      dispatch(allCarts());
+      dispatch(setAlert('Add to cart successfully!', 'success'));
+    } catch (err) {
+      const errors = err.response.data.errors;
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, 'warning')));
+      }
+      dispatch({
+        type: FAILED_ADD_TO_CART_BY_ID,
+      });
     }
-    const errors = err.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'warning')));
-    }
-    dispatch({
-      type: FAILED_ADD_TO_CART_BY_ID,
-    });
+  } catch (e) {
+    dispatch(setAlert('Please login first!', 'warning'));
   }
 };
 
@@ -92,8 +94,8 @@ export const removeManyCarts = (cartIds) => (dispatch) => {
         isLoaded: true,
         error: null,
       });
-      dispatch(setAlert('Remove  carts successfully!', 'success'));
       dispatch(allCarts());
+      dispatch(openCart(false));
     })
     .catch((err) => {});
 };

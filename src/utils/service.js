@@ -6,16 +6,23 @@ class WebAPI {
   };
 
   static fetchItems = async () => {
-    return axiosService.get(`/api/items`);
+    return axiosService.get(`/api/items`, {
+      axiosService,
+    });
   };
   static fetchItemsByUserId = async (USER_ID) => {
     return axiosService.get(`/api/items/items/${USER_ID}`);
+  };
+  static fetchOrderByUserId = async (id) => {
+    return axiosService.get(`/api/orders/${id}`);
   };
   static fetchItemById = async (id) => {
     return axiosService.get(`/api/items/${id}`);
   };
   static fetchLastProducts = async () => {
-    return axiosService.get('/api/items/lastproducts');
+    return axiosService.get('/api/items/lastproducts', {
+      axiosService,
+    });
   };
   static fetchCountsItems = async () => {
     return axiosService.get('/api/items/counts');
@@ -43,11 +50,12 @@ class WebAPI {
     });
   };
 
-  static createOrderPayments = async (cartIds, Payment, id) => {
+  static createOrderPayments = async (cartIds, Payment, id, IdItems) => {
     return axiosService.post(`/api/orders/payments`, {
       cartIds,
       Payment,
       id,
+      IdItems,
     });
   };
   static removeManyCarts = async (cartIds) => {
@@ -99,7 +107,7 @@ class WebAPI {
     });
   };
   static fetchRatingById = async (id) => {
-    return axiosService.get(`/api/ratings/${id}`);
+    return axiosService.get(`/api/ratings/rates/${id}`);
   };
   static fetchAllGreatertRatingsAverage = async (id) => {
     return axiosService.get(`/api/ratings`);

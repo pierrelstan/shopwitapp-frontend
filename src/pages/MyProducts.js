@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { CircularProgress, Container } from '@material-ui/core';
 import { fetchItemsByUserId } from '../redux/actions/ItemsActions';
+import imageLogo from '../utils/images/imageLogo.jpg';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -129,16 +130,16 @@ function MyProducts({ products, isLoaded, auth }) {
   }, [auth.user._id]);
   if (!isLoaded) {
     return (
-      <Container maxWidth='xl'>
+      <Container maxWidth="xl">
         <Titles>My Products</Titles>
         <div>
-          <CircularProgress color='secondary' />
+          <CircularProgress color="secondary" />
         </div>
       </Container>
     );
   }
   return (
-    <Container maxWidth='xl'>
+    <Container maxWidth="xl">
       <div className={classes.container}>
         <Titles>My Products</Titles>
         <div className={classes.containerItems}>
@@ -156,17 +157,27 @@ function MyProducts({ products, isLoaded, auth }) {
                     padding: '20px',
                   }}
                 >
-                  <Typography component='span' className={classes.price}>
+                  <Typography component="span" className={classes.price}>
                     ${data.price}
                   </Typography>
                 </div>
 
-                <img
-                  alt={data.title}
-                  src={data.imageUrl}
-                  title={data.title}
-                  className={classes.imageCard}
-                />
+                {data.imageUrl && (
+                  <img
+                    alt={data.title}
+                    src={data.imageUrl}
+                    title={data.title}
+                    className={classes.imageCard}
+                  />
+                )}
+                {!data.imageUrl && (
+                  <img
+                    alt={data.title}
+                    src={imageLogo}
+                    title={data.title}
+                    className={classes.imageCard}
+                  />
+                )}
               </Link>
             </Card>
           ))}

@@ -8,7 +8,7 @@ import ListItems from './ListItems';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingBottom: '12px',
+    flexGrow: 1,
   },
   centered: {
     marginTop: '100px',
@@ -43,10 +43,10 @@ function PopularProducts() {
     );
   }
   return (
-    <div className={classes.root}>
+    <div>
       <Titles>LAST PRODUCTS</Titles>
       <div>
-        <Grid container spacing={3}>
+        <Grid container className={classes.root} spacing={3}>
           {lastProducts &&
             lastProducts.map((data) => (
               <ListItems
@@ -61,7 +61,7 @@ function PopularProducts() {
         </Grid>
         <div className={classes.centered}>
           <Button
-            variant='outlined'
+            variant="outlined"
             onClick={handleViewAllClick}
             className={classes.button}
           >

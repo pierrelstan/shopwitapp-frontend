@@ -20,6 +20,7 @@ import {
 import { setAlert } from './alert';
 import axiosService from '../../utils/axiosService';
 import WebAPI from '../../utils/service';
+import { fetchRatingById } from './ratings';
 
 export const fetchCountsItems = () => async (dispatch) => {
   try {
@@ -45,7 +46,13 @@ export const fetchLastProducts = (cancelToken) => async (dispatch) => {
       type: FETCH_LAST_PRODUCTS_SUCCESS,
       lastProducts: items.data,
     });
-  } catch (err) {}
+  } catch (err) {
+    if (axiosService(err)) {
+      console.log('Request canceled', err.message);
+    } else {
+      // handle error
+    }
+  }
 };
 export const fetchItems = () => async (dispatch, getState) => {
   try {
@@ -136,6 +143,7 @@ export const fetchItemById = (id) => (dispatch) => {
         isLoaded: true,
         error: null,
       });
+      dispatch(fetchRatingById(id));
     })
     .catch((error) => {});
 };

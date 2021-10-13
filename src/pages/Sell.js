@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { connect } from 'react-redux';
@@ -42,11 +43,14 @@ const useStyles = makeStyles((theme) => ({
   },
   square: {
     height: '400px',
-    width: '300px',
-    backgroundColor: '#e3e3e3',
+    maxWidth: '600px',
   },
   input: {
     display: 'none',
+  },
+  image: {
+    maxWidth: '600px',
+    width: '300px',
   },
 }));
 const iniTialState = {
@@ -63,15 +67,17 @@ const Sell = ({ CreateItem, history }) => {
   const [PreviewImage, setPreviewImage] = React.useState();
 
   const classes = useStyles();
+
   const handleToggle = () => {
     setOpen((prev) => !prev);
   };
-  console.log(product.gender);
+
   React.useEffect(() => {
     if (alert.length === 1) {
       setOpen(false);
     }
   }, []);
+
   const uploadedImage = React.useRef();
 
   const handleImageUpload = (e) => {
@@ -107,34 +113,22 @@ const Sell = ({ CreateItem, history }) => {
       <Container component='main' maxWidth='md'>
         <Titles>Add Product</Titles>
         <CssBaseline />
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-          }}
-        >
-          <div
-            style={{
-              display: 'grid',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '500px',
-            }}
-          >
-            {PreviewImage && (
-              <img
-                src={PreviewImage}
-                alt='preview'
-                style={{
-                  width: '320px',
-                }}
-              />
-            )}
-            {!PreviewImage && <div className={classes.square}></div>}
-          </div>
-          <div>
+        <Grid container spacing={5}>
+          <Grid item xs={12} sm={6}>
+            <div>
+              {PreviewImage && (
+                <img
+                  src={PreviewImage}
+                  alt='preview'
+                  className={classes.image}
+                />
+              )}
+              {!PreviewImage && <div className={classes.square}></div>}
+            </div>
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <form className={classes.form} noValidate onSubmit={handleSubmit}>
-              <FormLabel component='legend'>For:</FormLabel>
+              <FormLabel component='legend'>Collections:</FormLabel>
               <RadioGroup
                 aria-label='gender'
                 name='gender'
@@ -255,8 +249,8 @@ const Sell = ({ CreateItem, history }) => {
                 </Button>
               </div>
             </form>
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </Container>
     </div>
   );

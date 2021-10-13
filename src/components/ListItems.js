@@ -12,6 +12,8 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Link as RouterLink } from 'react-router-dom';
 import { DisplayFavoriteCartIcon } from './DisplayFavoriteCartIcon';
 import DisplayShoppingCartIcon from './DisplayShoppingCartIcon';
+import imageLogo from '../utils/images/imageLogo.jpg';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -72,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down('xs')]: {
       objectFit: 'cover',
-      width: '100%',
+      maxWidth: '100%',
     },
     [theme.breakpoints.up('sm')]: {
       objectFit: 'cover',
@@ -82,8 +84,9 @@ const useStyles = makeStyles((theme) => ({
       top: '-180px',
     },
     [theme.breakpoints.down('md')]: {
-      objectFit: 'cover',
+      objectFit: 'scale-down',
       top: '-80px',
+      width: '100%',
     },
   },
   card: {
@@ -262,7 +265,7 @@ export default function ListItems({ id, price, title, image }) {
     dispatch(addToFavorites(id));
   };
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
+    <Grid item xs={11} sm={6} md={4} lg={3}>
       <Card className={classes.card} elevation={matches ? 1 : 0} key={id}>
         <div
           style={{
@@ -271,17 +274,27 @@ export default function ListItems({ id, price, title, image }) {
             padding: '20px',
           }}
         >
-          <Typography component='span' className={classes.price}>
+          <Typography component="span" className={classes.price}>
             ${price}
           </Typography>
         </div>
 
-        <img
-          alt={title}
-          src={image}
-          title={title}
-          className={classes.imageCard}
-        />
+        {image && (
+          <img
+            alt={title}
+            src={image}
+            title={title}
+            className={classes.imageCard}
+          />
+        )}
+        {!image && (
+          <img
+            alt={title}
+            src={imageLogo}
+            title={title}
+            className={classes.imageCard}
+          />
+        )}
         <Link
           component={RouterLink}
           to={`/item/${id}`}
@@ -293,34 +306,39 @@ export default function ListItems({ id, price, title, image }) {
             </div>
           </Box>
         </Link>
-        <div className={classes.containerButton}>
-          <div>
-            <Box boxShadow={0}>
-              <div className={classes.textLink}>
-                <Button className={classes.button}>
-                  <DisplayFavoriteCartIcon
-                    id={id}
-                    Favs={favorites.allFavorites}
-                    handleAddFavorites={handleAddFavorites}
-                    handleRemoveFavorite={handleRemoveFavorite}
-                  />
-                </Button>
-              </div>
-            </Box>
-          </div>
-          <div>
-            <Box boxShadow={0}>
-              <div className={classes.textLink}>
-                <Button className={classes.button}>
-                  <DisplayShoppingCartIcon
-                    Carts={carts.allCarts}
-                    id={id}
-                    handleAddCart={handleAddCart}
-                    hanldeRemoveCart={hanldeRemoveCart}
-                  />
-                </Button>
-              </div>
-            </Box>
+        <div>
+          <div className={classes.containerButton}>
+            <div>
+              <Box boxShadow={0}>
+                <div className={classes.textLink}>
+                  <Button className={classes.button}>
+                    <DisplayFavoriteCartIcon
+                      id={id}
+                      image={image}
+                      Favs={favorites.allFavorites}
+                      handleAddFavorites={handleAddFavorites}
+                      handleRemoveFavorite={handleRemoveFavorite}
+                    />
+                  </Button>
+                </div>
+              </Box>
+            </div>
+            <div>
+              <Box boxShadow={0}>
+                <div className={classes.textLink}>
+                  <Button className={classes.button}>
+                    <DisplayShoppingCartIcon
+                      Carts={carts.allCarts}
+                      disabled={classes.disabledCart}
+                      id={id}
+                      image={image}
+                      handleAddCart={handleAddCart}
+                      hanldeRemoveCart={hanldeRemoveCart}
+                    />
+                  </Button>
+                </div>
+              </Box>
+            </div>
           </div>
         </div>
       </Card>

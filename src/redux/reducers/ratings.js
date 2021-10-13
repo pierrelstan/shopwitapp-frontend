@@ -10,7 +10,7 @@ const initialState = {
   AddRatings: {},
   isLoaded: true,
   error: null,
-  rating: {},
+  rating: 0,
   ratings: [],
 };
 
@@ -29,7 +29,7 @@ export default function (state = initialState, action) {
     case FETCH_RATING:
       return {
         ...state,
-        rating: action.payload.data,
+        ...action.payload.data,
         isLoaded: true,
         error: null,
       };

@@ -45,19 +45,17 @@ const useStyles = makeStyles((theme) => ({
   },
 
   container: {},
-  centered: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-  },
+  // centered: {
+  //   position: 'absolute',
+  //   top: '50%',
+  //   left: '50%',
+  // },
   titleBorderLeftColor: {
     borderLeft: 'solid 5px #D13C6F',
     paddingLeft: '20px',
     [theme.breakpoints.down(800)]: {
       paddingLeft: '12px',
       fontSize: '34px',
-      borderBottom: ' 5px solid #D13C6F',
-      borderLeft: 'none',
       width: '334px',
     },
   },

@@ -3,15 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
-import Link from '@material-ui/core/Link';
 import axios from 'axios';
 import { Container } from '@material-ui/core';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NewArrivals from '../components/NewArrivals';
 import { pagesControlled } from '../redux/actions/pages';
 import ShopAll from '../components/ShopAll';
 import ScrollOnTop from '../components/ScrollOnTop';
 import pages from '../utils/pages';
+import MenuNavigation from '../components/MenuNavigation';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,28 +71,6 @@ function Sneakers() {
       <Container>
         <ScrollOnTop />
 
-        <Breadcrumbs
-          maxItems={2}
-          aria-label='breadcrumb'
-          style={{
-            marginTop: '10px',
-          }}
-        >
-          <Link
-            color='textPrimary'
-            style={{
-              cursor: 'pointer',
-            }}
-            // onClick={handleClick}
-          >
-            Home
-          </Link>
-
-          <Typography color='inherit' variant='h6'>
-            Shop
-          </Typography>
-        </Breadcrumbs>
-
         <Typography
           variant='h6'
           style={{
@@ -130,6 +107,7 @@ function Sneakers() {
             />
           </div>
         </div>
+        <MenuNavigation />
       </Container>
     </div>
   );
