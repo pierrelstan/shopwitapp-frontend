@@ -164,7 +164,7 @@ export default function Footer() {
       <div
         style={{
           textAlign: 'center',
-          paddingTop: '30px',
+          padding: '30px',
           background: '#333',
         }}
       >
