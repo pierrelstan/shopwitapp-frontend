@@ -137,12 +137,6 @@ const useStyles = makeStyles((theme) => ({
       background: '#fff',
       color: '#333',
     },
-    '& a': {
-      display: 'none',
-    },
-    '&:hover a': {
-      display: 'block',
-    },
     '& p': {
       position: 'absolute',
       top: '100px',
@@ -164,17 +158,18 @@ const useStyles = makeStyles((theme) => ({
       transform: 'translateY(0px)',
     },
 
-    '& h1': {
+    '& h4': {
       textTransform: 'uppercase',
       position: 'absolute',
       top: '20px',
       zIndex: 3,
       color: '#fff',
       opacity: 0,
-      transform: 'translateY(30px)',
+      transform: 'translateY(-30px)',
       transition: '0.5s all',
+      marginLeft: '20px',
     },
-    '&:hover h1': {
+    '&:hover h4': {
       opacity: 1,
       transform: 'translateY(0px)',
     },
@@ -230,7 +225,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     position: 'absolute',
     top: '227px',
-    width: '94%',
+    width: '100%',
   },
 }));
 
@@ -302,7 +297,7 @@ export default function ListItems({ id, price, title, image }) {
         >
           <Box>
             <div>
-              <h1>{title}</h1>
+              <h4>{title}</h4>
             </div>
           </Box>
         </Link>
