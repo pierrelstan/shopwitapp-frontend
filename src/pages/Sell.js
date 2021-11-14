@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState , useRef } from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
@@ -53,60 +55,85 @@ const useStyles = makeStyles((theme) => ({
     width: '300px',
   },
 }));
-const iniTialState = {
+const initialState = {
   title: '',
   description: '',
   price: '',
-  imageUrl: '',
+  file: '',
   quantityProducts: '',
   gender: 'women',
 };
+
+const validationSchema = yup.object({
+  title: yup
+    .string('Enter a title')
+    .required('Title is required'),
+
+  description: yup
+    .string('Enter a description')
+    .required('Description is required'),
+    file: yup
+    .string('Enter an image')
+    .required('Image is required'),
+
+    price: yup
+    .string('Enter a price')
+    .required('Price is required'),
+
+    quantityProducts: yup
+    .string('Enter a quantity')
+    .required('Quantity is required'),
+});
+
 const Sell = ({ CreateItem, history }) => {
-  const [product, setProduct] = React.useState(iniTialState);
-  const [open, setOpen] = React.useState(false);
-  const [PreviewImage, setPreviewImage] = React.useState();
+  const [open, setOpen] = useState(false);
+  const [PreviewImage, setPreviewImage] = useState('');
 
   const classes = useStyles();
+
+  const formik = useFormik({
+    initialValues: {
+    ...initialState
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      const formData = new FormData();
+      formData.append('title', values.title);
+      formData.append('description', values.description);
+      formData.append('image', values.file);
+      formData.append('quantity', values.quantityProducts);
+      formData.append('price', values.price);
+      formData.append('gender', values.gender);
+      CreateItem(formData, history);
+    },
+  });
 
   const handleToggle = () => {
     setOpen((prev) => !prev);
   };
 
-  React.useEffect(() => {
-    if (alert.length === 1) {
-      setOpen(false);
-    }
-  }, []);
-
-  const uploadedImage = React.useRef();
-
-  const handleImageUpload = (e) => {
-    const [file] = e.target.files;
+  const uploadPreviewImage=(file)=> {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreviewImage(reader.result);
-        setProduct({ ...product, imageUrl: file });
+
       };
-
       reader.readAsDataURL(file);
-    }
-  };
+  }
+  }
 
-  const handleChange = (event) => {
-    setProduct({ ...product, [event.target.name]: event.target.value });
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', product.title);
-    formData.append('description', product.description);
-    formData.append('image', product.imageUrl);
-    formData.append('quantity', product.quantityProducts);
-    formData.append('price', product.price);
-    formData.append('gender', product.gender);
-    CreateItem(formData, history);
-  };
+
+  useEffect(() => {
+    uploadPreviewImage();
+    if (alert.length === 1) {
+      setOpen(false);
+    }
+
+
+  }, []);
+
+
 
   return (
     <div>
@@ -127,13 +154,15 @@ const Sell = ({ CreateItem, history }) => {
             </div>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <form className={classes.form} noValidate onSubmit={handleSubmit}>
+            <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
               <FormLabel component='legend'>Collections:</FormLabel>
               <RadioGroup
                 aria-label='gender'
                 name='gender'
-                value={product.gender}
-                onChange={handleChange}
+                value={formik.values.gender}
+                onChange={formik.handleChange}
+                error={formik.touched.gender && Boolean(formik.errors.gender)}
+                helperText={formik.touched.gender && formik.errors.gender}
               >
                 <FormControlLabel
                   value='women'
@@ -156,8 +185,10 @@ const Sell = ({ CreateItem, history }) => {
                 label='Title'
                 name='title'
                 autoComplete='title'
-                value={product.title}
-                onChange={handleChange}
+                value={formik.values.titlel}
+                onChange={formik.handleChange}
+                error={formik.touched.title && Boolean(formik.errors.title)}
+                helperText={formik.touched.title && formik.errors.title}
               />
               <TextField
                 variant='outlined'
@@ -168,28 +199,38 @@ const Sell = ({ CreateItem, history }) => {
                 label='Description'
                 id='description'
                 autoComplete='description'
-                value={product.description}
-                onChange={handleChange}
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                error={formik.touched.description && Boolean(formik.errors.description)}
+                helperText={formik.touched.description && formik.errors.description}
               />
               <div style={{ display: 'flex', gap: '30px' }}>
-                <input
+                <TextField
                   margin='normal'
                   required={true}
                   type='file'
                   accept='image/*'
-                  name='imageUrl'
-                  label='Add image'
+                  name='file'
+                  label='Image'
+                  inputProps={{id: "file"}}
                   multiple={false}
-                  id='imageUrl'
-                  autoComplete='imageUrl'
-                  ref={uploadedImage}
+                  id='file'
+                  autoComplete='file'
                   className={classes.input}
-                  onChange={handleImageUpload}
+                  value={formik.values.image}
+                  onChange={(event) => {
+                  const file = event.currentTarget.files[0]
+                    formik.setFieldValue("file", file);
+                    uploadPreviewImage(file);
+                }}
+                  error={formik.touched.file && Boolean(formik.errors.file)}
+                  helperText={formik.touched.file && formik.errors.file}
                 />
-                <label htmlFor='imageUrl'>
+                <label htmlFor='file'>
                   <Button variant='contained' color='primary' component='span'>
                     Upload
                   </Button>
+                  {formik.touched.file && Boolean(formik.errors.file)}
                 </label>
               </div>
               <TextField
@@ -199,9 +240,11 @@ const Sell = ({ CreateItem, history }) => {
                 name='price'
                 label='Price'
                 id='price'
-                value={product.price}
                 type='number'
-                onChange={handleChange}
+                value={formik.values.price}
+                onChange={formik.handleChange}
+                error={formik.touched.price && Boolean(formik.errors.price)}
+                helperText={formik.touched.price && formik.errors.price}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>$</InputAdornment>
@@ -220,8 +263,10 @@ const Sell = ({ CreateItem, history }) => {
                 label='Quantity'
                 name='quantityProducts'
                 autoComplete='quantityProducts'
-                value={product.quantityProducts}
-                onChange={handleChange}
+                value={formik.values.quantityProducts}
+                onChange={formik.handleChange}
+                error={formik.touched.quantityProducts && Boolean(formik.errors.quantityProducts)}
+                helperText={formik.touched.quantityProducts && formik.errors.quantityProducts}
                 defaultValue={0}
                 variant='filled'
                 type='number'
