@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Paper } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
@@ -21,14 +21,14 @@ function Cart({
   userId,
   removeCart,
 }) {
-  const [total, setTotal] = React.useState();
+  const [total, setTotal] = useState();
 
-  const [cartImage, setCartImage] = React.useState();
+  const [cartImage, setCartImage] = useState();
 
-  const [cartIds, setCartIds] = React.useState([]);
-  const [IdItems, setIdItems] = React.useState([]);
+  const [cartIds, setCartIds] = useState([]);
+  const [IdItems, setIdItems] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     (() => {
       carts.map((cart) => {
         return setCartIds((prevArray) => [...prevArray, cart._id]);
@@ -39,7 +39,7 @@ function Cart({
     })();
   }, [carts]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     CalculatePriceTotal(carts, setCartImage, setTotal);
   }, [carts]);
 
@@ -81,8 +81,8 @@ function Cart({
                 <li>
                   {cart.item === null ? (
                     <div>
-                      <h4> This item has been removed by the owner</h4>
-
+                       <img src={cartImage} alt='removeImage' />
+                      <h4>This item has been removed by the owner </h4>
                       <button onClick={() => handleDeleteCart(cart._id)}>
                         Remove
                       </button>
