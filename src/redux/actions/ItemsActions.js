@@ -69,9 +69,6 @@ export const fetchItems = () => async (dispatch, getState) => {
 };
 
 export const CreateItem = (formData, history) => (dispatch) => {
-  const token = store.getState().auth.token;
-  const { user } = jwtDecode(token);
-  let USER_ID = user.userId;
 
   WebAPI.createItem(formData)
     .then((response) => {
@@ -148,7 +145,8 @@ export const fetchItemById = (id) => (dispatch) => {
     .catch((error) => {});
 };
 
-export const removeItemById = (id) => async (dispatch) => {
+export const removeItemById = (id, auth) => async (dispatch) => {
+
   try {
     let data = await WebAPI.removeItemById(id);
     console.log(data);
@@ -159,13 +157,14 @@ export const removeItemById = (id) => async (dispatch) => {
       }),
       dispatch(setAlert(data.data.message, 'success')),
       dispatch(fetchLastProducts()),
-      dispatch(fetchItemsByUserId()),
+      dispatch(fetchItemsByUserId(auth)),
     ]);
+
   } catch (error) {
     const errors = error.response.data;
-    console.table(error.response.data);
+    console.table(errors);
     if (errors) {
-      dispatch(setAlert(errors, 'warning'));
+      dispatch(setAlert(error, 'warning'));
     }
     dispatch({
       type: DELETE_ITEM_FAIL,
@@ -192,7 +191,7 @@ export const fetchItemsByUserId = () => async (dispatch) => {
 };
 
 export const updateItem = (id, formData, history) => async (dispatch) => {
-  console.log(formData);
+
   try {
     const token = store.getState().auth.token;
     const { user } = jwtDecode(token);
@@ -208,10 +207,9 @@ export const updateItem = (id, formData, history) => async (dispatch) => {
     dispatch(setAlert('Updated cart successfully!', 'success'));
   } catch (error) {
     const errors = error.response;
-    console.log(errors);
-    // if (errors) {
-    //   dispatch(setAlert(errors.error, 'warning'));
-    // }
+    if (errors) {
+      dispatch(setAlert(errors.error, 'warning'));
+    }
     dispatch({
       type: UPDATE_ITEM_FAIL,
     });
