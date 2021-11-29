@@ -2,8 +2,6 @@ import React from 'react'
 import Dialog from '@material-ui/core/Dialog';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import { Button } from '@material-ui/core';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import ModalDetails from './ModalDetails';
 
 
