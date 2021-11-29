@@ -32,10 +32,14 @@ const useStyles = makeStyles((theme) => ({
       justifySelf: 'center',
     },
   },
-  centereItems: {
+  centeredItems: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
 
@@ -113,15 +117,6 @@ const ModalDetails =React.memo( ({
     history.push('/myproducts');
   };
 
-
-  if (!item) {
-    return (
-      <Wrapper>
-        <Titles>Product</Titles>
-        <CircularProgress color="secondary" />
-      </Wrapper>
-    );
-  }
   if (item.error) {
     return <div>Error: {item.error.message}: : Please connect to Internet</div>;
   } else {
@@ -135,14 +130,19 @@ const ModalDetails =React.memo( ({
           <div>
             <Paper elevation={1}>
               <Grid container spacing={5}>
-                <Grid item xs={12} sm={6} className={classes.centereItems}>
+                <Grid item xs={12} sm={6} className={classes.centeredItems}>
+
+                {!item.isLoaded  &&  (
+                  <div className={classes.center}>
+                <CircularProgress color="secondary" /> </div>
+                )}
                   <img
                     className={classes.image}
                     src={item.item.imageUrl}
                     alt={item.item.title}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6} className={classes.centereItems}>
+                <Grid item xs={12} sm={6} className={classes.centeredItems}>
                   <div>
                     <div>
                       <h1
