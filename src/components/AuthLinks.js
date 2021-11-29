@@ -279,9 +279,6 @@ function AuthLinks({
     openCart(true);
   };
 
-  const handleClickFav = () => {
-    openFavoritesAndClosing(true);
-  };
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
