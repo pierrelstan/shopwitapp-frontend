@@ -1,6 +1,8 @@
-import React, { useEffect, useState , useRef } from 'react';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
+import React, { useEffect, useState  } from 'react';
+import * as Yup from 'yup';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Controller , useController} from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,11 +13,9 @@ import { connect } from 'react-redux';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
 import { CircularProgress } from '@material-ui/core';
 import { CreateItem } from '../redux/actions/ItemsActions';
 import Titles from '../components/Titles';
-import InputAdornment from '@material-ui/core/InputAdornment';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -55,63 +55,80 @@ const useStyles = makeStyles((theme) => ({
     width: '300px',
   },
 }));
-const initialState = {
-  title: '',
-  description: '',
-  price: '',
-  file: '',
-  quantityProducts: '',
-  gender: 'women',
-};
 
-const validationSchema = yup.object({
-  title: yup
-    .string('Enter a title')
-    .required('Title is required'),
 
-  description: yup
-    .string('Enter a description')
-    .required('Description is required'),
-    file: yup
-    .string('Enter an image')
-    .required('Image is required'),
+const validationSchema = Yup.object().shape({
+  title: Yup.string()
+    .required('Title is required')
+    .min(6, 'Title must be at least 6 characters')
+    .max(10, 'Title must not exceed 10 characters'),
 
-    price: yup
-    .string('Enter a price')
-    .required('Price is required'),
+    description: Yup.string()
+    .required('Description is required')
+    .min(10, 'Description must be at least 10 characters')
+    .max(100, 'Description must not exceed 100 characters'),
 
-    quantityProducts: yup
-    .string('Enter a quantity')
-    .required('Quantity is required'),
+    price: Yup.number().required('Price is required'),
+    quantityProducts: Yup.number().required('Quantity is required'),
+
+    imageUrl: Yup.mixed().test("fileSize", "The file is too large", (value) => {
+      if (!value.length) return true // attachment is optional
+      return value[0].size <= 2000000
+    })
 });
 
-const Sell = ({ CreateItem, history }) => {
+const Sell = ({CreateItem}) => {
   const [open, setOpen] = useState(false);
+  const [Product, setProduct] = useState({});
   const [PreviewImage, setPreviewImage] = useState('');
 
-  const classes = useStyles();
-
-  const formik = useFormik({
-    initialValues: {
-    ...initialState
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      const formData = new FormData();
-      formData.append('title', values.title);
-      formData.append('description', values.description);
-      formData.append('image', values.file);
-      formData.append('quantity', values.quantityProducts);
-      formData.append('price', values.price);
-      formData.append('gender', values.gender);
-      CreateItem(formData, history);
-    },
+  let history = useHistory();
+  const { handleSubmit, register, control , formState: { errors }, reset } = useForm({
+    resolver: yupResolver(validationSchema)
   });
+  const { field } = useController({ control });
+
+  const classes = useStyles();
 
   const handleToggle = () => {
     setOpen((prev) => !prev);
   };
 
+
+  const handleImageUpload = (e) => {
+    const [file] = e.target.files;
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImage(reader.result);
+        setProduct({ ...Product, imageUrl: file });
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const OnSubmit = (data) => {
+    const {
+      imageUrl,
+    } = Product;
+const {
+  title,
+  description,
+  price,
+  quantityProducts,
+  gender
+} = data;
+    let formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('image', imageUrl);
+    formData.append('quantity', quantityProducts);
+    formData.append('price', price);
+    formData.append('gender', gender);
+    CreateItem(formData, history);
+    reset();
+  };
   const uploadPreviewImage=(file)=> {
     if (file) {
       const reader = new FileReader();
@@ -129,14 +146,9 @@ const Sell = ({ CreateItem, history }) => {
     if (alert.length === 1) {
       setOpen(false);
     }
-
-
   }, []);
 
-
-
   return (
-    <div>
       <Container component='main' maxWidth='md'>
         <Titles>Add Product</Titles>
         <CssBaseline />
@@ -154,125 +166,136 @@ const Sell = ({ CreateItem, history }) => {
             </div>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
-              <FormLabel component='legend'>Collections:</FormLabel>
-              <RadioGroup
-                aria-label='gender'
-                name='gender'
-                value={formik.values.gender}
-                onChange={formik.handleChange}
-                error={formik.touched.gender && Boolean(formik.errors.gender)}
-                helperText={formik.touched.gender && formik.errors.gender}
-              >
-                <FormControlLabel
-                  value='women'
-                  control={<Radio />}
-                  label='Women'
-                />
-                <FormControlLabel value='men' control={<Radio />} label='Men' />
-                <FormControlLabel
-                  value='sneakers'
-                  control={<Radio />}
-                  label='Sneakers'
-                />
-              </RadioGroup>
-              <TextField
-                variant='outlined'
-                margin='normal'
-                required={true}
-                fullWidth
-                id='title'
-                label='Title'
-                name='title'
-                autoComplete='title'
-                value={formik.values.titlel}
-                onChange={formik.handleChange}
-                error={formik.touched.title && Boolean(formik.errors.title)}
-                helperText={formik.touched.title && formik.errors.title}
-              />
-              <TextField
-                variant='outlined'
-                margin='normal'
-                required={true}
-                fullWidth
-                name='description'
-                label='Description'
-                id='description'
-                autoComplete='description'
-                value={formik.values.description}
-                onChange={formik.handleChange}
-                error={formik.touched.description && Boolean(formik.errors.description)}
-                helperText={formik.touched.description && formik.errors.description}
-              />
-              <div style={{ display: 'flex', gap: '30px' }}>
+            <form className={classes.form} noValidate  onSubmit={handleSubmit(OnSubmit)}>
+                  <Controller
+                    rules={{ required: true }}
+                    control={control}
+                    defaultValue='women'
+                    name='gender'
+                    render={({ field }) => (
+                      <RadioGroup {...field}>
+                        <FormControlLabel
+                       value='women'
+                       control={<Radio />}
+                       label='Women'
+                        />
+                        <FormControlLabel
+                          value='men' control={<Radio />} label='Men'
+                        />
+                        <FormControlLabel
+                         value='sneakers'
+                         control={<Radio />}
+                         label='Sneakers'
+                        />
+                      </RadioGroup>
+                    )}
+                  />
+
+            <Controller
+              name="title"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
+                  label="Title"
                   margin='normal'
-                  required={true}
-                  type='file'
-                  accept='image/*'
-                  name='file'
-                  label='Image'
-                  inputProps={{id: "file"}}
-                  multiple={false}
-                  id='file'
-                  autoComplete='file'
-                  className={classes.input}
-                  value={formik.values.image}
-                  onChange={(event) => {
-                  const file = event.currentTarget.files[0]
-                    formik.setFieldValue("file", file);
-                    uploadPreviewImage(file);
-                }}
-                  error={formik.touched.file && Boolean(formik.errors.file)}
-                  helperText={formik.touched.file && formik.errors.file}
+                  variant='outlined'
+                  fullWidth
+                  onChange={onChange}
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
                 />
-                <label htmlFor='file'>
-                  <Button variant='contained' color='primary' component='span'>
-                    Upload
-                  </Button>
-                  {formik.touched.file && Boolean(formik.errors.file)}
-                </label>
-              </div>
-              <TextField
+              )}
+              rules={{ required: 'Title is required' }} />
+              <Controller
+              name="description"
+              control={control}
+
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="Description"
+                  margin='normal'
+                  variant='outlined'
+                  fullWidth
+                  onChange={onChange}
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+
+                />
+              )}
+              rules={{ required: 'Description is required' }} />
+                <div style={{ display: 'flex', gap: '30px' }}>
+                <TextField
+                error={true}
                 margin='normal'
-                required={true}
+                type='file'
+                accept='image/*'
+                name='imageUrl'
+                label='Add image'
+                multiple={false}
+                id='imageUrl'
+                {...register('imageUrl', { required: true })}
+                className={classes.input}
+                onChange={(e) => {
+                  let file = e.target.files;
+                  handleImageUpload(e);
+                  field.onChange(file);
+                  console.log(field);
+                }}
+              />
+              <label htmlFor='imageUrl' style={{
+                display:'flex',
+                flexDirection:'column'
+              }}>
+                Add an image:
+                <Button variant='contained' color='primary' component='span'>
+                  Upload
+                </Button>
+              </label>
+              {errors.imageUrl?.type === 'required' && " Image is required"}
+              </div>
+            <Controller
+              name="price"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                variant='outlined'
+                margin='normal'
                 fullWidth
                 name='price'
                 label='Price'
                 id='price'
-                type='number'
-                value={formik.values.price}
-                onChange={formik.handleChange}
-                error={formik.touched.price && Boolean(formik.errors.price)}
-                helperText={formik.touched.price && formik.errors.price}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>$</InputAdornment>
-                  ),
-                }}
-                min='0'
-                max='10000'
-                variant='filled'
-              />
+                autoComplete='price'
+                  onChange={onChange}
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+              rules={{ required: 'Price is required' }} />
 
-              <TextField
+              <Controller
+              name="quantityProducts"
+              control={control}
+
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                variant='outlined'
                 margin='normal'
-                required={true}
                 fullWidth
-                id='quantityProducts'
+                name='quantity'
                 label='Quantity'
-                name='quantityProducts'
-                autoComplete='quantityProducts'
-                value={formik.values.quantityProducts}
-                onChange={formik.handleChange}
-                error={formik.touched.quantityProducts && Boolean(formik.errors.quantityProducts)}
-                helperText={formik.touched.quantityProducts && formik.errors.quantityProducts}
-                defaultValue={0}
-                variant='filled'
-                type='number'
-                min='0'
-                max='10000'
-              />
+                id='price'
+                autoComplete='quantity'
+                  onChange={onChange}
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+
+                />
+              )}
+              rules={{ required: 'Quantity is required' }} />
               <div className={classes.containerSubmit}>
                 <Button
                   type='submit'
@@ -297,7 +320,6 @@ const Sell = ({ CreateItem, history }) => {
           </Grid>
         </Grid>
       </Container>
-    </div>
   );
 };
 
