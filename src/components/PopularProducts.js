@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, CircularProgress, Grid } from '@material-ui/core';
 import Titles from './Titles';
 import ListItems from './ListItems';
+import ModalItemDetails from './ModalItemDetails';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,10 +28,24 @@ function PopularProducts() {
 
   let history = useHistory();
 
+  const [open, setOpen] = useState(false);
+  const [idItem, setIdItem]= useState('');
+
   const { lastProducts, loading } = useSelector((state) => ({
     lastProducts: state.items.items,
     loading: state.lastProducts.isLoadingLast10Products,
   }));
+
+  const handleClickOpen = (id) => {
+    setOpen(true);
+    if(id){
+  setIdItem(id);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleViewAllClick = () => {
     history.push('/shop');
   };
@@ -56,6 +71,7 @@ function PopularProducts() {
                 title={data.title}
                 image={data.imageUrl}
                 description={data.description}
+                handleClickOpen={handleClickOpen}
               />
             ))}
         </Grid>
@@ -69,6 +85,11 @@ function PopularProducts() {
           </Button>
         </div>
       </div>
+      <ModalItemDetails
+        open={open}
+        handleClose={handleClose}
+         id={idItem}
+       />
     </div>
   );
 }
