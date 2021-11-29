@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useEffect , useState } from 'react';
 import { connect } from 'react-redux';
 import { Container, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EditProfile from '../components/editProfile';
 
 const useStyles = makeStyles((theme) => ({
-    container: {
-        display: 'grid',
-    },
+
     avatar: {
         display: 'inline-block',
         position: 'relative',
@@ -56,14 +54,18 @@ const useStyles = makeStyles((theme) => ({
         top: '127px',
         left: '66px',
     },
-    container_Profile: {
+    wrapper_Profile: {
         display: 'grid',
         gridTemplateColumns: '150px 1fr ',
         gridGap: '20px',
     },
+    container: {
+        width: '100%',
+        height: '939px',
+    }
 }));
 const Profile = (props) => {
-    const [User, setUser] = React.useState({
+    const [User, setUser] = useState({
         greetingTheName: '',
         firstname: '',
         lastname: '',
@@ -83,7 +85,7 @@ const Profile = (props) => {
 
     const classes = useStyles();
 
-    React.useEffect(() => {
+    useEffect(() => {
         setUser((prev) => ({
             ...prev,
             greetingTheName: props.auth.user.firstname,
@@ -98,17 +100,9 @@ const Profile = (props) => {
 
     return (
         <Container maxWidth="lg">
-            <div
-                style={{
-                    width: '100%',
-                    height: '939px',
-                }}
-            >
-                <div>
-                    <div>
-                        <div>
-                            <div>
-                                <div className={classes.container_Profile}>
+            <div className={classes.container}>
+
+                                <div className={classes.wrapper_Profile}>
                                     <div>
                                         <img
                                             className={`${classes.avatar}`}
@@ -132,8 +126,8 @@ const Profile = (props) => {
                                         />
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+
+
                         <Typography
                             variant="h4"
                             style={{
@@ -142,8 +136,7 @@ const Profile = (props) => {
                         >
                             {firstname}
                         </Typography>
-                    </div>
-                </div>
+
                 <div>
                     {menu.map((menu) => (
                         <Button
@@ -157,7 +150,7 @@ const Profile = (props) => {
                             {menu.name}
                         </Button>
                     ))}
-                </div>
+
 
                 <div>
                     {menu2.map((menu) => (
@@ -173,6 +166,7 @@ const Profile = (props) => {
                         </Button>
                     ))}
                 </div>
+            </div>
             </div>
         </Container>
     );
