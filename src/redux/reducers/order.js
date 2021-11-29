@@ -1,6 +1,5 @@
 import {
   ADD_PAYMENTS,
-  ADD_FAVORITES_FAILED,
   FETCH_ORDER_BY_USER_ID,
 } from '../actions/types';
 
