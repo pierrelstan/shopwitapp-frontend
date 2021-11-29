@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
@@ -39,12 +39,26 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  addColorFav: {
+    cursor: 'pointer',
+    color: '#cb436b',
+  },
+  removeColorFav: {
+    cursor: 'pointer',
+  },
+  addColorCart: {
+    cursor: 'pointer',
+    color: '#4BB543',
+  },
+  removeColorCart: {
+    cursor: 'pointer',
+  }
 }));
 
 const Item = () => {
   const classes = useStyles();
-  const [showCart, setShowCart] = React.useState(false);
-  const [showFav, setShowFav] = React.useState(false);
+  const [showCart, setShowCart] = useState(false);
+  const [showFav, setShowFav] = useState(false);
 
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -103,9 +117,12 @@ const Item = () => {
     dispatch(addToFavorites(id));
   };
 
-  const handleDeleteItem = (id) => {
-    dispatch(removeItemById(id));
-    history.push('/myproducts');
+  const handleDeleteItem = (id, auth) => {
+    dispatch(removeItemById(id, auth)).then(()=> {
+       history.push('/myproducts');
+    }).catch((e)=> {
+      console.log(e);
+    })
   };
 
   const handleChangeRating = (newValue) => {
@@ -139,8 +156,8 @@ const Item = () => {
                 <Grid item xs={12} sm={6} className={classes.centereItems}>
                   <img
                     className={classes.image}
-                    src={item.imageUrl}
-                    alt={item.title}
+                    src={item.item.imageUrl}
+                    alt={item.item.title}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.centereItems}>
@@ -151,7 +168,7 @@ const Item = () => {
                           fontSize: '16px',
                         }}
                       >
-                        {item.title}
+                        {item.item.title}
                       </h1>
                     </div>
                     <div>
@@ -162,7 +179,7 @@ const Item = () => {
                           lineHeight: '22px',
                         }}
                       >
-                        ${item.price}.00
+                        ${item.item.price}.00
                       </p>
                     </div>
                     <div
@@ -172,7 +189,7 @@ const Item = () => {
                         border: 0,
                       }}
                     >
-                      <p>{item.description}</p>
+                      <p>{item.item.description}</p>
                     </div>
                     <Box
                       style={{
@@ -202,53 +219,46 @@ const Item = () => {
                     >
                       {showCart && (
                         <AddShoppingCartIcon
-                          style={{
-                            cursor: 'pointer',
-                            color: '#4BB543',
-                          }}
-                          onClick={() => hanldeRemoveCart(item._id)}
+                          className={classes.addColorCart}
+                          onClick={() => hanldeRemoveCart(item.item._id)}
                         />
                       )}
                       {!showCart && (
                         <ShoppingCartOutlinedIcon
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => handleAddCart(item._id)}
+                        className={classes.removeColorCart}
+                          onClick={() => handleAddCart(item.item._id)}
                         />
                       )}
 
                       {showFav && (
                         <FavoriteSharpIcon
-                          style={{
-                            cursor: 'pointer',
-                            color: '#cb436b',
-                          }}
-                          onClick={() => handleRemoveFavorite(item._id)}
+                          className={classes.addColorFav}
+                          onClick={() => handleRemoveFavorite(item.item._id)}
                         />
                       )}
                       {!showFav && (
                         <FavoriteBorderIcon
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => handleAddFavorites(item._id)}
+                        className={classes.removeColorFav}
+                          onClick={() => handleAddFavorites(item.item._id)}
                         />
                       )}
-
-                      <Link
+                      {
+                        auth === item.item.userId && (
+                       <Link
                         component={RouterLink}
-                        to={`/item/update/${item._id}`}
+                        to={`/item/update/${item.item._id}`}
                       >
                         <EditIcon />
                       </Link>
+                        )
+                      }
 
-                      {auth === item.userId && (
+                      {auth === item.item.userId && (
                         <DeleteOutlineIcon
                           style={{
                             cursor: 'pointer',
                           }}
-                          onClick={() => handleDeleteItem(item._id)}
+                          onClick={() => handleDeleteItem(item.item._id, auth)}
                         />
                       )}
                     </div>
