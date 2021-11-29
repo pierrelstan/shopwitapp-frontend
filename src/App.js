@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,11 +27,11 @@ import ResetPassword from './components/ResetPassword';
 import MyProducts from './pages/MyProducts';
 import Orders from './pages/orders';
 import Favorites from './pages/favorites';
-
 import Footer from './components/Footer';
 import { fetchItemsByUserId } from './redux/actions/ItemsActions';
 import { allCarts } from './redux/actions/carts';
 import axiosService from './utils/axiosService';
+import { Box, CssBaseline } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,7 +74,7 @@ function App() {
     active: state.auth.user ? state.auth.user.active : false,
   }));
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (token) {
       Promise.all([
         dispatch(getProfile()),
@@ -89,7 +89,8 @@ function App() {
   }, [dispatch, token]);
 
   return (
-    <div className={classes.root}>
+    <Box  className={classes.root}>
+      <CssBaseline/>
       <Router basename={process.env.PUBLIC_URL}>
         <Alert />
         <Navbar>
@@ -130,7 +131,7 @@ function App() {
       </Router>
       <Footer />
       {/* <MobileNavbar /> */}
-    </div>
+    </Box>
   );
 }
 
