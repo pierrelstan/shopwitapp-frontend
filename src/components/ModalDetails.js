@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Container from '@material-ui/core/Container';
-import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 import EditIcon from '@material-ui/icons/Edit';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
@@ -16,11 +15,10 @@ import { Paper, Box, Grid } from '@material-ui/core';
 import { fetchItemById, removeItemById } from '../redux/actions/ItemsActions';
 import { removeCart, addToCart } from '../redux/actions/carts';
 import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
-import { addRatings, fetchRatingById } from '../redux/actions/ratings';
-import Wrapper from '../components/Wrapper';
-import ScrollOnTop from '../components/ScrollOnTop';
-import Titles from '../components/Titles';
-import { Rating } from '@material-ui/lab';
+import { fetchRatingById } from '../redux/actions/ratings';
+import Wrapper from './Wrapper';
+import Titles from './Titles';
+
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -34,51 +32,44 @@ const useStyles = makeStyles((theme) => ({
       justifySelf: 'center',
     },
   },
-  centereItems: {
+  centeredItems: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  addColorFav: {
-    cursor: 'pointer',
-    color: '#cb436b',
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
   },
-  removeColorFav: {
-    cursor: 'pointer',
-  },
-  addColorCart: {
-    cursor: 'pointer',
-    color: '#4BB543',
-  },
-  removeColorCart: {
-    cursor: 'pointer',
-  }
 }));
 
-const Item = () => {
+const ModalDetails =React.memo( ({
+      id
+}) => {
   const classes = useStyles();
-  const [showCart, setShowCart] = useState(false);
-  const [showFav, setShowFav] = useState(false);
-
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const history = useHistory();
 
-  const { carts, item, favorites, ratings, auth } = useSelector((state) => ({
-    carts: state.carts.allCarts,
+  const [showCart, setShowCart] = React.useState(false);
+  const [showFav, setShowFav] = React.useState(false);
+
+  const { item, carts, favorites, auth } = useSelector((state) => ({
     item: state.item,
+    carts: state.carts.allCarts,
     favorites: state.favorites.allFavorites,
-    loading: state.lastProducts.isLoadingLast10Products,
-    ratings: state.ratings,
     auth: state.auth.user._id,
   }));
 
-  let history = useHistory();
-
   useEffect(() => {
     dispatch(fetchItemById(id));
+    dispatch(fetchRatingById(id));
   }, [dispatch, id]);
 
-  React.useEffect(() => {
+
+
+
+
+  useEffect(() => {
     let Carts = carts && carts.findIndex((item) => item.item._id === id) !== -1;
     if (Carts) {
       setShowCart(true);
@@ -87,7 +78,7 @@ const Item = () => {
     }
   }, [carts, id]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let favs =
       favorites && favorites.findIndex((item) => item.item._id === id) !== -1;
 
@@ -123,21 +114,9 @@ const Item = () => {
     }).catch((e)=> {
       console.log(e);
     })
+    history.push('/myproducts');
   };
 
-  const handleChangeRating = (newValue) => {
-    dispatch(addRatings(id, newValue));
-    dispatch(fetchRatingById(id));
-  };
-
-  if (!item.isLoaded) {
-    return (
-      <Wrapper>
-        <Titles>Product</Titles>
-        <CircularProgress color="secondary" />
-      </Wrapper>
-    );
-  }
   if (item.error) {
     return <div>Error: {item.error.message}: : Please connect to Internet</div>;
   } else {
@@ -147,20 +126,23 @@ const Item = () => {
           marginBottom: '50px',
         }}
       >
-        <ScrollOnTop />
         <Container maxWidth="md">
-          <Titles>Product</Titles>
           <div>
-            <Paper elevation={0}>
+            <Paper elevation={1}>
               <Grid container spacing={5}>
-                <Grid item xs={12} sm={6} className={classes.centereItems}>
+                <Grid item xs={12} sm={6} className={classes.centeredItems}>
+
+                {!item.isLoaded  &&  (
+                  <div className={classes.center}>
+                <CircularProgress color="secondary" /> </div>
+                )}
                   <img
                     className={classes.image}
                     src={item.item.imageUrl}
                     alt={item.item.title}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6} className={classes.centereItems}>
+                <Grid item xs={12} sm={6} className={classes.centeredItems}>
                   <div>
                     <div>
                       <h1
@@ -172,6 +154,7 @@ const Item = () => {
                       </h1>
                     </div>
                     <div>
+
                       <p
                         style={{
                           color: '#878787',
@@ -179,8 +162,10 @@ const Item = () => {
                           lineHeight: '22px',
                         }}
                       >
+
                         ${item.item.price}.00
                       </p>
+
                     </div>
                     <div
                       style={{
@@ -189,59 +174,65 @@ const Item = () => {
                         border: 0,
                       }}
                     >
+                      <Link
+                      component={RouterLink}
+                      to={`/item/${item.item._id}`}
+                      className={classes.textLink}
+                    >
                       <p>{item.item.description}</p>
+                      </Link>
                     </div>
                     <Box
                       style={{
                         marginBottom: '20px',
                       }}
                     >
-                      <Rating
-                        name="customized-empty"
-                        value={ratings.rating}
-                        precision={0.5}
-                        max={5}
-                        min={0}
-                        emptyIcon={<StarBorderIcon fontSize="inherit" />}
-                        onChange={(event, newValue) => {
-                          handleChangeRating(newValue);
-                        }}
-                      />
                     </Box>
 
                     <div
                       style={{
                         display: 'inline-flex',
-                        gap: '87px',
+                        gap: '48px',
                         flexWrap: 'wrap',
                         paddingTop: '40px',
                       }}
                     >
                       {showCart && (
                         <AddShoppingCartIcon
-                          className={classes.addColorCart}
+                          style={{
+                            cursor: 'pointer',
+                            color: '#4BB543',
+                          }}
                           onClick={() => hanldeRemoveCart(item.item._id)}
                         />
                       )}
                       {!showCart && (
                         <ShoppingCartOutlinedIcon
-                        className={classes.removeColorCart}
+                          style={{
+                            cursor: 'pointer',
+                          }}
                           onClick={() => handleAddCart(item.item._id)}
                         />
                       )}
 
                       {showFav && (
                         <FavoriteSharpIcon
-                          className={classes.addColorFav}
+                          style={{
+                            cursor: 'pointer',
+                            color: '#cb436b',
+                          }}
                           onClick={() => handleRemoveFavorite(item.item._id)}
                         />
                       )}
                       {!showFav && (
                         <FavoriteBorderIcon
-                        className={classes.removeColorFav}
+                          style={{
+                            cursor: 'pointer',
+                          }}
                           onClick={() => handleAddFavorites(item.item._id)}
                         />
                       )}
+
                       {
                         auth === item.item.userId && (
                        <Link
@@ -271,6 +262,6 @@ const Item = () => {
       </div>
     );
   }
-};
+});
 
-export default Item;
+export default ModalDetails;

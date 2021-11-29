@@ -5,7 +5,6 @@ import { addToCart, removeCart } from '../redux/actions/carts';
 import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { Box, Button, Grid } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
@@ -13,6 +12,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Link as RouterLink } from 'react-router-dom';
 import { DisplayFavoriteCartIcon } from './DisplayFavoriteCartIcon';
 import DisplayShoppingCartIcon from './DisplayShoppingCartIcon';
+import imageLogo from '../utils/images/imageLogo.jpg';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textLink: {
     textDecoration: 'none',
+    cursor:'pointer',
     color: '#333',
     '&:hover': {
       textDecoration: 'none',
@@ -59,12 +60,12 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     objectFit: 'cover',
     position: 'relative',
-    top: '-80px',
+    top: '-80px !important',
     margin: 0,
     padding: 0,
     width: '322px',
     height: '304px',
-    zIndex: 1,
+    zIndex: 'auto',
     '&:hover': {
       boxShadow: 'none',
     },
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down('xs')]: {
       objectFit: 'cover',
-      width: '100%',
+      maxWidth: '100%',
     },
     [theme.breakpoints.up('sm')]: {
       objectFit: 'cover',
@@ -83,8 +84,8 @@ const useStyles = makeStyles((theme) => ({
       top: '-180px',
     },
     [theme.breakpoints.down('md')]: {
-      objectFit: 'cover',
       top: '-80px',
+      width: '100%',
     },
   },
   card: {
@@ -93,7 +94,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     borderRadius: '24px',
     transition: '0.5s ease-in-out ',
-    zIndex: 1,
+    padding: '10px',
+    zIndex: 0,
     [theme.breakpoints.down('xs')]: {
       width: '277px',
       height: '296px',
@@ -114,43 +116,24 @@ const useStyles = makeStyles((theme) => ({
     '&:hover:before': {
       opacity: 1,
     },
-
-    '&:before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      display: 'block',
-      width: '100%',
-      height: '100%',
-      zIndex: 2,
-      transition: '0.5s all',
-      opacity: 0,
-      borderRadius: '24px',
-      background:
-        'linear-gradient(to bottom, rgb(0 0 0 / 14%),rgb(0 0 0 / 87%))',
-    },
     '&:hover $price': {
       background: '#fff',
-      color: '#333',
-    },
-    '& a': {
-      display: 'none',
-    },
-    '&:hover a': {
-      display: 'block',
+      color: '#d13c6f',
     },
     '& p': {
       position: 'absolute',
       top: '100px',
-      zIndex: 2,
+      zIndex: 3,
       color: '#fff',
       opacity: 0,
       transform: 'translateY(30px)',
       transition: '0.5s all',
-      fontSize: '14px',
+      fontSize: '18px',
       wordWrap: 'break-all',
       display: 'none',
+      padding: '4px',
+      textAlign: 'center',
+      backgroundColor: '#555',
     },
     '&:hover p': {
       display: 'block',
@@ -158,17 +141,18 @@ const useStyles = makeStyles((theme) => ({
       transform: 'translateY(0px)',
     },
 
-    '& h1': {
+    '& h4': {
       textTransform: 'uppercase',
       position: 'absolute',
       top: '20px',
       zIndex: 3,
       color: '#fff',
       opacity: 0,
-      transform: 'translateY(30px)',
+      transform: 'translateY(-30px)',
       transition: '0.5s all',
+      marginLeft: '20px',
     },
-    '&:hover h1': {
+    '&:hover h4': {
       opacity: 1,
       transform: 'translateY(0px)',
     },
@@ -221,14 +205,14 @@ const useStyles = makeStyles((theme) => ({
   },
   containerButton: {
     display: 'flex',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     position: 'absolute',
     top: '227px',
     width: '100%',
   },
 }));
 
-export default function ListItems({ id, price, title, image, description }) {
+export default function ListItems({ id, price, title, image, handleClickOpen }) {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
@@ -259,7 +243,11 @@ export default function ListItems({ id, price, title, image, description }) {
     dispatch(addToFavorites(id));
   };
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
+    <Grid item xs={11} sm={6} md={4} lg={3}>
+     <Box
+          onClick={()=> handleClickOpen(id)}
+          className={classes.textLink}
+        >
       <Card className={classes.card} elevation={matches ? 1 : 0} key={id}>
         <div
           style={{
@@ -268,62 +256,29 @@ export default function ListItems({ id, price, title, image, description }) {
             padding: '20px',
           }}
         >
-          <Typography component='span' className={classes.price}>
+          <Typography component="span" className={classes.price}>
             ${price}
           </Typography>
         </div>
 
-        <img
-          alt={title}
-          src={image}
-          title={title}
-          className={classes.imageCard}
-        />
-        <Link
-          component={RouterLink}
-          to={`/item/${id}`}
-          className={classes.textLink}
-        >
-          <CardContent>
-            <div>
-              <h1>{title}</h1>
-            </div>
-            <p>
-              <span>{description}</span>
-            </p>
-          </CardContent>
-        </Link>
-        <div className={classes.containerButton}>
-          <div>
-            <Box boxShadow={0}>
-              <div>
-                <Button className={classes.button}>
-                  <DisplayFavoriteCartIcon
-                    id={id}
-                    Favs={favorites.allFavorites}
-                    handleAddFavorites={handleAddFavorites}
-                    handleRemoveFavorite={handleRemoveFavorite}
-                  />
-                </Button>
-              </div>
-            </Box>
-          </div>
-          <div>
-            <Box boxShadow={0}>
-              <div className={classes.textLink}>
-                <Button className={classes.button}>
-                  <DisplayShoppingCartIcon
-                    Carts={carts.allCarts}
-                    id={id}
-                    handleAddCart={handleAddCart}
-                    hanldeRemoveCart={hanldeRemoveCart}
-                  />
-                </Button>
-              </div>
-            </Box>
-          </div>
-        </div>
+        {image && (
+          <img
+            alt={title}
+            src={image}
+            title={title}
+            className={classes.imageCard}
+          />
+        )}
+        {!image && (
+          <img
+            alt={title}
+            src={imageLogo}
+            title={title}
+            className={classes.imageCard}
+          />
+        )}
       </Card>
+      </Box>
     </Grid>
   );
 }

@@ -16,7 +16,7 @@ const NewsLetters = React.memo(function NewsLettersMail(props) {
     error: false,
   });
 
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (e) => {
     const { name, value } = e.target;

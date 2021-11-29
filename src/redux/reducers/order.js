@@ -1,22 +1,33 @@
-import { ADD_PAYMENTS, ADD_FAVORITES_FAILED } from '../actions/types';
+import {
+  ADD_PAYMENTS,
+  FETCH_ORDER_BY_USER_ID,
+} from '../actions/types';
 
 const initialState = {
-    orderPayments: {},
-    isLoaded: false,
-    error: null,
+  orderPayments: {},
+  orders: [],
+  isLoading: false,
+  error: null,
 };
 
 export default function (state = initialState, action) {
-    switch (action.type) {
-        case ADD_PAYMENTS:
-            return {
-                ...state,
-                orderPayments: action.payload.data,
-                isLoaded: true,
-                error: null,
-            };
+  switch (action.type) {
+    case ADD_PAYMENTS:
+      return {
+        ...state,
+        orderPayments: action.payload.data,
+        isLoaded: true,
+        error: null,
+      };
 
-        default:
-            return state;
-    }
+    case FETCH_ORDER_BY_USER_ID:
+      return {
+        ...state,
+        orders: action.payload.data,
+        isLoading: true,
+      };
+
+    default:
+      return state;
+  }
 }

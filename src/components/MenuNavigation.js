@@ -1,39 +1,14 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { useHistory, withRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import Wrapper from './Wrapper';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 import Titles from './Titles';
 import image1 from '../utils/images/image1.jpg';
 import image2 from '../utils/images/image2.jpg';
 import image3 from '../utils/images/image3.jpg';
-
-const images = [
-  {
-    url: image1,
-    title: 'Men',
-    width: '40%',
-    height: '550px',
-    margin: '0px',
-  },
-  {
-    url: image2,
-    title: 'Woman',
-    width: '30%',
-    height: '550px',
-    margin: '40px',
-  },
-  {
-    url: image3,
-    title: 'Shoes',
-    width: '30%',
-    height: '550px',
-    margin: '0px',
-  },
-];
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -121,14 +96,48 @@ const useStyles = makeStyles((theme) => ({
   },
   imageWidth: {},
 }));
-function MenuNavigation({ items }) {
+function MenuNavigation() {
   const classes = useStyles();
+  const { countsItems } = useSelector((state) => ({
+    countsItems: state.countsItems.countsItems,
+  }));
+
+  const STATE = [
+    {
+      url: image1,
+      title: 'Men',
+      width: '40%',
+      height: '550px',
+      margin: '0px',
+      count: countsItems[0] || 0,
+      link: 'men',
+    },
+
+    {
+      url: image3,
+      title: 'Sneakers',
+      width: '30%',
+      height: '550px',
+      margin: '40px',
+      count: countsItems[1] || 0,
+      link: 'sneakers',
+    },
+    {
+      url: image2,
+      title: 'Woman',
+      width: '30%',
+      height: '550px',
+      margin: '0px',
+      count: countsItems[2] || 0,
+      link: 'women',
+    },
+  ];
 
   return (
     <div>
       <Titles>DISCOVER THE COLLECTIONS</Titles>
       <div className={classes.root}>
-        {images.map((image) => (
+        {STATE.map((image) => (
           <ButtonBase
             focusRipple
             key={image.title}
@@ -147,17 +156,24 @@ function MenuNavigation({ items }) {
               }}
             />
             <span className={classes.imageBackdrop} />
-            <span className={classes.imageButton}>
-              <Typography
-                component='span'
-                variant='subtitle1'
-                color='inherit'
-                className={classes.imageTitle}
-              >
-                {image.title} {items.items.length}
-                <span className={classes.imageMarked} />
-              </Typography>
-            </span>
+            <Link
+              component={RouterLink}
+              to={`/${image.link}`}
+              color='inherit'
+              className={classes.menuTextSize}
+            >
+              <span className={classes.imageButton}>
+                <Typography
+                  component='span'
+                  variant='subtitle1'
+                  color='inherit'
+                  className={classes.imageTitle}
+                >
+                  {image.title} {image.count}
+                  <span className={classes.imageMarked} />
+                </Typography>
+              </span>
+            </Link>
           </ButtonBase>
         ))}
       </div>
@@ -165,8 +181,4 @@ function MenuNavigation({ items }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  items: state.items,
-});
-
-export default withRouter(connect(mapStateToProps, {})(MenuNavigation));
+export default MenuNavigation;

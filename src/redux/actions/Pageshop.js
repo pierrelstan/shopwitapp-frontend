@@ -1,11 +1,11 @@
 import { PAGES, LOADING_PAGE_START, LOADING_PAGE_SUCCESS } from './types';
 import WebAPI from '../../utils/service';
 
-export const pagesControlled = (page, query) => (dispatch) => {
+export const PagesShop = (page) => (dispatch) => {
   dispatch({
     type: LOADING_PAGE_START,
   });
-  WebAPI.pagesControlled(page, query)
+  WebAPI.pagesShop(page)
     .then((items) =>
       Promise.all([
         dispatch({

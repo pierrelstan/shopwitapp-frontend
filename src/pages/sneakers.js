@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
-import Link from '@material-ui/core/Link';
-import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import { Container } from '@material-ui/core';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NewArrivals from '../components/NewArrivals';
+import { pagesControlled } from '../redux/actions/pages';
 import ShopAll from '../components/ShopAll';
 import ScrollOnTop from '../components/ScrollOnTop';
 import pages from '../utils/pages';
-import { PagesShop } from '../redux/actions/Pageshop';
+import MenuNavigation from '../components/MenuNavigation';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,13 +39,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Shop() {
+function Sneakers() {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const [page, setPage] = React.useState(1);
+  const dispatch = useDispatch();
 
   const { items } = useSelector((state) => ({
-    items: state.pages.itemsPerPages,
+    itemsPerPages: state.pages.itemsPerPages,
+    items: state.items.items,
     page: state.pages.page,
   }));
 
@@ -54,35 +55,21 @@ function Shop() {
   };
 
   useEffect(() => {
-    dispatch(PagesShop(page));
+    const cancelTokenSource = axios.CancelToken.source();
+    let query = 'sneakers';
+
+    dispatch(pagesControlled(page, query));
+
+    return () => {
+      cancelTokenSource.cancel();
+    };
   }, [dispatch, page]);
 
   return (
     <div>
       <NewArrivals />
-      <Container maxWidth='xl'>
+      <Container>
         <ScrollOnTop />
-
-        <Breadcrumbs
-          maxItems={2}
-          aria-label='breadcrumb'
-          style={{
-            marginTop: '10px',
-          }}
-        >
-          <Link
-            color='textPrimary'
-            style={{
-              cursor: 'pointer',
-            }}
-          >
-            Home
-          </Link>
-
-          <Typography color='inherit' variant='h6'>
-            Shop
-          </Typography>
-        </Breadcrumbs>
 
         <Typography
           variant='h6'
@@ -120,8 +107,10 @@ function Shop() {
             />
           </div>
         </div>
+        <MenuNavigation />
       </Container>
     </div>
   );
 }
-export default Shop;
+
+export default Sneakers;

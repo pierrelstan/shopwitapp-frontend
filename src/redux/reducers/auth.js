@@ -19,7 +19,7 @@ let initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: false,
   loadingLogin: false,
-  loading: true,
+  loadingStart: false,
   message: '',
   user: {
     fistname: '',
@@ -34,7 +34,7 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case LOGIN_START:
-      return { ...state, loadingLogin: true };
+      return { ...state, loadingStart: true };
     case USER_LOAD:
       return {
         ...state,
@@ -51,8 +51,9 @@ export default function (state = initialState, action) {
       return {
         ...state,
         ...payload,
-        isAuthenticated: true,
+        isAuthenticated: false,
         loading: false,
+        loadingStart: true,
         active: true,
       };
     case UPDATE_PROFILE:
@@ -62,7 +63,7 @@ export default function (state = initialState, action) {
         message: payload,
         isAuthenticated: true,
         loading: false,
-        update: true,
+        loadingLogin: false,
       };
     case REMOVE_UPDATE_SUCCESS_MESSAGE:
       return {

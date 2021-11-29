@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
 import { persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import allReducers from '../reducers/index';

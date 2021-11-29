@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
-const Alert = ({ alerts }) => {
+const AlertErrors = ({ alerts }) => {
   const { enqueueSnackbar } = useSnackbar();
   return (
     <div
@@ -32,10 +32,9 @@ const mapStateToProps = (state) => ({
   alerts: state.alert,
 });
 export default connect(mapStateToProps)(
-  React.memo(Alert, (prev, next) => {
+  React.memo(AlertErrors, (prev, next) => {
     if (prev === next.alerts) {
       return true;
     }
-    return false;
   }),
 );

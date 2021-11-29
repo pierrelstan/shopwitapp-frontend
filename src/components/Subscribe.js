@@ -44,10 +44,9 @@ export default function Subscribe() {
   });
 
   const classes = useStyles();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
     console.log(valueSubscribe);
     setValueSubscribe({ ...valueSubscribe, [e.target.name]: e.target.value });
   };

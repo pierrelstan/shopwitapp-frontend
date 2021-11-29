@@ -1,4 +1,3 @@
-import { isEmptyArray } from 'formik';
 import { FETCH_ITEMS_BY_USER_ID } from '../actions/types';
 
 const initialState = {

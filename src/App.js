@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,22 +21,23 @@ import Item from './pages/Item';
 import Shop from './pages/shop';
 import Woman from './pages/woman';
 import Men from './pages/men';
-import Shoes from './pages/shoes';
+import Sneakers from './pages/sneakers';
 import NewPassword from './components/NewPassword';
 import ResetPassword from './components/ResetPassword';
 import MyProducts from './pages/MyProducts';
 import Orders from './pages/orders';
-import Dashboard from './pages/dashboard';
+import Favorites from './pages/favorites';
 import Footer from './components/Footer';
 import { fetchItemsByUserId } from './redux/actions/ItemsActions';
 import { allCarts } from './redux/actions/carts';
-import store from './redux/store/store';
+import axiosService from './utils/axiosService';
+import { Box, CssBaseline } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh',
+    minHeight:'100vh',
   },
   paper: {
     padding: theme.spacing(2),
@@ -73,26 +74,30 @@ function App() {
     active: state.auth.user ? state.auth.user.active : false,
   }));
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (token) {
       Promise.all([
-        store.dispatch(getProfile()),
-
+        dispatch(getProfile()),
         dispatch(allFavorites()),
         dispatch(allCarts()),
         dispatch(fetchItemsByUserId()),
       ]);
     }
+    return () => {
+      axiosService();
+    };
   }, [dispatch, token]);
 
   return (
-    <div className={classes.root}>
+    <Box  className={classes.root}>
+      <CssBaseline/>
       <Router basename={process.env.PUBLIC_URL}>
+        <Alert />
         <Navbar>
           {active && <AuthLinks />}
           {!active && <GuestLinks />}
         </Navbar>
-        <Alert />
+
         <div className={classes.main}>
           <Switch>
             <Route exact path='/' render={(props) => <Home {...props} />} />
@@ -103,8 +108,7 @@ function App() {
               render={(props) => <SignUp {...props} />}
             />
             <ProtectedRoutes exact path='/profile' component={Profile} />
-            <ProtectedRoutes exact path='/orders' component={Orders} />
-            <ProtectedRoutes exact path='/dashboard' component={Dashboard} />
+            <ProtectedRoutes exact path='/orders/:id' component={Orders} />
             <ProtectedRoutes exact path='/item/new' component={Sell} />
             <ProtectedRoutes
               exact
@@ -114,19 +118,20 @@ function App() {
             <ProtectedRoutes exact path='/item/:id' component={Item} />
             <Route exact path='/newpassword/:id' component={NewPassword} />
             <ProtectedRoutes exact path='/myproducts' component={MyProducts} />
+            <ProtectedRoutes exact path='/favorites' component={Favorites} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/resetpassword' component={ResetPassword} />
             <Route exact path='/shop' component={Shop} />
-            <Route exact path='/woman' component={Woman} />
+            <Route exact path='/women' component={Woman} />
             <Route exact path='/men' component={Men} />
-            <Route exact path='/shoes' component={Shoes} />
+            <Route exact path='/sneakers' component={Sneakers} />
             <Route exact path='*' component={NoMatch} />
           </Switch>
         </div>
       </Router>
       <Footer />
       {/* <MobileNavbar /> */}
-    </div>
+    </Box>
   );
 }
 

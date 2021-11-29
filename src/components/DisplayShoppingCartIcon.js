@@ -7,6 +7,7 @@ export default function DisplayShoppingCartIcon({
   id,
   hanldeRemoveCart,
   handleAddCart,
+  image,
 }) {
   const [show, setShow] = React.useState(false);
 
@@ -20,24 +21,28 @@ export default function DisplayShoppingCartIcon({
   }, [Carts, id]);
   return (
     <div>
-      {show && (
-        <AddShoppingCartIcon
-          onClick={() => hanldeRemoveCart(id)}
-          style={{
-            fontSize: 62,
-            color: '#4BB543',
-            backgroundColor: 'transparent',
-          }}
-        />
-      )}
-      {!show && (
-        <ShoppingCartIcon
-          style={{
-            fontSize: 62,
-            backgroundColor: 'transparent',
-          }}
-          onClick={() => handleAddCart(id)}
-        />
+      {image && (
+        <div>
+          {show && (
+            <AddShoppingCartIcon
+              onClick={() => hanldeRemoveCart(id)}
+              style={{
+                fontSize: 62,
+                color: '#4BB543',
+                backgroundColor: 'transparent',
+              }}
+            />
+          )}
+          {!show && (
+            <ShoppingCartIcon
+              style={{
+                fontSize: 62,
+                backgroundColor: 'transparent',
+              }}
+              onClick={() => handleAddCart(id)}
+            />
+          )}
+        </div>
       )}
     </div>
   );

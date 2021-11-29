@@ -8,12 +8,13 @@ import {
 
 const initialState = {
   items: [],
+  removeById:{},
   createItem: {},
   isLoaded: false,
   error: null,
 };
 
-export default function (state = initialState, action) { 
+export default function (state = initialState, action) {
   switch (action.type) {
     case CREATE_ITEM:
       return {

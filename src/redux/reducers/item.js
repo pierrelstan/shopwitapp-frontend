@@ -2,9 +2,8 @@ import { FETCH_ITEM_BY_ID } from '../actions/types';
 
 const initialState = {
   description: 'Fetch one Item',
+  item:{},
   isLoaded: false,
-  error: null,
-  item: {},
 };
 
 export default function (state = initialState, action) {
@@ -14,7 +13,6 @@ export default function (state = initialState, action) {
         ...state,
         item: action.payload.data,
         isLoaded: true,
-        error: null,
       };
     default:
       return state;
