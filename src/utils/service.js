@@ -17,7 +17,7 @@ class WebAPI {
     return axiosService.get(`/api/orders/${id}`);
   };
   static fetchItemById = async (id) => {
-    return axiosService.get(`/api/items/${id}`);
+    return axiosService.get(`/api/items/item/${id}`);
   };
   static fetchLastProducts = async () => {
     return axiosService.get('/api/items/lastproducts', {
@@ -27,11 +27,13 @@ class WebAPI {
   static fetchCountsItems = async () => {
     return axiosService.get('/api/items/counts');
   };
-  static updateItem = async (id, formData, USER_ID) => {
-    return axiosService.put(`/api/items/${id}`, formData);
+  static updateItem = async (id, formData) => {
+    return axiosService.put(`/api/items/item/${id}`, formData);
   };
   static removeItemById = async (id) => {
-    return axiosService.post(`/api/items/${id}`);
+    return axiosService.post(`/api/items/item/remove/${id}`, {
+      activeFlag: 1
+    });
   };
   static pagesControlled = async (page, query) => {
     return axiosService.get(`/api/items/page/${page}/${query}`);
