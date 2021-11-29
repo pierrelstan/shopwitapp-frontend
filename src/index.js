@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import Zoom from '@material-ui/core/Zoom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
