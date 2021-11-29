@@ -6,6 +6,7 @@ import {
   FETCH_ALL_GREATEST_RATINGS_AVERAGE_FAILED,
 } from './types';
 import WebAPI from '../../utils/service';
+import { setAlert } from './alert';
 
 export const addRatings = (id, newValue) => async (dispatch) => {
   try {
@@ -18,6 +19,7 @@ export const addRatings = (id, newValue) => async (dispatch) => {
 
     dispatch(fetchRatingById(id));
     dispatch(fetchAllGreatertRatingsAverage());
+    dispatch(setAlert(data.data.message, 'success'));
   } catch (err) {
     dispatch({
       type: ADD_RATINGS_FAILED,
