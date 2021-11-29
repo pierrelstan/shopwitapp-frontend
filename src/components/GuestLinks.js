@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
@@ -9,14 +9,11 @@ import { useHistory } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Box } from '@material-ui/core';
-
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import { openCart } from '../redux/actions/openCart';
-import { openFavoritesAndClosing } from '../redux/actions/OpenAndCloseFavorites';
 
 const minWidth = 140;
 
@@ -281,22 +278,12 @@ function GuestLinks() {
   const classes = useStyles();
   let history = useHistory();
 
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     top: false,
     left: false,
     bottom: false,
     right: false,
   });
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClickCart = () => {
-    openCart(true);
-  };
-
-  const handleClickFav = () => {
-    openFavoritesAndClosing(true);
-  };
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -307,14 +294,6 @@ function GuestLinks() {
     }
 
     setState({ ...state, [anchor]: open });
-  };
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   const list = (anchor) => (
