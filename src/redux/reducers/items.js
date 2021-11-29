@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   items: [],
+  removeById:{},
   createItem: {},
   isLoaded: false,
   error: null,
