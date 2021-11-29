@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, Box, Typography } from '@material-ui/core';
+import { Button,  Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import styled, { keyframes, css } from 'styled-components';
