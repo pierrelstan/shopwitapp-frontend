@@ -13,7 +13,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { DisplayFavoriteCartIcon } from './DisplayFavoriteCartIcon';
 import DisplayShoppingCartIcon from './DisplayShoppingCartIcon';
 import imageLogo from '../utils/images/imageLogo.jpg';
-import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   media: {
@@ -51,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textLink: {
     textDecoration: 'none',
+    cursor:'pointer',
     color: '#333',
     '&:hover': {
       textDecoration: 'none',
@@ -60,12 +60,12 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     objectFit: 'cover',
     position: 'relative',
-    top: '-80px',
+    top: '-80px !important',
     margin: 0,
     padding: 0,
     width: '322px',
     height: '304px',
-    zIndex: 1,
+    zIndex: 'auto',
     '&:hover': {
       boxShadow: 'none',
     },
@@ -84,7 +84,6 @@ const useStyles = makeStyles((theme) => ({
       top: '-180px',
     },
     [theme.breakpoints.down('md')]: {
-      objectFit: 'scale-down',
       top: '-80px',
       width: '100%',
     },
@@ -96,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '24px',
     transition: '0.5s ease-in-out ',
     padding: '10px',
-    zIndex: 1,
+    zIndex: 0,
     [theme.breakpoints.down('xs')]: {
       width: '277px',
       height: '296px',
@@ -117,30 +116,14 @@ const useStyles = makeStyles((theme) => ({
     '&:hover:before': {
       opacity: 1,
     },
-
-    '&:before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      display: 'block',
-      width: '100%',
-      height: '100%',
-      zIndex: 2,
-      transition: '0.5s all',
-      opacity: 0,
-      borderRadius: '24px',
-      background:
-        'linear-gradient(to bottom, rgb(0 0 0 / 35%),rgb(0 0 0 / 55%))',
-    },
     '&:hover $price': {
       background: '#fff',
-      color: '#333',
+      color: '#d13c6f',
     },
     '& p': {
       position: 'absolute',
       top: '100px',
-      zIndex: 2,
+      zIndex: 3,
       color: '#fff',
       opacity: 0,
       transform: 'translateY(30px)',
@@ -229,7 +212,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ListItems({ id, price, title, image }) {
+export default function ListItems({ id, price, title, image, handleClickOpen }) {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
@@ -261,6 +244,10 @@ export default function ListItems({ id, price, title, image }) {
   };
   return (
     <Grid item xs={11} sm={6} md={4} lg={3}>
+     <Box
+          onClick={()=> handleClickOpen(id)}
+          className={classes.textLink}
+        >
       <Card className={classes.card} elevation={matches ? 1 : 0} key={id}>
         <div
           style={{
@@ -290,53 +277,8 @@ export default function ListItems({ id, price, title, image }) {
             className={classes.imageCard}
           />
         )}
-        <Link
-          component={RouterLink}
-          to={`/item/${id}`}
-          className={classes.textLink}
-        >
-          <Box>
-            <div>
-              <h4>{title}</h4>
-            </div>
-          </Box>
-        </Link>
-        <div>
-          <div className={classes.containerButton}>
-            <div>
-              <Box boxShadow={0}>
-                <div className={classes.textLink}>
-                  <Button className={classes.button}>
-                    <DisplayFavoriteCartIcon
-                      id={id}
-                      image={image}
-                      Favs={favorites.allFavorites}
-                      handleAddFavorites={handleAddFavorites}
-                      handleRemoveFavorite={handleRemoveFavorite}
-                    />
-                  </Button>
-                </div>
-              </Box>
-            </div>
-            <div>
-              <Box boxShadow={0}>
-                <div className={classes.textLink}>
-                  <Button className={classes.button}>
-                    <DisplayShoppingCartIcon
-                      Carts={carts.allCarts}
-                      disabled={classes.disabledCart}
-                      id={id}
-                      image={image}
-                      handleAddCart={handleAddCart}
-                      hanldeRemoveCart={hanldeRemoveCart}
-                    />
-                  </Button>
-                </div>
-              </Box>
-            </div>
-          </div>
-        </div>
       </Card>
+      </Box>
     </Grid>
   );
 }
