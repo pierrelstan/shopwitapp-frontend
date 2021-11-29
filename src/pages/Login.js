@@ -3,7 +3,7 @@ import { Link, useHistory, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, Controller , useController} from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Login({ Log_in, active, alert }) {
-  const { handleSubmit , control ,  formState: { errors }, reset } = useForm({
+  const { handleSubmit , control , reset } = useForm({
     resolver: yupResolver(schema),
   });
 
