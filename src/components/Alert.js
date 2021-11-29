@@ -36,5 +36,6 @@ export default connect(mapStateToProps)(
     if (prev === next.alerts) {
       return true;
     }
+    return false;
   }),
 );
