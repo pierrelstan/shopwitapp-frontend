@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import Titles from '../components/Titles';
@@ -18,27 +18,28 @@ const useStyles = makeStyles((theme) => ({
     width: 'auto',
     margin: 0,
     [theme.breakpoints.between('1200', '1368')]: {
-      width: '1080px',
+      width: '800px',
       margin: '0 auto',
     },
   },
   containerItems: {
     display: 'grid',
-    gridTemplateColumns: '320px 320px 320px 320px',
-    justifyItems: 'center',
+    gridTemplateColumns: '320px 320px 320px',
+    justifyContent:'center',
+    alignItems:'center',
     gap: '42px',
     margin: '20px',
     [theme.breakpoints.down('sm')]: {
       justifyContent: 'center',
-      gridTemplateColumns: '1fr 1fr',
+      gridTemplateColumns: '320px 320px',
     },
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.up('md')]: {
       justifyContent: 'center',
-      gridTemplateColumns: '1fr 1fr',
+      gridTemplateColumns: '1fr 1fr 1fr',
     },
     [theme.breakpoints.down('xs')]: {
       justifyContent: 'center',
-      gridTemplateColumns: '320px',
+      gridTemplateColumns: '1fr',
     },
     [theme.breakpoints.between('1200', '1368')]: {
       gridTemplateColumns: '320px 320px 320px',
@@ -52,8 +53,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   imageCard: {
-    // width: '100%',
-    // height: 'auto',
     maxWidth: '317px',
     verticalAlign: 'middle',
     position: 'relative',
@@ -64,7 +63,6 @@ const useStyles = makeStyles((theme) => ({
     width: '322px',
     height: '304px',
     zIndex: 1,
-    // objectFit: 'cover',
     '&:hover': {
       boxShadow: 'none',
     },
@@ -96,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
     transition: '0.5s ease-in-out ',
     zIndex: 1,
     [theme.breakpoints.down('xs')]: {
-      width: '277px',
+      width: '320px',
       height: '296px',
     },
     boxShadow:
@@ -123,11 +121,11 @@ const useStyles = makeStyles((theme) => ({
 function MyProducts({ products, isLoaded, auth }) {
   const classes = useStyles();
 
-  React.useEffect(() => {
+ useEffect(() => {
     if (auth.user._id) {
       fetchItemsByUserId(auth.user._id);
     }
-  }, [auth.user._id]);
+  }, [auth.user._id, products]);
   if (!isLoaded) {
     return (
       <Container maxWidth="xl">
@@ -144,7 +142,7 @@ function MyProducts({ products, isLoaded, auth }) {
         <Titles>My Products</Titles>
         <div className={classes.containerItems}>
           {products?.map((data) => (
-            <Card className={classes.card} key={data.title} elevation={1}>
+            <Card className={classes.card} key={data._id} elevation={1}>
               <Link
                 component={RouterLink}
                 to={`/item/${data._id}`}
@@ -193,10 +191,4 @@ const mapStateToProps = (state) => ({
   isLoaded: state.myProducts.isLoaded,
 });
 
-export default connect(mapStateToProps, { fetchItemsByUserId })(
-  React.memo(MyProducts, (prev, next) => {
-    if (prev.products === next.products) {
-      return true;
-    }
-  }),
-);
+export default connect(mapStateToProps, { fetchItemsByUserId })(MyProducts);
