@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import * as yup from 'yup';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Controller , useController} from 'react-hook-form';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,8 +16,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-// import { setAlert } from '../actions/alert';
 import { Log_in } from '../redux/actions/auth';
+
+
+const schema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().min(6).max(32).required(),
+});
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,14 +54,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Login({ Log_in, active, alert }) {
-  const [user, setUser] = React.useState({
-    email: '',
-    password: '',
+  const { handleSubmit , control ,  formState: { errors }, reset } = useForm({
+    resolver: yupResolver(schema),
   });
 
-  const [Errors, SetErrors] = React.useState(false);
 
-  const [open, setOpen] = React.useState(false);
+
+  const [open, setOpen] = useState(false);
   const handleToggle = () => {
     if (active) {
       setOpen(!open);
@@ -65,23 +72,19 @@ function Login({ Log_in, active, alert }) {
 
   const classes = useStyles();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (active) {
       history.push('/');
-      setUser({ email: '', password: '' });
     }
     if (alert.length === 1) {
       setOpen(false);
     }
   }, [active, alert.length, history]);
 
-  const handleChange = (event) => {
-    setUser({ ...user, [event.target.name]: event.target.value });
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    Log_in(user);
+  const OnSubmit = (data) => {
+    Log_in(data);
+    reset();
   };
 
   if (active === true) {
@@ -122,35 +125,47 @@ function Login({ Log_in, active, alert }) {
         <Typography component='h1' variant='h5'>
           Sign in
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit}>
-          <TextField
-            error={Errors}
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            id='email'
-            label='Email Address'
-            name='email'
-            autoComplete='email'
-            autoFocus
-            value={user.email}
-            onChange={handleChange}
-          />
-          <TextField
-            error={Errors}
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            name='password'
-            label='Password'
-            type='password'
-            id='password'
-            value={user.password}
-            autoComplete='current-password'
-            onChange={handleChange}
-          />
+        <form className={classes.form} noValidate onSubmit={handleSubmit(OnSubmit)}>
+
+        <Controller
+              name="email"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="Email"
+                  margin='normal'
+                  variant='outlined'
+                  fullWidth
+                  onChange={onChange}
+                  autoComplete='email'
+                  required
+                  autoFocus
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+              />
+              <Controller
+              name="password"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="Password"
+                  margin='normal'
+                  variant='outlined'
+                  type='password'
+                  fullWidth
+                  onChange={onChange}
+                  autoComplete='email'
+                  required
+                  autoFocus
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+              />
           <FormControlLabel
             control={<Checkbox value='remember' color='primary' />}
             label='Remember me'
