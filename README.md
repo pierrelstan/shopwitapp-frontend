@@ -1,68 +1,88 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Welcome to Shopwit App 👋🏾
+\
+&nbsp;
 
-## Available Scripts
+# [Demo link ](https://pierrelstan.github.io/shopwitapp-frontend/#/shopwitapp-frontend/)
+## The following are the screenshots of the different stages of the app.
+- SignUp Page
+![alt](https://res.cloudinary.com/stanley/image/upload/v1638297322/RegisterPage_b325jv.png)
+\
+&nbsp;
+- Login Page
+![alt](https://res.cloudinary.com/stanley/image/upload/v1638297128/LoginPage_cohskx.png)
+\
+&nbsp;
+- Home Page
+![alt](https://res.cloudinary.com/stanley/image/upload/v1638297240/AuthHomePage_jiwsrf.png)
+\
+&nbsp;
+- favorite Page
+![alt](https://res.cloudinary.com/stanley/image/upload/v1638297184/FavoritesPage_adrwnb.png)
 
-In the project directory, you can run:
+\
+&nbsp;
+# Description:
+Shopwit is a full stack E-Commerce app for small stores that clients can buy their products.
 
-### `yarn start`
+The functionalities of the app are:
+- Sign In
+- Sign Up
+- Create
+- Edit
+- Delete
+- Add / remove favorite
+- Add /remove to cart
+- Make transactions
+- Edit profile
+- Add / remove rating
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> The link github repo for the backend : [shopwit-backend](https://github.com/pierrelstan/shopwit-backend)
+\
+&nbsp;
+# Tech Stack:
+- [React/React Hooks](https://reactjs.org/
+)
+- [Material-ui](https://mui.com/) version v4
+- [React-Router](https://v5.reactrouter.com/web/guides/quick-start) for navigation
+- [Redux](https://redux.js.org/) for state management
+- [Stripe](https://stripe.com/) for transactions
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+\
+&nbsp;
+# Tool Used for the Project
+- [Github](https://github.com) Version control
 
-### `yarn test`
+\
+&nbsp;
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Technical decisions:
+The reason why I used Redux as state management are:
 
-### `yarn build`
+-  The state of the app is needed in many places.
+-   The logic to update the state is complex.
+\
+&nbsp;
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+\
+&nbsp;
+# Installation:
+OS / Linux / Windows
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+`yarn install`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+\
+&nbsp;
 
-### `yarn eject`
+# Usage:
+After all the packages has been successfully installed, you can run:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+ `yarn start`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+\
+&nbsp;
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Author
+👤 Stanley Pierre Louis
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- Twitter: [@pierrelstan](https://twitter.com/pierrelStan)
+- LinkedIn: [@pierrelstan](https://linkedin.com/in/pierre-louis-stanley-930110133)
