@@ -22,7 +22,7 @@
 \
 &nbsp;
 # Description:
-Shopwit is an E-Commerce app for small stores that clients can buy their products.
+Shopwit is a full stack E-Commerce app for small stores that clients can buy their products.
 
 The functionalities of the app are:
 - Sign In
@@ -34,6 +34,8 @@ The functionalities of the app are:
 - Add /remove to cart
 - Make transactions
 - Edit profile
+
+The link github repo for the backend : [shopwit-backend](https://github.com/pierrelstan/shopwit-backend)
 \
 &nbsp;
 # Tech Stack:
@@ -60,18 +62,6 @@ The reason why I used Redux as state management are:
 \
 &nbsp;
 
-<!-- # About this project
-### The functionalities  of the app are:
-
-- Sign In
-- Sign Up
-- Create
-- Edit
-- Delete
--  Add / remove  favorite
--  Add /remove to cart
-- Make transactions
-- Edit profile -->
 \
 &nbsp;
 # Installation:
