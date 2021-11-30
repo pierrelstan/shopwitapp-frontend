@@ -4,19 +4,19 @@
 
 # [Demo link ](https://pierrelstan.github.io/shopwitapp-frontend/#/shopwitapp-frontend/)
 ## The following are the screenshots of the different stages of the app.
-
+- SignUp Page
 ![alt](https://res.cloudinary.com/stanley/image/upload/v1638297322/RegisterPage_b325jv.png)
 \
 &nbsp;
+- Login Page
 ![alt](https://res.cloudinary.com/stanley/image/upload/v1638297128/LoginPage_cohskx.png)
 \
 &nbsp;
+- Home Page
 ![alt](https://res.cloudinary.com/stanley/image/upload/v1638297240/AuthHomePage_jiwsrf.png)
 \
 &nbsp;
-![alt](https://res.cloudinary.com/stanley/image/upload/v1638297240/AuthHomePage_jiwsrf.png)
-\
-&nbsp;
+- favorite Page
 ![alt](https://res.cloudinary.com/stanley/image/upload/v1638297184/FavoritesPage_adrwnb.png)
 
 \
@@ -34,6 +34,7 @@ The functionalities of the app are:
 - Add /remove to cart
 - Make transactions
 - Edit profile
+- Add / remove rating
 
 The link github repo for the backend : [shopwit-backend](https://github.com/pierrelstan/shopwit-backend)
 \
