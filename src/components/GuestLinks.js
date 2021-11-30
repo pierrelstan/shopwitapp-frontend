@@ -27,27 +27,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: '22px',
     textTransform: 'upperCase',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
     marginRight: '20px',
     border: '2px solid #333',
     padding: '6px',
-    textAlign: 'center',
-    textDecoration: 'none',
-    color: '#333',
-    width: '96px',
-    height: '20px',
-    [theme.breakpoints.down('sm')]: {
-      marginRight: '0px',
-    },
-  },
-  title2: {
-    fontSize: '22px',
-    textTransform: 'upperCase',
-    marginRight: '20px',
-    border: '2px solid #333',
-    padding: '5px',
     textAlign: 'center',
     textDecoration: 'none',
     color: '#333',
@@ -313,7 +295,7 @@ function GuestLinks() {
       >
         <Typography
           variant="h6"
-          className={classes.title2}
+          className={classes.title}
           component={RouterLink}
           to="/"
         >
