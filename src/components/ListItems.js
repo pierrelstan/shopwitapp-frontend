@@ -1,17 +1,10 @@
 import React from 'react';
-import Link from '@material-ui/core/Link';
-import { useSelector, useDispatch } from 'react-redux';
-import { addToCart, removeCart } from '../redux/actions/carts';
-import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
-import { Box, Button, Grid } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { Link as RouterLink } from 'react-router-dom';
-import { DisplayFavoriteCartIcon } from './DisplayFavoriteCartIcon';
-import DisplayShoppingCartIcon from './DisplayShoppingCartIcon';
 import imageLogo from '../utils/images/imageLogo.jpg';
 
 const useStyles = makeStyles((theme) => ({
@@ -217,31 +210,9 @@ export default function ListItems({ id, price, title, image, handleClickOpen }) 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const dispatch = useDispatch();
 
-  const { carts, favorites } = useSelector((state) => ({
-    carts: state.carts,
-    favorites: state.favorites,
-  }));
 
-  const handleRemoveFavorite = (id) => {
-    let fav = favorites.allFavorites.find((item) => item.item._id === id);
-    dispatch(removeFavorites(fav._id));
-  };
 
-  const hanldeRemoveCart = (id) => {
-    let cart = carts.allCarts.filter((item) => item.item._id === id);
-    const { _id } = cart[0];
-    dispatch(removeCart(_id));
-  };
-
-  const handleAddCart = (id) => {
-    dispatch(addToCart(id));
-  };
-
-  const handleAddFavorites = (id) => {
-    dispatch(addToFavorites(id));
-  };
   return (
     <Grid item xs={11} sm={6} md={4} lg={3}>
      <Box
