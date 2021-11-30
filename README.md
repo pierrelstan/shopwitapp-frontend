@@ -36,7 +36,7 @@ The functionalities of the app are:
 - Edit profile
 - Add / remove rating
 
-The link github repo for the backend : [shopwit-backend](https://github.com/pierrelstan/shopwit-backend)
+> The link github repo for the backend : [shopwit-backend](https://github.com/pierrelstan/shopwit-backend)
 \
 &nbsp;
 # Tech Stack:
