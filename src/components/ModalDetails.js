@@ -16,8 +16,6 @@ import { fetchItemById, removeItemById } from '../redux/actions/ItemsActions';
 import { removeCart, addToCart } from '../redux/actions/carts';
 import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
 import { fetchRatingById } from '../redux/actions/ratings';
-import Wrapper from './Wrapper';
-import Titles from './Titles';
 
 
 const useStyles = makeStyles((theme) => ({
