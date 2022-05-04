@@ -3,7 +3,12 @@
 &nbsp;
 
 # [Demo link ](https://pierrelstan.github.io/shopwitapp-frontend/#/shopwitapp-frontend/)
+
+### Login to the app with:
+- User: user01@test.com
+- Password: user010101
 ## The following are the screenshots of the different stages of the app.
+
 - SignUp Page
 ![alt](https://res.cloudinary.com/stanley/image/upload/v1638297322/RegisterPage_b325jv.png)
 \
