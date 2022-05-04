@@ -5,7 +5,7 @@
 # [Demo link ](https://pierrelstan.github.io/shopwitapp-frontend/#/shopwitapp-frontend/)
 
 ### Login to the app with:
-- User: user01@test.com
+- User: user01@example.com
 - Password: user010101
 ## The following are the screenshots of the different stages of the app.
 
