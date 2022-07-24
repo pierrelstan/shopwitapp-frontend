@@ -60,13 +60,7 @@ The functionalities of the app are:
 \
 &nbsp;
 
-# Technical decisions:
-The reason why I used Redux as state management are:
 
--  The state of the app is needed in many places.
--   The logic to update the state is complex.
-\
-&nbsp;
 
 \
 &nbsp;
@@ -79,8 +73,6 @@ OS / Linux / Windows
 &nbsp;
 
 # Usage:
-After all the packages has been successfully installed, you can run:
-
  `yarn start`
 
 \
