@@ -17,8 +17,12 @@ import { removeCart, addToCart } from '../redux/actions/carts';
 import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
 import { fetchRatingById } from '../redux/actions/ratings';
 
-
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    width: '100%',
+    maxWidth: '300px',
+  },
   image: {
     width: '100%',
     maxWidth: '60%',
@@ -41,9 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ModalDetails =React.memo( ({
-      id
-}) => {
+const ModalDetails = React.memo(({ id }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -62,10 +64,6 @@ const ModalDetails =React.memo( ({
     dispatch(fetchItemById(id));
     dispatch(fetchRatingById(id));
   }, [dispatch, id]);
-
-
-
-
 
   useEffect(() => {
     let Carts = carts && carts.findIndex((item) => item.item._id === id) !== -1;
@@ -107,11 +105,13 @@ const ModalDetails =React.memo( ({
   };
 
   const handleDeleteItem = (id, auth) => {
-    dispatch(removeItemById(id, auth)).then(()=> {
-       history.push('/myproducts');
-    }).catch((e)=> {
-      console.log(e);
-    })
+    dispatch(removeItemById(id, auth))
+      .then(() => {
+        history.push('/myproducts');
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     history.push('/myproducts');
   };
 
@@ -121,142 +121,133 @@ const ModalDetails =React.memo( ({
     return (
       <div
         style={{
-          marginBottom: '50px',
+          margin: '50px',
         }}
       >
-        <Container maxWidth="md">
-          <div>
-            <Paper elevation={1}>
-              <Grid container spacing={5}>
-                <Grid item xs={12} sm={6} className={classes.centeredItems}>
-
-                {!item.isLoaded  &&  (
-                  <div className={classes.center}>
-                <CircularProgress color="secondary" /> </div>
-                )}
+        <div className={classes.root}>
+          <Box>
+            {!item.isLoaded ? (
+              <div className={classes.center}>
+                <CircularProgress color="secondary" />
+              </div>
+            ) : (
+              <Grid container justifyContent="center" alignItems="center">
+                <Grid item xs={12} sm={6}>
                   <img
                     className={classes.image}
                     src={item.item.imageUrl}
                     alt={item.item.title}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6} className={classes.centeredItems}>
+
+                <Grid item xs={12} sm={6}>
                   <div>
-                    <div>
-                      <h1
-                        style={{
-                          fontSize: '16px',
-                        }}
-                      >
-                        {item.item.title}
-                      </h1>
-                    </div>
-                    <div>
-
-                      <p
-                        style={{
-                          color: '#878787',
-                          fontSize: '22px',
-                          lineHeight: '22px',
-                        }}
-                      >
-
-                        ${item.item.price}.00
-                      </p>
-
-                    </div>
-                    <div
+                    <h1
                       style={{
-                        marginBottom: '20px',
-                        padding: 0,
-                        border: 0,
+                        fontSize: '16px',
                       }}
                     >
-                      <Link
+                      {item.item.title}
+                    </h1>
+                  </div>
+                  <div>
+                    <p
+                      style={{
+                        color: '#878787',
+                        fontSize: '22px',
+                        lineHeight: '22px',
+                      }}
+                    >
+                      ${item.item.price}.00
+                    </p>
+                  </div>
+                  <div
+                    style={{
+                      marginBottom: '20px',
+                      padding: 0,
+                      border: 0,
+                    }}
+                  >
+                    <Link
                       component={RouterLink}
                       to={`/item/${item.item._id}`}
                       className={classes.textLink}
                     >
                       <p>{item.item.description}</p>
-                      </Link>
-                    </div>
-                    <Box
-                      style={{
-                        marginBottom: '20px',
-                      }}
-                    >
-                    </Box>
+                    </Link>
+                  </div>
+                  <Box
+                    style={{
+                      marginBottom: '20px',
+                    }}
+                  ></Box>
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      gap: '48px',
+                      flexWrap: 'wrap',
+                      paddingTop: '40px',
+                    }}
+                  >
+                    {showCart && (
+                      <AddShoppingCartIcon
+                        style={{
+                          cursor: 'pointer',
+                          color: '#4BB543',
+                        }}
+                        onClick={() => hanldeRemoveCart(item.item._id)}
+                      />
+                    )}
+                    {!showCart && (
+                      <ShoppingCartOutlinedIcon
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleAddCart(item.item._id)}
+                      />
+                    )}
 
-                    <div
-                      style={{
-                        display: 'inline-flex',
-                        gap: '48px',
-                        flexWrap: 'wrap',
-                        paddingTop: '40px',
-                      }}
-                    >
-                      {showCart && (
-                        <AddShoppingCartIcon
-                          style={{
-                            cursor: 'pointer',
-                            color: '#4BB543',
-                          }}
-                          onClick={() => hanldeRemoveCart(item.item._id)}
-                        />
-                      )}
-                      {!showCart && (
-                        <ShoppingCartOutlinedIcon
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => handleAddCart(item.item._id)}
-                        />
-                      )}
+                    {showFav && (
+                      <FavoriteSharpIcon
+                        style={{
+                          cursor: 'pointer',
+                          color: '#cb436b',
+                        }}
+                        onClick={() => handleRemoveFavorite(item.item._id)}
+                      />
+                    )}
+                    {!showFav && (
+                      <FavoriteBorderIcon
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleAddFavorites(item.item._id)}
+                      />
+                    )}
 
-                      {showFav && (
-                        <FavoriteSharpIcon
-                          style={{
-                            cursor: 'pointer',
-                            color: '#cb436b',
-                          }}
-                          onClick={() => handleRemoveFavorite(item.item._id)}
-                        />
-                      )}
-                      {!showFav && (
-                        <FavoriteBorderIcon
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => handleAddFavorites(item.item._id)}
-                        />
-                      )}
-
-                      {
-                        auth === item.item.userId && (
-                       <Link
+                    {auth === item.item.userId && (
+                      <Link
                         component={RouterLink}
                         to={`/item/update/${item.item._id}`}
                       >
                         <EditIcon />
                       </Link>
-                        )
-                      }
+                    )}
 
-                      {auth === item.item.userId && (
-                        <DeleteOutlineIcon
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => handleDeleteItem(item.item._id, auth)}
-                        />
-                      )}
-                    </div>
+                    {auth === item.item.userId && (
+                      <DeleteOutlineIcon
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleDeleteItem(item.item._id, auth)}
+                      />
+                    )}
                   </div>
                 </Grid>
               </Grid>
-            </Paper>
-          </div>
-        </Container>
+            )}
+          </Box>
+        </div>
       </div>
     );
   }
