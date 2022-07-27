@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Container from '@material-ui/core/Container';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,7 +10,7 @@ import FavoriteSharpIcon from '@material-ui/icons/FavoriteSharp';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Paper, Box, Grid } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import { fetchItemById, removeItemById } from '../redux/actions/ItemsActions';
 import { removeCart, addToCart } from '../redux/actions/carts';
 import { addToFavorites, removeFavorites } from '../redux/actions/favorites';
@@ -20,7 +19,6 @@ import { fetchRatingById } from '../redux/actions/ratings';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    width: '100%',
   },
   image: {
     width: '100%',
