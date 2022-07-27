@@ -29,7 +29,7 @@ function PopularProducts() {
   let history = useHistory();
 
   const [open, setOpen] = useState(false);
-  const [idItem, setIdItem] = useState('');
+  const [idItem, setIdItem]= useState('');
 
   const { lastProducts, loading } = useSelector((state) => ({
     lastProducts: state.items.items,
@@ -38,8 +38,8 @@ function PopularProducts() {
 
   const handleClickOpen = (id) => {
     setOpen(true);
-    if (id) {
-      setIdItem(id);
+    if(id){
+  setIdItem(id);
     }
   };
 
@@ -85,7 +85,11 @@ function PopularProducts() {
           </Button>
         </div>
       </div>
-      <ModalItemDetails open={open} handleClose={handleClose} id={idItem} />
+      <ModalItemDetails
+        open={open}
+        handleClose={handleClose}
+         id={idItem}
+       />
     </div>
   );
 }

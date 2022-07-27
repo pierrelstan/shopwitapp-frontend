@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textLink: {
     textDecoration: 'none',
-    cursor: 'pointer',
+    cursor:'pointer',
     color: '#333',
     '&:hover': {
       textDecoration: 'none',
@@ -205,50 +205,50 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ListItems({
-  id,
-  price,
-  title,
-  image,
-  handleClickOpen,
-}) {
+export default function ListItems({ id, price, title, image, handleClickOpen }) {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
 
-  return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Box onClick={() => handleClickOpen(id)} className={classes.textLink}>
-        <Card className={classes.card} elevation={matches ? 1 : 0} key={id}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              padding: '20px',
-            }}
-          >
-            <Typography component="span" className={classes.price}>
-              ${price}
-            </Typography>
-          </div>
 
-          {image && (
-            <img
-              alt={title}
-              src={image}
-              title={title}
-              className={classes.imageCard}
-            />
-          )}
-          {!image && (
-            <img
-              alt={title}
-              src={imageLogo}
-              title={title}
-              className={classes.imageCard}
-            />
-          )}
-        </Card>
+
+
+  return (
+    <Grid item xs={11} sm={6} md={4} lg={3}>
+     <Box
+          onClick={()=> handleClickOpen(id)}
+          className={classes.textLink}
+        >
+      <Card className={classes.card} elevation={matches ? 1 : 0} key={id}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: '20px',
+          }}
+        >
+          <Typography component="span" className={classes.price}>
+            ${price}
+          </Typography>
+        </div>
+
+        {image && (
+          <img
+            alt={title}
+            src={image}
+            title={title}
+            className={classes.imageCard}
+          />
+        )}
+        {!image && (
+          <img
+            alt={title}
+            src={imageLogo}
+            title={title}
+            className={classes.imageCard}
+          />
+        )}
+      </Card>
       </Box>
     </Grid>
   );
