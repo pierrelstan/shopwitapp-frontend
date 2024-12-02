@@ -11,6 +11,9 @@
 #history
 .history
 
+# .vscode
+.vscode
+
 # testing
 /coverage
 
