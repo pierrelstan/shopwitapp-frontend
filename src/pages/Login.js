@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, withRouter } from 'react-router-dom';
+import { Link, useNavigate, } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -68,18 +68,18 @@ function Login({ Log_in, active, alert }) {
       setOpen(!open);
     }
   };
-  let history = useHistory();
+  let navigate = useNavigate();
 
   const classes = useStyles();
 
   useEffect(() => {
     if (active) {
-      history.push('/');
+      navigate.push('/');
     }
     if (alert.length === 1) {
       setOpen(false);
     }
-  }, [active, alert.length, history]);
+  }, [active, alert.length, navigate]);
 
 
   const OnSubmit = (data) => {
@@ -216,6 +216,4 @@ const mapStateToProps = (state) => {
     alert,
   };
 };
-export default connect(mapStateToProps, {
-  Log_in,
-})(withRouter(Login));
+export default Login;

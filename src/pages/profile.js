@@ -177,7 +177,7 @@ const mapStateToProps = (state) => ({
     update: state.auth.update,
     success: state.auth.message,
 });
-export default connect(mapStateToProps, {})(Profile);
+export default Profile;
 
 const menu = [
     {

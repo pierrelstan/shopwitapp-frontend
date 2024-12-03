@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import store from '../store/store';
 import {
   FETCH_ITEMS,
@@ -68,7 +68,7 @@ export const fetchItems = () => async (dispatch, getState) => {
   }
 };
 
-export const CreateItem = (formData, history) => (dispatch) => {
+export const CreateItem = (formData, navigate)=>(dispatch) => {
 
   WebAPI.createItem(formData)
     .then((response) => {
@@ -79,7 +79,7 @@ export const CreateItem = (formData, history) => (dispatch) => {
         payload: response,
       });
       dispatch(setAlert(response.data.message, 'success'));
-      history.push(`/myproducts`);
+      navigate(`/myproducts`);
     })
     .catch((err) => {
       const errors = err.response.data.errors;
@@ -190,7 +190,7 @@ export const fetchItemsByUserId = () => async (dispatch) => {
   }
 };
 
-export const updateItem = (id, formData, history) => async (dispatch) => {
+export const updateItem = (id, formData, navigate)=>async (dispatch) => {
 
   try {
     const token = store.getState().auth.token;
@@ -203,7 +203,7 @@ export const updateItem = (id, formData, history) => async (dispatch) => {
       payload: data.data,
       isLoaded: true,
     });
-    history.push(`/myproducts`);
+    navigate(`/myproducts`);
     dispatch(setAlert('Updated cart successfully!', 'success'));
   } catch (error) {
     const errors = error.response;

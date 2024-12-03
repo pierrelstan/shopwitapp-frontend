@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 function ProtectedRoutes({
@@ -12,7 +12,7 @@ function ProtectedRoutes({
       {...rest}
       render={(props) =>
         !isAuthenticated && !loading ? (
-          <Redirect to='/login' />
+          <Navigate replace to='/login' />
         ) : (
           <Component {...props} />
         )
@@ -25,4 +25,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps)(ProtectedRoutes);
+export default ProtectedRoutes

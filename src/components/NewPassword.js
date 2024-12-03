@@ -64,4 +64,4 @@ class NewPassword extends Component {
 const mapStateToProps = (state) => ({
   newPassWord: state.auth,
 });
-export default connect(mapStateToProps, { newPassWord, setAlert })(NewPassword);
+export default NewPassword;

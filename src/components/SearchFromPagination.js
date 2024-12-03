@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+
 import { searchItems, clearSearchItems } from '../redux/actions/ItemsActions';
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles';
@@ -241,6 +241,4 @@ const mapStateToProps = (state) => ({
   value: state.Search.value,
 });
 
-export default withRouter(
-  connect(mapStateToProps, { searchItems })(SearchFromPagination),
-);
+export default SearchFromPagination;

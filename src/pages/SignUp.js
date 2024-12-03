@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -60,7 +60,7 @@ const SignUp = () => {
     password: '',
     confirmPassword: '',
   });
-  let history = useHistory();
+  let navigate = useNavigate();
   const classes = useStyles();
   //   fix error binding
   const [open, setOpen] = React.useState(false);
@@ -77,25 +77,25 @@ const SignUp = () => {
   };
   React.useEffect(() => {
     if (active) {
-      history.push('/');
+      navigate('/');
       setUser({});
     }
     if (alert.length === 1) {
       setOpen(false);
     }
-  }, [active, history]);
+  }, [active, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       dispatch(setAlert('Password do not match', 'danger'));
     } else {
-      dispatch(signUp(User, history));
+      dispatch(signUp(User));
     }
   };
 
   if (active) {
-    return <Redirect to='/' />;
+    return <Navigate replace to='/' />;
   }
   const { email, password, confirmPassword, firstname, lastname } = User;
   return (

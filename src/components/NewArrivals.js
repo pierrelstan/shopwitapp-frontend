@@ -223,4 +223,4 @@ const mapStateToProps = (state) => ({
   values: state.scrollValues.values,
 });
 
-export default connect(mapStateToProps)(NewArrivals);
+export default NewArrivals

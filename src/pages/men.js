@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+
 import axios from 'axios';
 import { Container } from '@material-ui/core';
 import NewArrivals from '../components/NewArrivals';
@@ -109,4 +109,4 @@ const mapStateToProps = (state) => ({
   page: state.pages.page,
 });
 
-export default withRouter(connect(mapStateToProps, { pagesControlled })(Men));
+export default Men;

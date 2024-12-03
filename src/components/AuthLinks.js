@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Avatar from '@material-ui/core/Avatar';
@@ -270,7 +270,7 @@ function AuthLinks({
   });
 
   const classes = useStyles();
-  let history = useHistory();
+  let navigate = useNavigate();
   const { id } = useParams();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -568,7 +568,7 @@ function AuthLinks({
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  history.push('/');
+                  navigate('/');
                   logout(true);
                 }}
               >
@@ -594,13 +594,4 @@ const mapStateToProps = (state) => ({
   userId: state.auth.user,
 });
 
-export default withRouter(
-  connect(mapStateToProps, {
-    logout,
-    openCart,
-    openFavoritesAndClosing,
-    allFavorites,
-    fetchItemsByUserId,
-    allCarts,
-  })(AuthLinks),
-);
+export default AuthLinks;

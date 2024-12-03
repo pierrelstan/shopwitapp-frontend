@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+import {jwtDecode } from 'jwt-decode';
 import store from '../store/store';
 import {
   ADD_TO_CART_BY_ID,

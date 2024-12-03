@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, CircularProgress, Grid } from '@material-ui/core';
 import Titles from './Titles';
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 function PopularProducts() {
   const classes = useStyles();
 
-  let history = useHistory();
+  let navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [idItem, setIdItem] = useState('');
@@ -47,7 +47,7 @@ function PopularProducts() {
     setOpen(false);
   };
   const handleViewAllClick = () => {
-    history.push('/shop');
+    navigate('/shop');
   };
   if (loading) {
     return (

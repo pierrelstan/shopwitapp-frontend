@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from 'react-hook-form';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
@@ -74,7 +74,7 @@ const EditItem = ({ item, updateItem, fetchItemById }) => {
 
   const [Product, setProduct] = useState({});
   let { id } = useParams();
-  let history = useHistory();
+  let navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [PreviewImage, setPreviewImage] = useState();
 
@@ -127,7 +127,7 @@ console.log(data)
     formData.append('quantity', quantityProducts);
     formData.append('price', price);
     formData.append('gender', gender);
-    updateItem(id, formData, history);
+    updateItem(id, formData, navigate);
   };
 
 
@@ -351,10 +351,4 @@ const mapStateToProps = (state) => ({
   item: state.item,
   userId: state.auth.user._id,
 });
-export default connect(mapStateToProps, { updateItem, fetchItemById })(
-  React.memo(EditItem, (prev, next) => {
-    if (prev.item.item === next.item.item) {
-      return true;
-    }
-  }),
-);
+export default EditItem

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import './App.css';
-import Home from './pages/home';
+import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import AuthLinks from './components/AuthLinks';
-import GuestLinks from './components/GuestLinks';
+import GuestLinks from './components/GuestLinks.tsx';
 import { getProfile } from './redux/actions/auth';
 import { allFavorites } from './redux/actions/favorites';
 import Login from './pages/Login';
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function App() {
+function App_depre() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -99,7 +99,7 @@ function App() {
         </Navbar>
 
         <div className={classes.main}>
-          <Switch>
+          <Routes>
             <Route exact path='/' render={(props) => <Home {...props} />} />
             <Route path='/login' render={(props) => <Login {...props} />} />
             <Route
@@ -126,7 +126,7 @@ function App() {
             <Route exact path='/men' component={Men} />
             <Route exact path='/sneakers' component={Sneakers} />
             <Route exact path='*' component={NoMatch} />
-          </Switch>
+          </Routes>
         </div>
       </Router>
       <Footer />

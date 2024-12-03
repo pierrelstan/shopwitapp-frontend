@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
-import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -72,7 +72,7 @@ const Item = () => {
     auth: state.auth.user._id,
   }));
 
-  let history = useHistory();
+  let navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchItemById(id));
@@ -119,7 +119,7 @@ const Item = () => {
 
   const handleDeleteItem = (id, auth) => {
     dispatch(removeItemById(id, auth)).then(()=> {
-       history.push('/myproducts');
+       navigate.push('/myproducts');
     }).catch((e)=> {
       console.log(e);
     })

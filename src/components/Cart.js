@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Paper } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
 import { openCart } from '../redux/actions/openCart';
 import { allCarts, removeCart, updateCart } from '../redux/actions/carts';
 import { setAlert } from '../redux/actions/alert';
@@ -138,12 +137,4 @@ const mapStateToProps = (state) => ({
   userId: state.auth.user._id,
   openCart: state.openCart.cart,
 });
-export default withRouter(
-  connect(mapStateToProps, {
-    removeCart,
-    updateCart,
-    setAlert,
-    allCarts,
-    openCart,
-  })(Cart),
-);
+export default Cart;

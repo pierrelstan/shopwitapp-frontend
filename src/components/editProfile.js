@@ -264,10 +264,4 @@ const mapStateToProps = (state) => ({
   update: state.auth.update,
 });
 
-export default connect(mapStateToProps, { editProfile })(
-  React.memo(EditProfile, (prev, next) => {
-    if (prev.user !== next.user) {
-      return true;
-    }
-  }),
-);
+export default EditProfile

@@ -2,7 +2,7 @@ import React, { useEffect, useState  } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller , useController} from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
@@ -82,7 +82,7 @@ const Sell = ({CreateItem}) => {
   const [Product, setProduct] = useState({});
   const [PreviewImage, setPreviewImage] = useState('');
 
-  let history = useHistory();
+  let navigate = useNavigate();
   const { handleSubmit, register, control , formState: { errors }, reset } = useForm({
     resolver: yupResolver(validationSchema)
   });
@@ -126,7 +126,7 @@ const {
     formData.append('quantity', quantityProducts);
     formData.append('price', price);
     formData.append('gender', gender);
-    CreateItem(formData, history);
+    CreateItem(formData, navigate);
     reset();
   };
   const uploadPreviewImage=(file)=> {
@@ -327,4 +327,4 @@ const mapStateToProps = (state) => ({
   alert: state.alert,
 });
 
-export default connect(mapStateToProps, { CreateItem })(Sell);
+export default Sell;

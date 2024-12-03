@@ -191,4 +191,4 @@ const mapStateToProps = (state) => ({
   isLoaded: state.myProducts.isLoaded,
 });
 
-export default connect(mapStateToProps, { fetchItemsByUserId })(MyProducts);
+export default MyProducts;

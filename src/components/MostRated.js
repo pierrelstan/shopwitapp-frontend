@@ -1,15 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import SwiperCore, {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Controller,
-  Thumbs,
-  Autoplay,
-} from 'swiper';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 import { Rating } from '@material-ui/lab';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
@@ -18,15 +17,15 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { CircularProgress, Container } from '@material-ui/core';
 import Titles from './Titles';
 
-SwiperCore.use([
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Controller,
-  Thumbs,
-  Autoplay,
-]);
+// SwiperCore.use([
+//   Navigation,
+//   Pagination,
+//   Scrollbar,
+//   A11y,
+//   Controller,
+//   Thumbs,
+//   Autoplay,
+// ]);
 
 const useStyles = makeStyles((theme) => ({
   media: {

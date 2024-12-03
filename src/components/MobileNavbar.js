@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -39,16 +39,16 @@ const useStyles = makeStyles((theme) => ({
 export default function MobileNavbar() {
   const classes = useStyles();
   const [value, setValue] = React.useState('');
-  let history = useHistory();
+  let navigate = useNavigate();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
     if (newValue.toString() === 'home') {
-      return history.push('/');
+      return navigate('/');
     } else if (newValue.toString() === 'profile') {
-      return history.push('/profile');
+      return navigate('/profile');
     } else if (newValue.toString() === 'products') {
-      return history.push('/myproducts');
+      return navigate('/myproducts');
     } else if (newValue.toString() === 'favorites') {
       return;
     } else {

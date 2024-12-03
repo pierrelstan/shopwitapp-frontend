@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
 const AlertErrors = ({ alerts }) => {
@@ -31,10 +30,4 @@ const AlertErrors = ({ alerts }) => {
 const mapStateToProps = (state) => ({
   alerts: state.alert,
 });
-export default connect(mapStateToProps)(
-  React.memo(AlertErrors, (prev, next) => {
-    if (prev === next.alerts) {
-      return true;
-    }
-  }),
-);
+export default AlertErrors;

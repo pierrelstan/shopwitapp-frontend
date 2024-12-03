@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import {
   REGISTER_FAIL,
   REGISTER_SUCCESS,
@@ -23,7 +23,7 @@ import WebAPI from '../../utils/service';
 export const getProfile = () => async (dispatch) => {
   try {
     let token = store.getState().auth.token;
-    let decodeToken = jwtDecode(token);
+    let decodeToken = { jwtDecode }(token);
     let userId = decodeToken.user.userId;
 
     if (token !== null) {
@@ -105,7 +105,7 @@ export const newPassWord = (token, state, props) => async (dispatch) => {
       payload: res.data,
     });
 
-    props.history.push('/');
+    props.navigate('/');
   } catch (error) {
     dispatch({
       type: NEW_PASSWORD_FAIL,
@@ -115,7 +115,7 @@ export const newPassWord = (token, state, props) => async (dispatch) => {
 
 export const editProfile = (User) => async (dispatch) => {
   const token = store.getState().auth.token;
-  const { user } = jwtDecode(token);
+  const { user } = { jwtDecode }(token);
   let USER_ID = user.userId;
   try {
     let res = await WebAPI.editProfile(USER_ID, User);

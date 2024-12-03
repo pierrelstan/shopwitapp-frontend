@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 const ModalDetails = React.memo(({ id }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [showCart, setShowCart] = React.useState(false);
   const [showFav, setShowFav] = React.useState(false);
@@ -104,12 +104,12 @@ const ModalDetails = React.memo(({ id }) => {
   const handleDeleteItem = (id, auth) => {
     dispatch(removeItemById(id, auth))
       .then(() => {
-        history.push('/myproducts');
+        navigate.push('/myproducts');
       })
       .catch((e) => {
         console.log(e);
       });
-    history.push('/myproducts');
+    navigate.push('/myproducts');
   };
 
   if (item.error) {
