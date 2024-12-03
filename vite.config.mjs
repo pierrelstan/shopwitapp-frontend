@@ -5,6 +5,7 @@ import rollupReplace from "@rollup/plugin-replace";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base:"/shopwitapp-frontend/",
   server: {
     port: 3000,
   },
